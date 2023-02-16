@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Static.sta_WF_title02
+{
+	background: transparent;
+	color: #101010;
+	font: bold 17px "Arial","Malgun Gothic","Gulim";
+	-nexa-padding : 0px;
+}
+.Static.sta_cm_box01L
+{
+	background : #f7f7f7;
+	-nexa-text-align : left;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #c7c7c7, 0px none;
+	-nexa-padding : 0px 0px 0px 12px;
+}
+.Static.sta_cm_box02L
+{
+	background : #ffffff;
+	-nexa-border : 1px solid #c7c7c7, 0px none;
+	-nexa-text-align : left;
+	-nexa-padding : 0px 5px 0px 5px;
+}
+.Static.sta_WF_titleStar
+{
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #c7c7c7, 0px none;
+	-nexa-padding : 0px 0px 0px 15px;
+	background : url('imagerc::img_WF_titleStar.png') no-repeat 3% center #f7f7f7;
+}
+
+.Button.btn_WF_add01, .Button.btn_WF_add01[status=mouseover],
+.Button.btn_WF_add01[userstatus=pushed], .Button.btn_WF_add01[status=focused], .Button.btn_WF_add01[userstatus=selected],
+.Button.btn_WF_search, .Button.btn_WF_search[status=mouseover],
+.Button.btn_WF_search[userstatus=pushed], .Button.btn_WF_search[status=focused], .Button.btn_WF_search[userstatus=selected]
+{
+	-nexa-border : 1px solid #070707;
+	-nexa-icon : none;
+	-nexa-text-align : center;
+	-nexa-padding : 0px;
+	-nexa-text-padding : 0px;
+	background : #070707;
+	color : #ffffff;
+	cursor : pointer;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+.Button.btn_WF_delete01, .Button.btn_WF_save01, .Button.btn_WF_excel01
+{
+	-nexa-border : 1px solid #c7c7c7;
+	-nexa-icon : none;
+	-nexa-text-align : center;
+	-nexa-padding : 0px;
+	-nexa-text-padding : 0px;
+	background : #ffffff;
+	cursor : pointer;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+.Button.btn_WF_delete01[status=mouseover], .Button.btn_WF_delete01[userstatus=pushed],
+.Button.btn_WF_delete01[status=focused], .Button.btn_WF_delete01[userstatus=selected],
+.Button.btn_WF_save01[status=mouseover], .Button.btn_WF_save01[userstatus=pushed],
+.Button.btn_WF_save01[status=focused], .Button.btn_WF_save01[userstatus=selected],
+.Button.btn_WF_excel01[status=mouseover], .Button.btn_WF_excel01[userstatus=pushed],
+.Button.btn_WF_excel01[status=focused], .Button.btn_WF_excel01[userstatus=selected]
+{
+	-nexa-border : 1px solid #c7c7c7;
+	-nexa-icon : none;
+	-nexa-text-align : center;
+	-nexa-padding : 0px;
+	-nexa-text-padding : 0px;
+	background : #e7e7e7;
+	cursor : pointer;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+.Button.btn_cm_basic01,.Button.btn_cm_basic01[status=focused],.Button.btn_cm_basic01[userstatus=selected]
+{
+	background : #e7e7e7;
+	color : #101010;
+	cursor : pointer;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #999999;
+	-nexa-text-align : center;
+}
+.Button.btn_cm_basic01[status=mouseover]
+{
+	background : #e0e0e0;
+	color : #101010;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #999999;
+}
+.Button.btn_cm_basic01[userstatus=pushed]
+{
+	background : #d7d7d7;
+	color : #101010;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #999999;
+	-nexa-text-decoration : underline;
+}
+.Button.btn_cm_basic01[status=disabled]
+{
+	background : #dddddd;
+	color : #aaaaaa;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	-nexa-border : 1px solid #999999;
+}]]></XCSS>

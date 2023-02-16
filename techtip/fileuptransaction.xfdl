@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="fileuptransaction" width="400" height="300" titletext="New Form">
+    <Layouts>
+      <Layout height="300" width="400">
+        <Button id="btnFindFile" taborder="0" text="파일찾기" left="205" top="10" width="90" height="30" onclick="btnFindFile_onclick"/>
+        <Button id="btnFileUpload" taborder="1" text="파일업로드" top="10" width="90" height="30" left="300" onclick="btnFileUpload_onclick"/>
+        <Grid id="Grid00" taborder="2" left="10" top="45" width="380" height="245" binddataset="dsFileUpload" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80" band="right"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="filename"/>
+                <Cell col="1" text="filesize"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:filename"/>
+                <Cell col="1" text="bind:filesize" displaytype="number"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsFileUpload">
+        <ColumnInfo>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="filesize" type="STRING" size="256"/>
+          <Column id="content" type="BLOB" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDialog id="fileFind" onclose="fileFind_onclose"/>
+      <VirtualFile id="vFileRead" async="false" onerror="vFileRead_onerror" onsuccess="vFileRead_onsuccess"/>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.btnFindFile_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fileFind.open('파일찾기', FileDialog.LOAD);
+};
+
+this.btnFileUpload_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sId = "SAVE";
+	var sUrl = "http://localhost/toy/service/save.jsp";
+	var sInDs = "dsFile=dsFileUpload";
+	var sOutDs = "";
+	var sParam = "";
+	var sCallback = "fnCallback";
+	this.transaction(sId, sUrl, sInDs, sOutDs, sParam, sCallback);
+};
+
+this.fnCallback = function(sId, nErrorCd, sErrorMsg)
+{	
+	if(nErrorCd<0)
+	{
+		alert("["+nErrorCd+"]"+sErrorMsg);
+	}else
+	{
+		if(sId=="SEARCH")
+		{
+		
+		}else if(sId=="SAVE")
+		{
+			alert("성공");
+			this.dsFileUpload.clearData();
+		}
+	}
+};
+
+this.fileFind_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	if(e.reason==1)
+	{
+		trace(e.virtualfiles);
+		this.gfnSelectContent(e.virtualfiles);
+	}
+};
+
+this.vFileRead_onerror = function(obj:nexacro.VirtualFile,e:nexacro.VirtualFileErrorEventInfo)
+{
+	alert("파일읽기에 실패하였습니다.");
+};
+
+this.gfnVFile_onsuccess = function(obj:nexacro.VirtualFile,e:nexacro.VirtualFileEventInfo)
+{
+	trace(e.reason);
+	if(e.reason=="9")
+	{
+		this.filesize = e.filesize;
+		trace(this.filesize);
+	}else if(e.reason=="3")
+	{
+		this.binarydata = e.binarydata;
+	}
+};
+
+this.gfnSelectContent = function(objVFileList)
+{
+	var i;
+	var nLength;
+	var objVFile;
+	nLength = objVFileList.length;
+	
+	for(i=0;i<nLength;i++)
+	{
+		objVFile = objVFileList[i];
+		this.gfnAddList(objVFile);	
+	}
+}
+
+this.gfnAddList = function(objVFile)
+{
+	var nRow;
+	var sFileName;
+	var sFilePath;
+	var sIdx;
+	var eIdx;
+	
+	objVFile.set_async(false);
+	objVFile.addEventHandler("onsuccess", this.gfnVFile_onsuccess, this);
+	objVFile.open(objVFile.fullpath, VirtualFile.openRead|VirtualFile.openBinary);
+	objVFile.read();
+	objVFile.getFileSize();
+	
+	sFileName = objVFile.filename;
+	sFileSize = this.filesize;
+	sContents = nexacro.base64Encode(this.binarydata);	
+	
+	nRow = this.dsFileUpload.addRow();
+	this.dsFileUpload.setColumn(nRow, "filename", sFileName);
+	this.dsFileUpload.setColumn(nRow, "filesize", sFileSize);
+	this.dsFileUpload.setColumn(nRow, "content", sContents);
+	
+	objVFile.close();
+}
+]]></Script>
+  </Form>
+</FDL>

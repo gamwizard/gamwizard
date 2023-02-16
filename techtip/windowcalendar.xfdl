@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="windowcalendar" width="400" height="400" titletext="New Form" onload="windowcalendar_onload" scrollbartype="none none" scrolltype="none">
+    <Layouts>
+      <Layout height="400" width="400">
+        <Calendar id="calCalendar" taborder="0" left="10" top="20" width="170" height="40" canchange="calCalendar_canchange" onchanged="calCalendar_onchanged" accessibilityrole="calendar" cssclass="cal_WF_calendar"/>
+        <Button id="btnCalendar" taborder="1" left="180" top="20" width="40" height="40" cssclass="btn_WF_calBtn"/>
+        <Grid id="Grid00" taborder="2" left="10" top="80" width="210" height="82" binddataset="ds_calendar" autofittype="col" cssclass="grd_WF_calendar">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="40" band="head"/>
+                <Row size="40"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="달력"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0" displaytype="date" edittype="date"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > windowcalendar
+*  techtip [디자인] Window Calendar (윈도우 스타일 달력)
+
+*  @FileName	aniaccordionmenu.xfdl 
+*******************************************************************************
+*  2021.05.20		투비대원&투비미뇽		최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_windowcalendar.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+ /**
+ * @description 화면 onload시 처리내역
+*/
+this.windowcalendar_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//윈도우달력 초기화 함수 호출
+	this.gfnInitWindowCalendar(this.calCalendar, this.btnCalendar);
+};
+
+this.calCalendar_canchange = function(obj:nexacro.Calendar,e:nexacro.ChangeEventInfo)
+{
+	trace("calCalendar_canchange : " + e.posttext);
+	trace("calCalendar_canchange : " + e.postvalue);
+	return true;
+};
+
+this.calCalendar_onchanged = function(obj:nexacro.Calendar,e:nexacro.ChangeEventInfo)
+{
+	trace("calCalendar_onchanged : " + e.posttext);
+	trace("calCalendar_onchanged : " + e.postvalue);
+};]]></Script>
+    <Objects>
+      <Dataset id="ds_calendar">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="calCalendar" propid="value" datasetid="ds_calendar" columnid="Column0"/>
+    </Bind>
+  </Form>
+</FDL>

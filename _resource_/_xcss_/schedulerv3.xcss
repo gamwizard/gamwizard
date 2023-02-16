@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Edit, .Combo, .Calendar, .TextArea
+{
+	-nexa-border : 1px solid #cccccc;
+	border-radius : 4px;
+}
+.Div
+{
+	-nexa-border : 1px solid #cccccc;
+	background : #ffffff;
+}
+.Static.static_WF_year
+{
+	color : #000000;
+	font : bold 17px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label1
+{
+	background : #FF5252;
+	color : #ffffff;
+	border-radius : 4px;
+	font : 13px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label2
+{
+	background : #7C4DFF;
+	color : #ffffff;
+	border-radius : 4px;
+	font : 13px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label3
+{
+	background : #00B0FF;
+	color : #ffffff;
+	border-radius : 4px;
+	font : 13px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label4
+{
+	background : #61C81C;
+	color : #ffffff;
+	border-radius : 4px;
+	font : 13px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label5
+{
+	background : #FF9100;
+	color : #ffffff;
+	border-radius : 4px;
+	font : 13px "Arial";
+	-nexa-text-align : center;
+}
+.Static.static_WF_label1[status=mouseover], .Static.static_WF_label1[status=disabled]
+{
+	background : #E14949;
+	cursor : pointer;
+}
+.Static.static_WF_label2[status=mouseover], .Static.static_WF_label2[status=disabled]
+{
+	background : #6A3EE3;
+	cursor : pointer;
+}
+.Static.static_WF_label3[status=mouseover], .Static.static_WF_label3[status=disabled]
+{
+	background : #0F9FDF;
+	cursor : pointer;
+}
+.Static.static_WF_label4[status=mouseover], .Static.static_WF_label4[status=disabled]
+{
+	background : #54AB1A;
+	cursor : pointer;
+}
+.Static.static_WF_label5[status=mouseover], .Static.static_WF_label5[status=disabled]
+{
+	background : #EC8600;
+	cursor : pointer;
+}
+.Static.static_WF_title
+{
+	font : 13px "Arial";
+	-nexa-border : 0px none;
+	-nexa-vertical-align : middle;
+}
+.Button.btn_WF_save
+{
+	-nexa-border : 1px solid #363636;
+	background : #363636;
+	border-radius : 4px;
+	color : #ffffff;
+	font : 15px "Arial";
+}
+.Button.btn_WF_save[status=mouseover], .Button.btn_WF_save[userstatus=pushed],
+.Button.btn_WF_save[status=focused], .Button.btn_WF_save[userstatus=selected]
+{
+	-nexa-border : 1px solid #363636;
+	background : #000000;
+	border-radius : 4px;
+	color : #ffffff;
+	font : 15px "Arial";
+	cursor : pointer;
+}
+.Button.btn_WF_cancel, .Button.btn_WF_today, .Button.btn_WF_new
+{
+	-nexa-border : 1px solid #cccccc;
+	background : #ffffff;
+	border-radius : 4px;
+	color : #000000;
+	font : 15px "Arial";
+}
+.Button.btn_WF_cancel[status=mouseover], .Button.btn_WF_cancel[userstatus=pushed],
+.Button.btn_WF_cancel[status=focused], .Button.btn_WF_cancel[userstatus=selected],
+.Button.btn_WF_today[status=mouseover], .Button.btn_WF_today[userstatus=pushed],
+.Button.btn_WF_today[status=focused], .Button.btn_WF_today[userstatus=selected],
+.Button.btn_WF_new[status=mouseover], .Button.btn_WF_new[userstatus=pushed],
+.Button.btn_WF_new[status=focused], .Button.btn_WF_new[userstatus=selected]
+{
+	-nexa-border : 1px solid #cccccc;
+	background : #f6f6f6;
+	border-radius : 4px;
+	color : #000000;
+	font : 15px "Arial";
+	cursor : pointer;
+}
+.Button.btn_WF_save[status=disabled], .Button.btn_WF_cancel[status=disabled], .Button.btn_WF_today[status=disabled],
+.Button.btn_WF_new[status=disabled] 
+{
+	-nexa-border : 1px solid #cccccc;
+	background : #dddddd;
+	border-radius : 4px;
+	color : #777777;
+	font : 15px "Arial";
+}
+.Button.btn_WF_left
+{
+	-nexa-border : 0px none;
+	background : #ffffff;
+	border-radius : 4px;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-left.png');
+}
+.Button.btn_WF_left[status=mouseover], .Button.btn_WF_left[userstatus=pushed],
+.Button.btn_WF_left[status=focused], .Button.btn_WF_left[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	background : #E8E8E8;
+	border-radius : 4px;
+	cursor : pointer;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-left.png');
+}
+.Button.btn_WF_left[status=disabled]
+{
+	-nexa-border : 0px none;
+	background : #E8E8E8;
+	border-radius : 4px;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-left.png');
+	opacity : 0.5;
+}
+.Button.btn_WF_right
+{
+	-nexa-border : 0px none;
+	background : #ffffff;
+	border-radius : 4px;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-right.png');
+}
+.Button.btn_WF_right[status=mouseover], .Button.btn_WF_right[userstatus=pushed],
+.Button.btn_WF_right[status=focused], .Button.btn_WF_right[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	background : #E8E8E8;
+	border-radius : 4px;
+	cursor : pointer;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-right.png');
+}
+.Button.btn_WF_right[status=disabled]
+{
+	-nexa-border : 0px none;
+	background : #E8E8E8;
+	border-radius : 4px;
+	-nexa-icon : url('imagerc::schedulerv3/arrow-right.png');
+	opacity : 0.5;
+}]]></XCSS>

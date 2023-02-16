@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="treegrid" width="840" height="530" titletext="treegrid level drag&amp;drop (그리드 트리 이동 or 복사)" onload="form_onload">
+    <Layouts>
+      <Layout height="530" mobileorientation="landscape" width="840">
+        <Grid id="grdTree" binddataset="dsOrg" treeusecheckbox="false" treeinitstatus="expand,null" left="50" top="70" height="420" width="370">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="301"/>
+              </Columns>
+              <Rows>
+                <Row size="24"/>
+              </Rows>
+              <Band id="body">
+                <Cell displaytype="treeitemcontrol" edittype="tree" text="bind:NAME" treelevel="bind:LEVEL"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Grid id="Grid00" taborder="2" left="457" top="70" width="323" height="420">
+          <Formats>
+            <Format id="default"/>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsOrg" firefirstcount="0" firenextcount="0" useclientlayout="false" updatecontrol="true" enableevent="true" loadkeymode="keep" loadfiltermode="keep" reversesubsum="false">
+        <ColumnInfo>
+          <Column id="NAME" type="STRING" size="160"/>
+          <Column id="LEVEL" type="STRING" size="1"/>
+          <Column id="CODE" type="STRING" size="256"/>
+          <Column id="PARENT" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="NAME">투비소프트</Col>
+            <Col id="LEVEL">0</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업본부</Col>
+            <Col id="LEVEL">1</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업그룹</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업1팀(제조)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업2팀(공공)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업3팀(금융)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">기술융합그룹</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">프리세일즈팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">기술융합팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">교육서비스팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">마케팅팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업전략팀</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업지원팀</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">기술지원본부</Col>
+            <Col id="LEVEL">1</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">제품컨설팅그룹</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">사업관리팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">제품컨설팅팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">UX디자인팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">제품컨설팅1팀(제조)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">제품컨설팅2팀(공공)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">제품컨설팅3팀(금융)</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">기술지원그룹</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">기술지원팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">테크솔루션팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">일본사업지원팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">서버솔루션팀</Col>
+            <Col id="LEVEL">3</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">솔루션사업본부</Col>
+            <Col id="LEVEL">1</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">솔루션사업그룹</Col>
+            <Col id="LEVEL">2</Col>
+          </Row>
+          <Row>
+            <Col id="LEVEL">2</Col>
+            <Col id="NAME">오픈소스사업그룹</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">솔루션사업본부</Col>
+            <Col id="LEVEL">1</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">신규사업팀</Col>
+            <Col id="LEVEL">1</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip paging sample 
+*  @MenuPath    techtip > treegrid
+*  @FileName	treegrid.xfdl 
+*  @Desction	tree grid init form 
+*******************************************************************************
+*  2019.04.05		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "techtip::treegrid.xjs";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+
+this.form_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	/*
+	 treegrid 옵션 설정
+	 1. orgGrid -> 원본 Grid
+	 2. targetGrid -> 이동하거나 복사될 Grid
+	 3. levelColumn -> treelevel column name
+	 4. option ->  복사 : c or "" , 이동 : m 
+	*/
+	
+	var objForm = obj;
+	var objConfig = {
+						orgGrid		: this.grdTree,
+						targetGrid	: this.Grid00,
+						levelColumn : "LEVEL",
+						option		: "m"			
+				    }
+	this.fnInitTreeGridDragDropMove(objForm,objConfig);
+}]]></Script>
+  </Form>
+</FDL>

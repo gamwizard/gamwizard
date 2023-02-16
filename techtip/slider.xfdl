@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="slider" width="550" height="300" titletext="Slider (슬라이더 만들기 샘플)" onmousemove="slidebar_onmousemove" onload="slider_onload">
+    <Layouts>
+      <Layout height="300" mobileorientation="landscape" width="550">
+        <Static id="stSliderBarBg" taborder="0" left="20" top="116" width="300" height="10" background="black"/>
+        <Static id="stSliderBar" taborder="1" left="38" top="110" width="20" height="20" background="gray" onlbuttondown="stSliderBar_onlbuttondown" onlbuttonup="stSliderBar_onlbuttonup"/>
+        <Edit id="edtPos" taborder="2" left="209" top="148" width="60" height="30"/>
+        <Button id="btnSet" taborder="3" text="설정" left="279" top="148" width="40" height="30" onclick="btnSet_onclick"/>
+        <Static id="stSliderBarBgH" taborder="4" left="400" top="26" width="10" height="200" background="black"/>
+        <Static id="stSliderBarH" taborder="5" left="395" top="53" width="20" height="20" background="gray" onlbuttondown="stSliderBar_onlbuttondown" onlbuttonup="stSliderBar_onlbuttonup"/>
+        <Edit id="edtPosH" taborder="6" left="429" top="195" width="60" height="30"/>
+        <Button id="btnSetH" taborder="7" text="설정" left="499" top="195" width="40" height="30" onclick="btnSetH_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > slider
+*  techtip 슬라이더 만들기
+*  @FileName	workflow.xfdl 
+*******************************************************************************
+*  2020.05.28		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_slider.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.slider_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//설정정보 만들기
+	//targetForm 	: 슬라이더가 만들어질 Form 컴포넌트
+	//targetBar 	: 슬라이더 Bar로 활용할 컴포넌트
+	//targetBg 		: 슬라이더 배경으로 활용할 컴포넌트
+	//fnCallback 	: 슬라이더 Pos가 변경될 때 호출될 콜백함수
+	//slideType 	: 슬라이더가 동작될 방향(vertical : 좌/우, horizontal : 상/하)
+	var objConfig = {
+						"targetForm" : this,
+						"targetBar" : this.stSliderBar,
+						"targetBg"  : this.stSliderBarBg,
+						"fnCallback" : this.fnSliderBarCallback,
+						"slideType" : "vertical"
+					};
+	
+	var objConfig2 = {
+						"targetForm" : this,
+						"targetBar" : this.stSliderBarH,
+						"targetBg"  : this.stSliderBarBgH,
+						"fnCallback" : this.fnSliderBarHCallback,
+						"slideType" : "horizontal"
+						
+					};
+	
+	//Slider 초기화 함수 실행(vertical)
+	this.gfnInitSliderBar(objConfig);
+	
+	//Slider 초기화 함수 실행(horizontal)
+	this.gfnInitSliderBar(objConfig2);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+this.btnSet_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var nPos = this.edtPos.value;
+	
+	//Slider Pos 변경 함수 호출
+	this.gfnSetSliderBar(this.stSliderBar, nPos);
+};
+
+//Slider Pos가 변경될 때 호출될 콜백함수
+this.fnSliderBarCallback = function(obj, nPos)
+{
+	this.edtPos.set_value(nPos);
+}
+
+this.btnSetH_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var nPos = this.edtPosH.value;
+	
+	//Slider Pos 변경 함수 호출
+	this.gfnSetSliderBar(this.stSliderBarH, nPos);
+};
+
+//Slider Pos가 변경될 때 호출될 콜백함수
+this.fnSliderBarHCallback = function(obj, nPos)
+{
+	this.edtPosH.set_value(nPos);
+}
+
+]]></Script>
+  </Form>
+</FDL>

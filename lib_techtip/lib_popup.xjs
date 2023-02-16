@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip  popup sample library
+*  @MenuPath    lib_techtip > lib_popup
+*  @FileName	lib_popup.xjs 
+*  @Desction	modal and modeless popup library
+*******************************************************************************
+*  2019.03.20		nana			최초 생성
+*  2019.03.02		nana			수정
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define a user variable
+* @param objForm   : form
+*		 objConfig : {popupWidth, popupHeight, objTextArea, objFunction}
+* @return
+*/
+this.gfnInitPopupForm = function(objForm, objConfig)
+{
+	objForm.config = objConfig;
+}
+
+this.gfnShowModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType)
+{
+	// 현재 구동되는 정보를 업데이트 한다.
+	var childFrame = new ChildFrame();
+	var parentFrame = obj.getOwnerFrame();
+	
+	var sOpenAlignType = "center middle";
+
+	// TO-DO 팝업사이즈 미지정 시 디폴트 값 적용
+	if (this.gfnIsNull(nPopupWidth)) 
+	{
+		nPopupWidth = obj.confing.popupWidth;
+	}
+
+	if (this.gfnIsNull(nPopupHeight)) 
+	{
+		nPopupHeight = obj.confing.popupHeight;
+	}
+
+	var sShowStatus;
+	if (this.gfnIsNull(bShowFrameStatus) || bShowFrameStatus == false) 
+	{
+		sShowStatus = false;
+	}
+	else if (bShowFrameStatus == true) 
+	{
+		sShowStatus = true;
+	}
+	
+	if (!this.gfnIsNull(sAlignType)) 
+	{
+		sOpenAlignType = sAlignType;
+	}
+
+	var nPopupLeft = "";
+	var nPopupTop = "";
+
+	// 팝업 포지션 값 위치 설정
+	nPopupLeft = 0;
+	nPopupTop = 0;
+	
+	/* ===== Statusbar 옵션 추가 - Start ===== */
+	if (sShowStatus == true) 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4 + 25, null, null, sPopupUrl);
+		childFrame.set_statusbarheight(25);
+		childFrame.set_showstatusbar(true);
+	}
+	else 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4, null, null, sPopupUrl);
+	}
+	
+	/* ===== Statusbar 옵션 추가 - End   ===== */
+	childFrame.set_openalign(sOpenAlignType);
+	// 색상정보 6자리 + 투명도 2자리
+	// childFrame.style.set_overlaycolor("#ffffff39");
+	childFrame.set_overlaycolor("RGBA(30, 144, 255, 0.75)");
+	childFrame.set_autosize(false);	
+	childFrame.set_dragmovetype("normal");
+
+	if (this.gfnIsNull(bShowFrameTitle) || bShowFrameTitle == true) 
+	{
+		childFrame.set_showtitlebar(true);
+		childFrame.set_border("3 solid #351b6f");
+		childFrame.set_border("normal");
+	}else{
+		childFrame.set_showtitlebar(false);
+	}
+	
+	// 동적으로 생성한 ChildFrame을 Modal Dialog로 보여줌.
+	childFrame.showModal(parentFrame, arrArguments, obj, popupCallback, true);
+	
+	/*
+	if (!this.gfnIsNull(bShowFrameTitle) || bShowFrameTitle) 
+	{
+		// childframe 에 연결 된 Form titletext 를 적용하지 않기 위해 추가
+		// Popupid 를 결합한 Title 지정
+		var sPopupTitle = "[" + sPopupId + "]" + " " + bShowFrameTitle;
+
+		childFrame.set_titletext(sPopupTitle);
+		childFrame.set_titlebarheight(28);		
+	}
+	*/
+};
+
+this.gfnOpenPopup = function(sPopupId, arrArguments, sPopupUrl, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType)
+{
+	var sShowStatus = "";
+
+	if (this.gfnIsNull(bShowFrameStatus) || bShowFrameStatus == false) 
+	{
+		sShowStatus = false;
+	}
+	else if (bShowFrameStatus == true) 
+	{
+		sShowStatus = true;
+	}
+	
+	var sShowTitle = "";
+	if (this.gfnIsNull(bShowFrameTitle) || bShowFrameTitle == false) 
+	{
+		sShowTitle = false;
+	}
+	else if (bShowFrameTitle == true) 
+	{
+		sShowTitle = true;
+	}
+	
+	var sOpenAlignType = "center middle";
+	
+	if (!this.gfnIsNull(sAlignType)) 
+	{
+		sOpenAlignType = sAlignType;
+	}
+	
+	var parentFrame = obj.getOwnerFrame();
+	
+	var popupLeft = 0;
+	var popupTop = 0;
+	var sOpt = "showtitlebar="+sShowTitle+" showstatusbar="+sShowStatus+" openalign='"+sOpenAlignType+"'";	//only runtime
+	
+	/*
+	for (var i = 0; i < nexacro.getPopupFrames().length; i++) 
+	{
+		if (nexacro.getPopupFrames()[i].name == sID) 
+		{
+			alert("화면이 열려있습니다.");
+			nexacro.getPopupFrames()[i].form.setFocus();
+			return false;
+		}
+	}
+	*/
+	// 신규 Modeless 팝업 호출
+	// application.open(sID, sURL, objMyFrame, sArg, sOpt, popupLeft, popupTop, nWidth, nHeight, this);
+	nexacro.open(sPopupId, sPopupUrl, parentFrame, arrArguments, sOpt, 100,100);
+};
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param {All} val – 체크할 문자열
+* @return {boolean} Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}]]></Script>

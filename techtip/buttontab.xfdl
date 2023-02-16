@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="buttontab" width="450" height="400" titletext="Button Tab (Button, Div를 이용한 탭화면 구성하는 함수)" onload="buttontab_onload">
+    <Layouts>
+      <Layout height="400" mobileorientation="landscape" width="450">
+        <Div id="divTab" taborder="0" text="Div00" left="10" top="10" height="40" width="430"/>
+        <Div id="divTabPage" taborder="1" text="Div00" left="10" top="49" height="340" width="430"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > buttontab
+*  techtip Button, Div을 이용한 Tab 샘플
+*  @FileName	buttontab.xfdl 
+*******************************************************************************
+*  2019.06.19		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_buttontab.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.buttontab_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//Button Tab을 만들기 위한 설정정보 만들기
+	//tabbutton : 탭버튼의 위치/사이즈
+	//extrabutton : 닫기버튼의 위치/사이즈
+	//prevbutton : 이전버튼의 위치/사이즈
+	//nextbutton : 다음버튼의 위치/사이즈
+	//closeallbutton : 전체닫기버튼의 위치/사이즈
+	var objConfig = {
+						"size" : {
+									"tabbutton" : {
+														"left" : 0,
+														"top" : 10,
+														"width" : 120,
+														"height" : 30
+									},
+									"extrabutton" : {
+														"left" : 95,
+														"top" : 5,
+														"width" : 20,
+														"height" : 20,
+									},
+									"prevbutton" : {
+														"left" : 0,
+														"top" : 20,
+														"width" : 20,
+														"height" : 20
+									},
+									"nextbutton" : {
+														"left" : 0,
+														"top" : 20,
+														"width" : 20,
+														"height" : 20
+									},
+									"closeallbutton" : {
+														"left" : 0,
+														"top" : 20,
+														"width" : 20,
+														"height" : 20
+									}
+						}
+	};
+	
+	//Button Tab 초기화 함수 실행
+	this.gfnInitButtonTab(objConfig, this.divTab, this.divTabPage);
+	
+	//Button Tab 추가 함수 실행
+	this.gfnAddButtonTab("001", this.divTab, "테스트1", "techtip::buttontab_inner01.xfdl");
+	this.gfnAddButtonTab("002", this.divTab, "테스트2", "techtip::buttontab_inner02.xfdl");
+	this.gfnAddButtonTab("003", this.divTab, "테스트3", "techtip::buttontab_inner03.xfdl");
+	
+	//첫번째 탭으로 포커스 이동
+	this.gfnAddButtonTab("001", this.divTab);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+]]></Script>
+  </Form>
+</FDL>

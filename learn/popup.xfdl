@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="popup" width="400" height="250" titletext="New Form">
+    <Layouts>
+      <Layout height="250" mobileorientation="landscape" width="400">
+        <GroupBox id="GroupBox03" text="popup" taborder="0" enableevent="false" left="10" top="10" width="380" height="230"/>
+        <TextArea id="modelessTextarea" taborder="1" left="20" top="35" height="155" width="360"/>
+        <Button id="btnSend" taborder="2" text="send" left="92" width="90" onclick="btnSend_onclick" bottom="490" height="30"/>
+        <Button id="btnCall" taborder="3" text="Call Method" left="190" width="90" onclick="btnCall_onclick" bottom="490" height="30"/>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

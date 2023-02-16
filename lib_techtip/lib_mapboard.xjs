@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[//Graphics 컴포넌트 그리기 함수 호출
+this.gfnLoadGraphics = function(objGraphics, objDs)
+{
+	var i, nRow, nCount;
+	var nX, nY, nWidth, nHeight;
+	var nPointWidth = 10;
+	var nPointHeight = 10;
+	var nPointBgWidth = 30;
+	var nPointBgHeight = 30;
+	var sUrl;
+	var objPath;
+	var jsnConfig;
+	
+	//Graphics 컴포넌트 초기화
+	objGraphics.clear();
+	
+	//배경이미지 설정 정보 만들기
+	jsnConfig = {
+					"x" : 0, "y" : 0, "width" : 512,"height" : 633,
+					"image" : "URL('imagerc::/mapboard/img_WF_mapBg01.png')"
+				};
+	
+	//GraphicsImage 생성함수 호출
+	objPath = this.gfnSetGraphicProperties("GraphicsImage", jsnConfig);
+	objGraphics.addChild("imgBg", objPath);
+	
+	nCount = objDs.rowcount;
+	for(i=0;i<nCount;i++)
+	{
+		//데이터셋의 지도 표현 정보 가져오기
+		sId = objDs.getColumn(i, "id");
+		nX = nexacro.toNumber(objDs.getColumn(i, "x"));
+		nY = nexacro.toNumber(objDs.getColumn(i, "y"));
+		sTitle = objDs.getColumn(i, "title");
+		sValue1 = objDs.getColumn(i, "value1");
+		sValue2 = objDs.getColumn(i, "value2");
+		sValue3 = objDs.getColumn(i, "value3");
+		
+		
+		//포인트 배경 설정 정보 만들기
+		jsnConfig = {
+						"x" : nX, "y" : nY, 
+						"width" : nPointBgWidth,"height" : nPointBgHeight,
+						"fillstyle" : "#E3DCFA",
+						"strokepen" : "1px solid #E3DCFA",
+						"opacity" 	: "0.3"
+					};
+		//GraphicsEllipse 생성함수 호출
+		objPath = this.gfnSetGraphicProperties("GraphicsEllipse", jsnConfig);
+		objGraphics.addChild("pointBg_"+sId, objPath);
+		
+		
+		//포인트 설정 정보 만들기
+		jsnConfig = {
+						"x" : nX, "y" : nY, 
+						"width" : nPointWidth,"height" : nPointHeight,
+						"fillstyle" : "#8547FE",
+						"strokepen" : "1px solid #8547FE"
+					};
+					
+		//GraphicsEllipse 생성함수 호출
+		objPath = this.gfnSetGraphicProperties("GraphicsEllipse", jsnConfig);
+		objGraphics.addChild("point_"+sId, objPath);
+		
+		//상세정보 창 생성함수 호출
+		objPath = this.gfnCreateWindow(nX, nY, sTitle, sValue1, sValue2, sValue3);
+		objGraphics.addChild("window_"+sId, objPath);
+	}
+	
+	//Graphics redraw 실행
+	objGraphics.redraw();
+}
+
+//Graphics 하위 오브젝트 생성 및 속성 설정 함수
+this.gfnSetGraphicProperties = function(sCompId, jsnProps)
+{
+	//Graphics 하위 오브젝트 생성
+	var objComp = new nexacro[sCompId];
+	var objFunc;
+	var sProp;
+	
+	//설정정보를 오브젝트의 속성으로 설정
+	for(sProp in jsnProps)
+	{
+		//속성 설정함수 가져오기
+		objFunc = objComp["set_"+sProp];
+		
+		//속성 설정함수 실행
+		objFunc.call(objComp, jsnProps[sProp]);
+	}
+	
+	//생성된 Graphics 하위 오브젝트 리턴
+	return objComp;
+}
+
+//상세정보 창 생성함수
+this.gfnCreateWindow = function(x, y, title, value1, value2, value3)
+{
+	var obj;
+	var objChild;
+	var xGap = 15;
+	var yGap = -45;
+	var nX = x + xGap;
+	var nY = y + yGap;
+	var sValue;
+	var jsnConfig;
+	
+	//상세정보 그룹 설정 정보 만들기
+	jsnConfig = {
+					"x" : nX, "y" : nY,
+					"visible" : false
+				};
+				
+	//GraphicsGroup 생성함수 호출
+	obj = this.gfnSetGraphicProperties("GraphicsGroup", jsnConfig);
+		
+	
+	//상세정보 배경 설정 정보 만들기
+	jsnConfig = {
+					"x" : 0, "y" : 0, 
+					"width" : 110, "height" : 40,
+					"fillstyle" : "#8547FE",
+					"strokepen" : "1px solid #8547FE"
+				};
+				
+	//GraphicsRect 생성함수 호출
+	objChild = this.gfnSetGraphicProperties("GraphicsRect", jsnConfig);
+	obj.addChild("box", objChild);
+	
+	
+	//상세정보 타이틀 설정 정보 만들기
+	jsnConfig = {
+					"x" : 5, "y" : 5, 
+					"font" : 'bold 10px/normal "Arial","Malgun Gothic","Gulim',
+					"color" : "#ffffff",
+					"textAlign" : "left",
+					"verticalAlign" : "top",
+					"text" : title,
+				};
+				
+	//GraphicsText 생성함수 호출
+	objChild = this.gfnSetGraphicProperties("GraphicsText", jsnConfig);
+	obj.addChild("title", objChild);
+	
+	
+	//상세정보 설정 정보 만들기
+	sValue = value1+ "℃ | " + value2 + "% | " + value3;
+	jsnConfig = {
+					"x" : 5, "y" : 25, 
+					"font" : 'bold 8px/normal "Arial","Malgun Gothic","Gulim"',
+					"color" : "#B78FFF",
+					"textAlign" : "left",
+					"verticalAlign" : "top",
+					"text" : sValue,
+				};
+	
+	//GraphicsText 생성함수 호출
+	objChild = this.gfnSetGraphicProperties("GraphicsText", jsnConfig);
+	obj.addChild("value1", objChild);
+	
+	return obj;
+}]]></Script>

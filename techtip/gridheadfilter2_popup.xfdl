@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="gridheadfilter_popup" width="200" height="200" titletext="New Form">
+    <Layouts>
+      <Layout height="200" width="200">
+        <Grid id="grdFilter" taborder="0" left="0" top="0" right="0" bottom="30" autofittype="col" binddataset="dsFilter" oncellclick="Grid00_oncellclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="24" band="left"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24"/>
+              </Rows>
+              <Band id="body">
+                <Cell text="bind:chk" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="bind:code"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnApply" taborder="1" text="설정" left="0" width="50%" height="30" bottom="0" onclick="btnApply_onclick"/>
+        <Button id="btnCancel" taborder="2" text="취소" width="50%" height="30" bottom="0" right="0" onclick="btnCancel_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsFilter">
+        <ColumnInfo>
+          <Column id="chk" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[//필터 리스트 데이터셋 생성 함수 호출
+/**
+* @description 	      : 필터 리스트 데이터셋 생성 함수
+* @param objGrid	  : 필터 적용된 그리드 컴포넌트
+* @param nCol	  	  : 팝업이 호출된 Head Col Index
+* @param objConfig	  : 필터 설정 정보
+* @return             : 없음
+*/
+this.fnMakeFilterDataset = function(objGrid, nCol, objConfig)
+{
+	var i, nRow, nFRow;
+	var objDs = objGrid.getBindDataset();
+	var objCol = objConfig.cols[nCol];
+	var nRowCount = objDs.getRowCountNF();
+	var sColumnId = objCol.bind;
+	var sPreValue = objCol.value;
+	var arrPreValue;
+	var sValue;
+	var nIdx;
+	
+	//기존에 설정된 필터 문자열이 존재하는 경우
+	//문자열을 Array로 분해
+	if(sPreValue)
+	{
+		arrPreValue = sPreValue.split(",");
+	}
+	
+	this.dsFilter.set_enableevent(false);
+	objDs.set_enableevent(false);
+	this.dsFilter.clearData();
+	
+	for(i=0;i<nRowCount;i++)
+	{
+		//원본데이터셋의 데이터 가져오기
+		sValue = objDs.getColumnNF(i, sColumnId);
+		
+		//필터 리스트 데이터셋에 존재 여부 확인
+		nFRow = this.dsFilter.findRow("code", sValue);
+		
+		//필터 리스트에 해당 컬럼 값이 없을 경우 데이터 추가
+		if(nFRow==-1)
+		{
+			nRow = this.dsFilter.addRow();
+			this.dsFilter.setColumn(nRow, "code", sValue);
+			
+			//추가한 컬럼값이 기존 필터 스트링이 있을 경우
+			if(arrPreValue)
+			{
+				nIdx = arrPreValue.indexOf(sValue);
+				if(nIdx!=-1)
+				{
+					//체크박스 선택 상태로 변경
+					this.dsFilter.setColumn(nRow, "chk", "1");
+				}
+			}
+		}
+	}
+	
+	//0번째 Row가 선택되도록 설정
+	this.dsFilter.set_rowposition(0);
+	
+	objDs.set_enableevent(true);
+	this.dsFilter.set_enableevent(true);
+}
+
+/**
+ * @description 설정 버튼 onclick 시 처리내역
+*/
+this.btnApply_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.closePopup({"targetObj" : this.parent, "rtnValue" : "apply"});
+};
+
+/**
+ * @description 취소 버튼 onclick 시 처리내역
+*/
+this.btnCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.closePopup({"targetObj" : this.parent, "rtnValue" : "cancel"});
+};
+]]></Script>
+  </Form>
+</FDL>

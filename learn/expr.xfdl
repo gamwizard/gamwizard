@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="expr" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="Static00" taborder="0" left="50" top="40" width="190" height="51" border="1px solid #555555" padding="5px 5px 5px 5px" font="normal 12pt/normal &quot;Arial&quot;,&quot;나눔고딕&quot;" expr="comp.parent.fnGetValues(comp.text)"/>
+        <Grid id="Grid01" taborder="1" left="50" top="101" width="430" height="147" binddataset="Dataset01" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="59"/>
+                <Column size="341"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="실제 값"/>
+                <Cell col="1" text="expr 출력 값"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:values" textAlign="right"/>
+                <Cell col="1" text="bind:values" expr="comp.parent.fnGetValues(values)" cssclass="expr:comp.parent.fnGetCssclass(values)"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Grid id="Grid00" taborder="2" left="45" top="334" width="445" height="186" binddataset="Dataset00" autofittype="col" autoenter="key">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="60"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="119"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="status"/>
+                <Cell col="1" text="type"/>
+                <Cell col="2" text="num1"/>
+                <Cell col="3" text="num2"/>
+                <Cell col="4" text="calculation"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:status" expr="status == 1? &quot;추가&quot; : status == 2?&quot;수정&quot; : status == 3?&quot;삭제&quot; : &quot;&quot;" cssclass="expr:status==1? &quot;expr1&quot; : status==2? &quot;expr2&quot; : status==3? &quot;expr3&quot; : &quot;&quot;"/>
+                <Cell col="1" text="bind:type" displaytype="combocontrol" edittype="expr:status == 3? &quot;none&quot; : &quot;combo&quot;" combodataset="Dataset02" combocodecol="type" combodatacol="value" comboautoselect="true"/>
+                <Cell col="2" text="bind:num1" edittype="expr:status == 1? &quot;normal&quot; : &quot;none&quot;" textareaautoselect="true"/>
+                <Cell col="3" text="bind:num2" edittype="expr:status == 1? &quot;normal&quot; : &quot;none&quot;" textareaautoselect="true"/>
+                <Cell col="4" expr="type==1? num1 + num2 : type==2? num1-num2 : num1 * num2" displaytype="number" cssclass="expr:status==1? &quot;expr1&quot; : status==2? &quot;expr2&quot; : status==3? &quot;expr3&quot; : &quot;&quot;"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button01" taborder="3" text="추가" left="45" top="304" width="56" height="26" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="4" text="삭제" left="109" top="304" width="56" height="26" onclick="Button02_onclick"/>
+        <Grid id="Grid02" taborder="5" left="511" top="336" width="445" height="186" binddataset="Dataset04" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="60"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="119"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="status"/>
+                <Cell col="1" text="type"/>
+                <Cell col="2" text="num1"/>
+                <Cell col="3" text="num2"/>
+                <Cell col="4" text="calculation"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:statustext" cssclass="bind:cssclass"/>
+                <Cell col="1" text="bind:type" displaytype="combocontrol" edittype="expr:combtype" combodataset="Dataset02" combocodecol="type" combodatacol="value" comboautoselect="true"/>
+                <Cell col="2" text="bind:num1" edittype="expr:num1type" textareaautoselect="true"/>
+                <Cell col="3" text="bind:num2" edittype="expr:num2type" textareaautoselect="true"/>
+                <Cell col="4" displaytype="number" cssclass="bind:cssclass" text="bind:calculate"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button03" taborder="6" text="set init expr" left="837" top="283" width="119" height="47" onclick="Button03_onclick"/>
+        <Button id="Button00" taborder="7" text="추가" left="511" top="304" width="56" height="26" onclick="Button00_onclick"/>
+        <Button id="Button04" taborder="8" text="삭제" left="575" top="304" width="56" height="26" onclick="Button04_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="Dataset00" oncolumnchanged="Dataset00_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="status" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="num1" type="INT" size="256"/>
+          <Column id="num2" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">3</Col>
+            <Col id="num2">5</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">2</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">1</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">5</Col>
+            <Col id="num2">2</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">6</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">4</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset01">
+        <ColumnInfo>
+          <Column id="values" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="values">98</Col>
+          </Row>
+          <Row>
+            <Col id="values">114</Col>
+          </Row>
+          <Row>
+            <Col id="values">100</Col>
+          </Row>
+          <Row>
+            <Col id="values">54</Col>
+          </Row>
+          <Row>
+            <Col id="values">102</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset02">
+        <ColumnInfo>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="type">1</Col>
+            <Col id="value">더하기</Col>
+          </Row>
+          <Row>
+            <Col id="type">2</Col>
+            <Col id="value">빼기</Col>
+          </Row>
+          <Row>
+            <Col id="type">3</Col>
+            <Col id="value">곱하기</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset03" oncolumnchanged="Dataset00_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="status" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="num1" type="INT" size="256"/>
+          <Column id="num2" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">3</Col>
+            <Col id="num2">5</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">2</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">1</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">5</Col>
+            <Col id="num2">2</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">6</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">4</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset04" oncolumnchanged="Dataset04_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="status" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="num1" type="INT" size="256"/>
+          <Column id="num2" type="INT" size="256"/>
+          <Column id="cssclass" type="STRING" size="256"/>
+          <Column id="calculate" type="STRING" size="256"/>
+          <Column id="combtype" type="STRING" size="256"/>
+          <Column id="num1type" type="STRING" size="256"/>
+          <Column id="num2type" type="STRING" size="256"/>
+          <Column id="statustext" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">3</Col>
+            <Col id="num2">5</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">2</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">1</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">5</Col>
+            <Col id="num2">2</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">1</Col>
+            <Col id="num1">6</Col>
+            <Col id="num2">3</Col>
+          </Row>
+          <Row>
+            <Col id="status">0</Col>
+            <Col id="type">3</Col>
+            <Col id="num1">2</Col>
+            <Col id="num2">4</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="item0" compid="Static00" propid="text" datasetid="Dataset01" columnid="values"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[/* grid cell cssclass 정의
+
+.Grid .body .row .cell.expr1
+{
+	color : #52dfee;
+}
+.Grid .body .row .cell.expr2
+{
+	color : #ee52ec;
+}
+.Grid .body .row .cell.expr3
+{
+	color : #f88948;
+}
+*/
+
+this.fnGetValues = function (val)
+{
+	var sRtn = val;
+	if(val == 100)
+	{
+		sRtn = "값은 " + sRtn;
+		sRtn += "입니다.";
+	}
+	else
+	{
+		sRtn += "값은 100";
+		if(val >100)
+		{
+			sRtn += "보다 큽니다.";
+		}
+		else
+		{
+			sRtn += "보다 작습니다.";
+		}
+	}
+	
+	return sRtn;
+};
+
+this.fnGetCssclass = function (val)
+{
+	var sRtn = "expr1";
+	
+	if(val != 100)
+	{
+		if(val >100)
+		{
+			sRtn = "expr2";
+		}
+		else
+		{
+			sRtn = "expr3";
+		}
+	}
+	
+	return sRtn;
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Grid00 추가
+	this.Dataset00.set_enableevent(false);
+	var nRow = this.Dataset00.addRow();
+	this.Dataset00.setColumn(nRow,"status",1);
+	this.Dataset00.setColumn(nRow,"type",1);
+	this.Dataset00.set_enableevent(true);
+};
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Grid00 삭제
+	this.Dataset00.set_enableevent(false);
+	var nRow = this.Dataset00.rowposition;
+	this.Dataset00.setColumn(nRow,"status",3);
+	this.Dataset00.set_enableevent(true);
+};
+
+this.Dataset00_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	//Grid00 수정
+	if(obj.getColumn(e.row,"status")==0)
+	{
+		obj.setColumn(e.row,"status",2);
+	}
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Grid02 추가
+	this.Dataset04.set_enableevent(false);
+	var nRow = this.Dataset04.addRow();
+	this.Dataset04.setColumn(nRow,"status",1);
+	this.Dataset04.setColumn(nRow,"type",1);
+	this.fnsetDatasetInfo(nRow);
+	this.Dataset04.set_enableevent(true);
+};
+
+this.Button04_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Grid02 삭제
+	this.Dataset04.set_enableevent(false);
+	var nRow = this.Dataset04.rowposition;
+	this.Dataset04.setColumn(nRow,"status",3);
+	this.fnsetDatasetInfo(nRow);
+	this.Dataset04.set_enableevent(true);
+};
+
+this.Dataset04_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	//Grid02 수정
+	if(obj.getColumn(e.row,"status")==0)
+	{
+		this.Dataset04.set_enableevent(false);
+		obj.setColumn(e.row,"status",2);
+		this.fnsetDatasetInfo(e.row);
+		this.Dataset04.set_enableevent(true);
+	}
+	else if(obj.getColumn(e.row,"status")==1)
+	{
+		this.Dataset04.set_enableevent(false);
+		this.fnsetDatasetInfo(e.row);
+		this.Dataset04.set_enableevent(true);
+	}
+};
+
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.Dataset04.set_enableevent(false);
+	for(var i=0; i<this.Dataset04.getRowCount(); i++)
+	{
+		this.fnsetDatasetInfo(i);		
+	}
+	this.Dataset04.set_enableevent(true);
+};
+
+this.fnsetDatasetInfo = function (n)
+{
+	this.Dataset04.setColumn(n,"cssclass",this.fngetclass(n));
+	this.Dataset04.setColumn(n,"calculate",this.fngetCalculate(n));
+	this.Dataset04.setColumn(n,"combtype",this.fngetCombotype(n));
+	this.Dataset04.setColumn(n,"num1type",this.fngetNumtype(n));
+	this.Dataset04.setColumn(n,"num2type",this.fngetNumtype(n));
+	this.Dataset04.setColumn(n,"statustext",this.fngetText(n));
+}
+
+this.fngetclass = function(nRow)
+{
+	var sStatus = this.Dataset04.getColumn(nRow,"status");
+	var sCssClass = sStatus==1? "expr1" : sStatus==2? "expr2" : sStatus==3? "expr3" : "";
+	return sCssClass;
+}
+
+this.fngetCalculate = function(nRow)
+{
+	var num1 = this.Dataset04.getColumn(nRow,"num1");
+	var num2 = this.Dataset04.getColumn(nRow,"num2");
+	var sType = this.Dataset04.getColumn(nRow,"type");
+	var nSum = sType==1? num1 + num2 : sType==2? num1-num2 : num1 * num2;
+	return nSum;
+}
+
+this.fngetCombotype = function(nRow)
+{
+	var sStatus = this.Dataset04.getColumn(nRow,"status");
+	var sCombType = sStatus == 3? "none" : "combo";
+	return sCombType;
+}
+
+this.fngetNumtype = function(nRow)
+{
+	var sStatus = this.Dataset04.getColumn(nRow,"status");
+	var sNumType = sStatus == 1? "normal" : "none";
+	return sNumType;
+}
+
+this.fngetText = function(nRow)
+{
+	var sStatus = this.Dataset04.getColumn(nRow,"status");
+	var sTesxt = sStatus == 1? "추가" : sStatus == 2?"수정" : sStatus == 3?"삭제" : "";
+	return sTesxt;
+}]]></Script>
+  </Form>
+</FDL>

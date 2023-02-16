@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip distinct & group by sample library
+*  @MenuPath	lib_techtip > lib_groupby
+*  @FileName	lib_groupby.xjs 
+*  @Desction	make distinct & group by dataset
+*******************************************************************************
+*  2019.06.21		nana			최초 생성
+*  2020.03.02		nana			수정
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description set distinct dataset
+* @param objDs : dataset,
+*		 arrList : select distinct column list
+* @return
+*/
+this.fnSetdistinct = function (objDs,arrList)
+{
+	//create dataset name ('dsTemp' + random 4 number)
+	var sDatasetId = "dsTemp" + nexacro.floor(Math.random(),4) * 10000;	// 0 ~ 9999
+	
+	//create dataset
+	var objTempDs = new Dataset;
+	objTempDs.set_name(sDatasetId);
+	//obj.addChild(sDatasetId, objTempDs);	
+	
+	var sKeyString = "S";
+	for(var i=0; i<arrList.length; i++)
+	{
+		objTempDs.addColumn(arrList[i],"string",256);
+		sKeyString += "+" + arrList[i];
+	}
+
+	objDs.set_enableevent(false);
+	
+	//set_keystring = sort
+	objDs.set_keystring(sKeyString);
+	var nRow = 0;
+	for(var i=0; i<objDs.getRowCount(); i++)
+	{
+		strList = "";
+		for(var k=0; k<arrList.length; k++)
+		{
+			strList += arrList[k] + "=='" +  objDs.getColumn(i,arrList[k]) + "'";
+			
+			if(k != arrList.length -1)
+			{
+				strList += " && " ;
+			}
+		}
+		
+		//find row and add row
+		if(objTempDs.findRowExpr(strList) < 0)
+		{
+			nRow = objTempDs.addRow();
+			objTempDs.copyRow(nRow,objDs,i);
+		}
+	}
+	
+	objDs.set_keystring("");
+	objDs.set_enableevent(true);
+	return objTempDs;
+}
+
+/**
+* @description set group by dataset
+* @param objDs : dataset,
+*		 arrList : select distinct column list
+*		 objInfo : {num , columnId}
+*			num	 : 0 = total count, 1 = sum, 2 = avg
+*		columnId : sum & avg column id
+* @return
+*/
+this.fnSetGroupBy = function (objDs,arrList,objInfo)
+{
+	//create dataset
+	var objTempDs = this.fnSetdistinct(objDs,arrList);
+	
+	var colName = "";
+	switch(objInfo.num) {
+	case '0':		colName = "total";
+		break;
+	case '1':		colName = "sum";
+		break;
+	case '2':		colName = "avg";
+		break;
+	default:
+	}
+	
+	//group by column add
+	objTempDs.addColumn(colName,"BIGDECIMAL",256);
+	
+	var strList = "";
+	var nTotalCount = 0;
+	
+	for(var i=0; i<objTempDs.getRowCount(); i++)
+	{
+		strList = "";
+		for(var k=0; k<arrList.length; k++)
+		{
+			strList += arrList[k] + "=='" +  objTempDs.getColumn(i,arrList[k]) + "'";
+			
+			if(k != arrList.length -1)
+			{
+				strList += " && " ;
+			}
+		}
+		
+		objDs.set_enableevent(false);
+		
+		//dataset filter
+		objDs.set_filterstr(strList);
+		
+		switch(objInfo.num) {
+		case '0':		nTotalCount = objDs.getRowCount();				//total row count
+			break;
+		case '1':		nTotalCount = objDs.getSum(objInfo.columnId);	//sum
+			break;
+		case '2':		nTotalCount = objDs.getAvg(objInfo.columnId);	//avg
+			break;
+		default:
+		}
+		
+		objTempDs.setColumn(i,colName,nTotalCount);
+		objDs.set_filterstr("");
+		objDs.set_enableevent(true);
+	}
+	
+	return objTempDs;
+};
+]]></Script>

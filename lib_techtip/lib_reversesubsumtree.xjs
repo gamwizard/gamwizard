@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	       : ReverseSubsum을 활용한 Tree만들기 함수
+* @param objGrid       : 설정할 그리드
+*        arrColumnList : Tree의 그룹으로 설정할 컬럼리스트
+*        nSize         : Tree를 표현할 컬럼의 Width
+* @return              : 없음
+*/
+this.gfnMakeReverseSubsumTree = function (objGrid, arrColumnList, nSize)
+{
+	var i;
+	var nCount = arrColumnList.length;
+	var objDs = objGrid.getBindDataset();
+	var sKeyString;
+
+	//성능향상을 위해 Redraw/Event 정지
+	objGrid.set_enableredraw(false);
+	objDs.set_enableevent(false);
+
+	//데이터셋 keystring에 설정할 그룹키 생성
+	sKeyString = "G:";
+	for(i=0;i<nCount;i++)
+	{
+		if(i==0)sKeyString += arrColumnList[i];
+		else sKeyString += "," + arrColumnList[i];
+	}
+
+	//reversesubsum 설정
+	objDs.set_reversesubsum(true);
+
+	//keystring 설정
+	objDs.set_keystring(sKeyString);
+
+	//expr에서 사용하기위해 컬럼리스트를 데이터셋의 변수로 등록
+	objDs.treecolumnlist = arrColumnList;
+
+	//그리드에 Col 삽입
+	objGrid.insertContentsCol("body", 0);
+
+	//삽입된 Col의 사이즈 변경
+	objGrid.setFormatColProperty(0, "size", nSize);
+
+	//삽입된 Column의 displaytype을 treeitemcontrol로 설정
+	objGrid.setCellProperty("body", 0, "displaytype", "treeitemcontrol");
+
+	//삽입된 Column의 edittype을 tree 설정
+	objGrid.setCellProperty("body", 0, "edittype", "tree");
+
+	//삽입된 Column의 text를 그룹핑된 컬럼의 정보를 표현하기 위한 Expr함수 설정
+	objGrid.setCellProperty("body", 0, "text", "expr:dataset.parent.gfnSetSubSumText(currow, dataset, comp)");
+
+	//treelevel 값의 증가값이 rowlevel과 반대이므로 역순으로 계산 하기위한 Expr 설정
+	objGrid.setCellProperty("body", 0, "treelevel", "expr:dataset.treecolumnlist.length>0?dataset.treecolumnlist.length-dataset.getRowLevel(currow):'0'");
+
+	//성능향상을 위해 Redraw/Event 재실행
+	objDs.set_enableevent(true);
+	objGrid.set_enableredraw(true);
+}
+
+/**
+* @description 	 : SubsumText를 만들기위한 Expr 함수
+* @param nRow    : 설정할 Row Index
+*        objDs   : 참조할 데이터셋 오브젝트
+*        objGrid : 설정할 그리드 컴포넌트
+* @return        : SubsumText로 설정할 텍스트
+*/
+this.gfnSetSubSumText = function(nRow, objDs, objGrid)
+{
+	//현재 Row Idx의 Level 값
+	var nLevel = objDs.getRowLevel(nRow);
+
+	//Level이 0일 경우 텍스트를 공백으로 설정
+	if(nLevel==0) return "";
+
+	//Level이 0이 아닐 경우 [현재 레벨에 해당하는 컬럼의 값 (하위 노드의 갯수)] 형태의 텍스트 설정
+	return objDs.getColumn(nRow+nLevel, objDs.treecolumnlist[objDs.treecolumnlist.length-(nLevel)])+"("+objGrid.getTreeChildCount(nRow)+")";
+}
+]]></Script>

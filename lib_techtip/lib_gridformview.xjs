@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip dataset auto filter form sample library
+*  @MenuPath   	lib_techtip > lib_gridformview.xjs
+*  @FileName	lib_gridformview.xjs 
+*  @Desction	Grid edit form open
+*******************************************************************************
+*  2020.06.25		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define config object
+* @param objForm : objGrid,
+*		 objConfig : {divPaddingWith, divPaddingHeight, divViewName}
+* @return
+*/
+this.gfnInitGridFormView = function(objGrid,objConfig)
+{
+	objGrid.config = objConfig;
+	
+	//Row Num 자동생성(생략가능)
+	this.gfnCreateRowNumber(objGrid);
+}
+
+/**
+* @description create row number col
+* @param objGrid : grid
+* @return
+*/
+this.gfnCreateRowNumber = function(objGrid)
+{
+	//grid에 currow를 가져오는 셀이 없을 경우 추가
+	var sText = objGrid.getCellProperty( "Body", 0, "text" );
+	objGrid.set_enableevent(false);
+	if(sText.indexOf("currow")<0)
+	{
+		// No. column 추가 (현재 row +1 : row는 0부터 시작)
+		objGrid.insertContentsCol("left",0);
+		objGrid.setFormatColProperty(0,"size",50);
+		objGrid.setCellProperty( "Head", 0, "text", "No." );
+		objGrid.setCellProperty( "Body", 0, "text", "expr:currow+1" );
+	};
+	objGrid.set_enableevent(true);
+};
+
+/**
+* @description create Div form
+* @param objGrid : grid
+* @return objDiv: div (form view)
+*/
+this.gfnCreateDivView = function(objGrid)
+{
+	var objParent = objGrid.parent;
+	var conf = objGrid.config;
+	var sDivName = conf.divViewName;
+	var nLeft = objGrid.getOffsetLeft() + conf.divPaddingWith;
+	var nTop  = objGrid.getOffsetTop()  + conf.divPaddingHeight;
+	var nWidth = objGrid.getOffsetWidth() - (conf.divPaddingWith * 2);
+	var nRight = objParent.width - (nLeft+nWidth);
+
+	//create div form
+	var objDiv = new Div();
+		objDiv.init(sDivName, nLeft, nTop, null, 100, nRight, null);
+		
+		//div style 적용
+		objDiv.set_background("#ffffff");
+		objDiv.set_border("3px solid #dbdee2");
+		
+		objDiv.set_visible(false);
+		
+	objParent.addChild(sDivName, objDiv);
+	objDiv.show();
+	
+	return objDiv;
+}
+
+/**
+* @description create input component (Grid record)
+* @param objGrid : grid
+* @return objDiv : div (form view)
+*/
+this.gfnCreateFormView = function(objGrid)
+{
+	//define component size
+	var nPadding	= 10;	
+	var nTitleWidth = 80;
+	var nTop		= 10;
+	var nLeft		= 10;
+	var nHeight		= 45;
+	var nRight		= 10;
+
+	//div form 생성 함수 호출
+	var objDiv = this.gfnCreateDivView(objGrid);
+	
+	//title level과 value component - object & id
+	var objTitleComp, objViewComp;
+	var sCompTitleId = "", 	sCompViewId = "";
+	
+	//grid cell의 edittype
+	var sEditType = "";
+	
+	//그리드에 바인딩 된 데이터 셋 및 column id, column info
+	var objDs = objGrid.getBindDataset();
+	var sColumnId = "";
+	var objColumnInfo;
+	
+	//component에 바인딩 될 property
+	var sPropertyId = "value";
+	
+	var objParent = objGrid.parent;
+	var conf = objGrid.config;
+	var nCount = objGrid.getFormatColCount();
+	
+	for(var i=0; i<nCount; i++)
+	{
+		//dataset과 바인딩 된 컬럼이 있을 때 column id - 바인딩 컬럼이 없을 경우 null return
+		sColumnId = this.gfnGetBindColumnId(objGrid, i);
+		
+		if(!this.gfnIsNull(sColumnId))
+		{
+			//create title Component - Static
+			sCompTitleId = "title_" + sColumnId;
+			objTitleComp = new Static();
+			objTitleComp.init(sCompTitleId,nLeft,nTop,nTitleWidth,nHeight,null,null);
+			
+			//grid head text 가져오기
+			objTitleComp.set_text(this.gfnGetFieldTitle(objGrid, i));
+			
+			//static style 적용
+			objTitleComp.set_textAlign("right");
+			
+			//form view로 사용할 div에 addchild
+			objDiv.addChild(sCompTitleId,objTitleComp);
+			objTitleComp.show();
+			
+			nLeft = objTitleComp.getOffsetRight() + nPadding;
+			
+			//grid cell의 edittype (편집상태) 가져오기
+			sEditType = this.gfnGetFieldEditType(objGrid,i);
+			
+			//컬럼정보 가져오기 -> data type 구별 하기위함
+			objColumnInfo = objDs.getColumnInfo(sColumnId);
+			
+			//create view (input) Component - Static, Edit, TextArea, Calendar, Button
+			sCompViewId = "view_" + sColumnId;
+			
+			//생성할 컴포넌트 가져오기
+			objViewComp = this.gfnSetCompType(sEditType,objColumnInfo);
+			objViewComp.init(sCompViewId,nLeft,nTop,null,nHeight,nRight,null);
+			
+			//form view로 사용할 div에 addchild
+			objDiv.addChild(sCompViewId,objViewComp);
+			objViewComp.show();
+			
+			//component bind property - static or button일 때 text 바인딩, 그 외는 value에 바인딩
+			if(objViewComp.toString() == "[object Static]" || objViewComp.toString() == "[object Button]")
+			{
+				sPropertyId = "text";				
+			}
+			else
+			{
+				sPropertyId = "value";
+			}
+			
+			//컴포넌트 property 변경
+			this.gfnSetCompProperty(objViewComp,objGrid,i);
+			
+			//컴포넌트 바인드
+			//component 동적 bind 시 컴포넌트 명 설명 방법 : div.form.compid (objDiv.name+".form."+sCompViewId)
+			this.gfnSetBinditems(objDiv.name+".form."+ sCompViewId, sPropertyId, objGrid.binddataset, sColumnId,i);
+			
+			nTop = nTop + nHeight + nPadding;
+			nLeft = 10;
+			
+			if(objGrid.getOffsetHeight()-(conf.divPaddingHeight*2) > nTop)
+			{
+				objDiv.setOffsetHeight(nTop);
+			}
+		}
+	}
+	
+	objDiv.form.resetScroll();
+	
+	return objDiv;
+};
+
+/**
+* @description find component type
+* @param sEditType	: grid edittype cell property,
+		objColInfo	: col info object
+* @return
+* enumEdittype ::= 'normal' | 'none' | 'button' | 'checkbox' | 'combo' | 'date' | 'mask' | 'readonly' | 'text' | 'textarea' | 'tree'
+*/
+this.gfnSetCompType = function(sEditType,objColInfo)
+{
+	//컴럼정보에서 컬럼의 datatype 가져오기
+	var sColType = objColInfo.type;
+	var sDataType = "";
+	
+	//dataset datatype에 따라서 생성 컴포넌트가 달라짐
+	if(sColType == "INT" || sColType ==  "FLOAT" || sColType ==  "BIGDECIMAL")
+	{
+		//int, float, bicdecimal - number로 구분
+		sDataType = "number";
+	}
+	else if(sColType == "DATE" || sColType == "DATETIME")
+	{
+		//date, datetime - date로 구분
+		sDataType = "date";
+	}
+	else
+	{
+		//그 외 (string, blob.. ) - 모두 string
+		sDataType = "string";
+	}	
+	
+	//component init
+	var objComp;
+	if(sEditType == "normal")
+	{
+		if(sDataType == "number")
+		{
+			//number처리 위해 maskedit 사용
+			objComp = new MaskEdit();
+			objComp.set_type("number");
+		}
+		else if(sDataType == "date")
+		{
+			objComp = new Calendar();
+		}
+		else
+		{
+			objComp = new Edit();
+		}
+	}
+	else if(sEditType == "none")
+	{
+		objComp = new Static();
+	}
+	else if(sEditType == "button")
+	{
+		objComp = new Button();
+	}
+	else if(sEditType == "checkbox")
+	{
+		objComp = new CheckBox();
+	}
+	else if(sEditType == "combo")
+	{
+		objComp = new Combo();
+	}
+	else if(sEditType == "date")
+	{
+		objComp = new Calendar();
+	}
+	else if(sEditType == "mask")
+	{
+		objComp = new MaskEdit();
+	}
+	else if(sEditType == "readonly")
+	{
+		objComp = new Edit();
+		objComp.set_readonly(true);
+	}
+	else if(sEditType == "text")
+	{
+		//number처리 위해 maskedit 사용
+		if(sDataType == "number")
+		{
+			objComp = new MaskEdit();
+			objComp.set_type("number");
+		}
+		else
+		{
+			objComp = new Edit();
+		}
+	}
+	else if(sEditType == "textarea")
+	{
+		objComp = new TextArea();
+	}
+	else if(sEditType == "tree")
+	{
+		objComp = new Static();
+	}
+	
+	return objComp;
+};
+
+/**
+* @description component property update
+* @param objComp	: view form input component,
+		 objGrid	: Grid,
+		 nCell		: Grid cell num
+* @return
+*/
+this.gfnSetCompProperty = function(objComp,objGrid,nCell)
+{
+	if(objComp.toString() == "[object Combo]")
+	{
+		var sInnerDataset = objGrid.getCellProperty("Body", nCell, "combodataset");
+		var sInnerCode = objGrid.getCellProperty("Body", nCell, "combocodecol");
+		var sInnerData = objGrid.getCellProperty("Body", nCell, "combodatacol");
+		
+		objComp.set_innerdataset(sInnerDataset);
+		objComp.set_codecolumn(sInnerCode);
+		objComp.set_datacolumn(sInnerData);		
+	}
+	else if(objComp.toString() == "[object MaskEdit]")
+	{
+		var sMaskFormat = objGrid.getCellProperty("Body", nCell, "maskeditformat");
+		objComp.set_format(sMaskFormat);
+	}
+	else if(objComp.toString() == "[object Static]")
+	{
+		//style 변경
+		objComp.set_background("#999999");
+		objComp.set_border("1px solid #d5d5d5");
+		objComp.set_padding("1px 9px 0px 9px");
+	}
+};
+
+/**
+* @description add bind items 
+* @param sObj		: component name,
+		 sProperty	: bind property,
+		 sDatasetId	: Dataset id,
+		 sColumnId	: dataset column id,
+		 nNum		: binditems number
+* @return
+*/
+this.gfnSetBinditems = function(sObj, sProperty, sDatasetId, sColumnId, nNum)
+{
+	var sBindId = "bindItem"+nNum;
+	var objBindItem = new BindItem();
+		objBindItem.init(sBindId, sObj, sProperty, sDatasetId, sColumnId);
+	this.addChild(sBindId, objBindItem);
+	objBindItem.bind();
+};
+
+/**
+* @description get find title text
+* @param objGrid : grid, nCell : cell num
+* @return
+*/
+this.gfnGetFieldTitle = function(objGrid, nCell)
+{
+	var sText = objGrid.getCellProperty( "Head", nCell, "text");
+	return sText;
+};
+
+/**
+* @description get bind col id
+* @param objGrid : grid, nCell : cell num
+* @return sColumnId : dataset binded column id
+*/
+this.gfnGetBindColumnId = function(objGrid, nCell)
+{
+	//grid cell에 작성된 text 가져오기
+	var sText = objGrid.getCellProperty("Body", nCell, "text");
+	
+	var sColumnId = "";
+	
+	// "bind:" : 데이터셋과 바인딩 된 컬럼이 있는 경우
+	if(sText.indexOf("bind")>-1)
+	{
+		sColumnId = sText.replace("bind:","");
+	}
+	
+	return sColumnId;
+};
+
+/**
+* @description get find field edit type
+* @param objGrid : grid, nCell : cell num
+* @return
+*/
+this.gfnGetFieldEditType = function(objGrid, nCell)
+{
+	var sText = objGrid.getCellProperty( "Body", nCell, "edittype");
+	return sText;
+};
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description form open button onclick event --> this.gfnOpenFormClick(objButton)
+*/
+this.gfnOpenFormClick = function(objGrid)
+{
+	var sDivViewName = objGrid.config.divViewName;
+	
+	var objDiv = this.components[sDivViewName];
+	
+	if(this.gfnIsNull(this.components[sDivViewName]))
+	{
+		//form view가 없을 때, 새로 생성해 줌
+		objDiv = this.gfnCreateFormView(objGrid);
+	}
+	
+	if(objDiv.visible)
+	{
+		objDiv.set_visible(false);
+	}
+	else
+	{
+		objDiv.set_visible(true);
+	}
+}
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param {All} val – 체크할 문자열
+* @return {boolean} Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}]]></Script>

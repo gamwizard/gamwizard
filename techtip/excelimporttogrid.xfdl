@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="excelimporttogrid" width="710" height="720" titletext="New Form" onload="excelimporttogrid_onload">
+    <Layouts>
+      <Layout height="720" width="710">
+        <Grid id="grdList01" taborder="0" left="10" top="56" height="413" autofittype="col" binddataset="dsList01" right="10">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="120"/>
+                <Column size="138"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="60"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+                <Row size="24" band="summ"/>
+              </Rows>
+              <Band id="head">
+                <Cell colspan="8" text="Test Grid 01"/>
+                <Cell row="1" text="NAME"/>
+                <Cell row="1" col="1" text="YEAR"/>
+                <Cell row="1" col="2" text="ENGINE"/>
+                <Cell row="1" col="3" text="POWER"/>
+                <Cell row="1" col="4" text="TORQUE"/>
+                <Cell row="1" col="5" text="MAXSPEED"/>
+                <Cell row="1" col="6" text="WEIGHT"/>
+                <Cell row="1" col="7" text="SUM"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:NAME"/>
+                <Cell col="1" text="bind:YEAR" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="2" text="bind:ENGINE"/>
+                <Cell col="3" text="bind:POWER"/>
+                <Cell col="4" text="bind:TORQUE"/>
+                <Cell col="5" text="bind:MAXSPEED"/>
+                <Cell col="6" text="bind:WEIGHT"/>
+                <Cell col="7" text="expr:MAXSPEED*POWER" displaytype="number"/>
+              </Band>
+              <Band id="summary">
+                <Cell colspan="7" text="합계"/>
+                <Cell col="7" text="expr:dataset.getSum('POWER*MAXSPEED')" displaytype="number"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <TextArea id="txtLog" taborder="1" left="10" top="502" height="175" value="" right="10"/>
+        <Static id="stLogs" taborder="2" text="Excute Logs" left="10" top="476" height="26" font="bold 12px &quot;Malgun Gothic&quot;" border="1px solid #cbcbcb" background="#a6c26b" textAlign="center" right="10"/>
+        <Button id="btnImportList" taborder="3" text="Import File" top="8" height="42" font="bold 12px &quot;Malgun Gothic&quot;" onclick="btnImportList_onclick" width="105" right="10"/>
+        <Div id="divSelectSheet" taborder="4" left="720" top="28" width="450" height="500" background="#ffffff" border="1px solid #125dae" visible="false">
+          <Layouts>
+            <Layout>
+              <Grid id="grdSheetList" taborder="0" left="125" top="80" binddataset="dsSheetList" oncelldblclick="grdSheetList_oncelldblclick" height="115" right="25">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="150"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="body">
+                      <Cell text="bind:sheetname"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Static id="Static00" taborder="1" text="Import Excel ( 1/2 )" left="0" top="0" right="0" height="30" font="bold 14px &quot;Malgun Gothic&quot;" padding="0px 0px 0px 15px" background="#125dae" color="#ffffff"/>
+              <Static id="Static01" taborder="2" text="Select Sheet &lt;fc v='#b7b1b2'&gt;&gt; Column mappings&lt;/fc&gt;" left="224" top="30" height="30" font="bold 11px &quot;Malgun Gothic&quot;" textAlign="right" right="15" usedecorate="true"/>
+              <Static id="Static01_00" taborder="3" text="1. select sheet" left="20" top="70" height="30" font="bold 12px &quot;Malgun Gothic&quot;" width="100"/>
+              <Button id="btnCancel" taborder="4" text="Cancel" left="358" top="455" width="65" height="30" font="bold 12px &quot;Malgun Gothic&quot;"/>
+              <Button id="btnNext" taborder="5" text="Next" left="285" top="455" width="65" height="30" font="bold 12px &quot;Malgun Gothic&quot;"/>
+              <Static id="Static01_00_00" taborder="6" text="2. display selected sheet data" left="25" top="210" height="30" font="bold 12px &quot;Malgun Gothic&quot;" width="260"/>
+              <Grid id="grdDataList" taborder="7" left="25" top="250" height="195" right="25" binddataset="dsDataList">
+                <Formats>
+                  <Format id="default"/>
+                </Formats>
+              </Grid>
+              <Static id="stCount" taborder="8" text="row count : 0" left="318" top="222" height="30" font="bold 10px &quot;Malgun Gothic&quot;" width="105" textAlign="right"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divColumnMappings" taborder="5" left="1174" top="27" width="450" height="500" background="#ffffff" border="1px solid #125dae" visible="false">
+          <Layouts>
+            <Layout>
+              <Grid id="grdColumnMappings" taborder="0" left="25" top="105" height="145" right="25" binddataset="dsColumnMappings" autofittype="col" autoenter="key">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="75"/>
+                      <Column size="160"/>
+                      <Column size="160"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="24" band="head"/>
+                      <Row size="24"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text="Exclusion"/>
+                      <Cell col="1" text="Grid HEAD"/>
+                      <Cell col="2" text="EXCEL HEAD"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:ex" displaytype="checkboxcontrol" edittype="checkbox"/>
+                      <Cell col="1" text="bind:grdHead"/>
+                      <Cell col="2" text="bind:excelHead" edittype="combo" displaytype="normal" combodataset="dsCombo" combocodecol="code" combodatacol="value"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Static id="Static00" taborder="1" text="Import Excel ( 2/2 )" left="0" top="0" right="0" height="30" font="bold 14px &quot;Malgun Gothic&quot;" padding="0px 0px 0px 15px" background="#125dae" color="#ffffff"/>
+              <Static id="Static01" taborder="2" text="&lt;fc v='#b7b1b2'&gt;Select Sheet &gt; &lt;/fc&gt;Column mappings" left="224" top="30" height="30" font="bold 11px &quot;Malgun Gothic&quot;" textAlign="right" right="15" usedecorate="true"/>
+              <Static id="Static01_00" taborder="3" text="1. Column mappings" left="20" top="70" height="30" font="bold 12px &quot;Malgun Gothic&quot;" width="194"/>
+              <Button id="btnCancel" taborder="4" text="Cancel" left="358" top="455" width="65" height="30" font="bold 12px &quot;Malgun Gothic&quot;"/>
+              <Button id="btnFinish" taborder="5" text="Finish" left="285" top="455" width="65" height="30" font="bold 12px &quot;Malgun Gothic&quot;"/>
+              <Static id="Static01_00_00" taborder="6" text="2. data preview" left="25" top="265" height="30" font="bold 12px &quot;Malgun Gothic&quot;" width="100"/>
+              <Grid id="grdDataApply" taborder="7" left="25" top="300" height="145" right="25" binddataset="dsApplyDataFormat">
+                <Formats>
+                  <Format id="default"/>
+                </Formats>
+              </Grid>
+              <Button id="btnBack" taborder="8" text="Back" left="213" top="455" width="65" height="30" font="bold 12px &quot;Malgun Gothic&quot;"/>
+              <CheckBox id="chkHeaderRow" taborder="9" text="A First row is a header row." left="200" top="272" width="158" height="26" font="bold 10px &quot;Malgun Gothic&quot;" value="true"/>
+              <Button id="btnApply" taborder="10" text="Apply" left="364" top="275" width="59" height="20" font="bold 12px &quot;Malgun Gothic&quot;" color="#125dae"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Radio id="rdoAddType" taborder="6" top="10" width="170" height="37" font="bold 12px &quot;Malgun Gothic&quot;" innerdataset="innerdataset" codecolumn="codecolumn" datacolumn="datacolumn" index="0" text="Change all" value="change" right="120" rowcount="1" direction="vertical">
+          <Dataset id="innerdataset">
+            <ColumnInfo>
+              <Column id="codecolumn" size="256"/>
+              <Column id="datacolumn" size="256"/>
+            </ColumnInfo>
+            <Rows>
+              <Row>
+                <Col id="codecolumn">change</Col>
+                <Col id="datacolumn">Change all</Col>
+              </Row>
+              <Row>
+                <Col id="codecolumn">adddata</Col>
+                <Col id="datacolumn">Add Row</Col>
+              </Row>
+            </Rows>
+          </Dataset>
+        </Radio>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip
+*  @MenuPath    techtip > excelimporttogrid
+*  @FileName	excelimporttogrid.xfdl 
+*  @Desction	excel import sample (select sheet & column mappings)
+*******************************************************************************
+*  2020.10.07		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_excelimporttogrid.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ //nexacro-xeni call url
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.excelimporttogrid_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//nexacro-xeni call url : "http://localhost:8080/nexacro17-xeni/";
+	//import folder name  : "http://localhost:8080/nexacro17-xeni/import/"
+	//import jsp file name: "http://localhost:8080/nexacro17-xeni/import/fileUpload.jsp"
+	
+	var objConfig  = {
+                        importGrd	: this.grdList01,
+                        importRdo	: this.rdoAddType,
+                        importBtn	: this.btnImportList,
+						importText	: this.txtLog,
+						dsCboList	: this.dsCombo,
+						divSheet	: this.divSelectSheet,
+						divMapping	: this.divColumnMappings,
+						sheetList	: "grdSheetList",
+						dataList	: "grdDataList",
+						mappingList : "grdColumnMappings",
+						applyList 	: "grdDataApply",
+						sSaveUrl	: "",
+						sImportUrl	: "http://localhost/nexacro17-xeni/",
+						sUploadUrl 	: "http://localhost/nexacro17-xeni/import/",
+                        sFolderName	: "fileUpload.jsp?fileFolder=import"
+                    }
+					
+	this.gfnInitExcelImportToGridFormOnload(obj,objConfig);
+};
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+/**
+* @description btnImportList(Import SheetList) onclick event : open file dialog & select import file
+*/
+this.btnImportList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//file dialog object
+	var objFileDiaload = this.gfnCreateFileDialogObject();
+	objFileDiaload.open('nexacro17', FileDialog.LOAD, "%MYDOCUMENT%");
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsSheetList">
+        <ColumnInfo>
+          <Column id="number" type="STRING" size="256"/>
+          <Column id="sheetname" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsDataList"/>
+      <Dataset id="dsColumnMappings">
+        <ColumnInfo>
+          <Column id="ex" type="STRING" size="256"/>
+          <Column id="grdHead" type="STRING" size="256"/>
+          <Column id="excelHead" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsApplyDataFormat">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCombo">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsList01">
+        <ColumnInfo>
+          <Column id="NAME" type="STRING" size="256"/>
+          <Column id="YEAR" type="DATE" size="256"/>
+          <Column id="ENGINE" type="STRING" size="256"/>
+          <Column id="POWER" type="INT" size="256"/>
+          <Column id="TORQUE" type="INT" size="256"/>
+          <Column id="MAXSPEED" type="INT" size="256"/>
+          <Column id="WEIGHT" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="NAME">Miura</Col>
+            <Col id="YEAR">19661212</Col>
+            <Col id="ENGINE">3900cc V12 </Col>
+            <Col id="POWER">350</Col>
+            <Col id="WEIGHT">980</Col>
+            <Col id="MAXSPEED">278</Col>
+            <Col id="TORQUE">37.5</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Countach</Col>
+            <Col id="YEAR">19710707</Col>
+            <Col id="ENGINE">4000cc V12 DOHC</Col>
+            <Col id="POWER">375</Col>
+            <Col id="MAXSPEED">295</Col>
+            <Col id="TORQUE">36.8</Col>
+            <Col id="WEIGHT">1065</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Diablo</Col>
+            <Col id="YEAR">19901111</Col>
+            <Col id="ENGINE">5707cc V12 DOHC</Col>
+            <Col id="POWER">492</Col>
+            <Col id="TORQUE">59.1</Col>
+            <Col id="WEIGHT">1530</Col>
+            <Col id="MAXSPEED">325</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Murcielago</Col>
+            <Col id="WEIGHT">1650</Col>
+            <Col id="YEAR">20010214</Col>
+            <Col id="POWER">588</Col>
+            <Col id="TORQUE">66.3</Col>
+            <Col id="ENGINE">6200cc V12 DOHC</Col>
+            <Col id="MAXSPEED">340</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Reventon</Col>
+            <Col id="YEAR">20070314</Col>
+            <Col id="POWER">650</Col>
+            <Col id="ENGINE">6500cc V12 DOHC</Col>
+            <Col id="TORQUE">67.34</Col>
+            <Col id="WEIGHT">1655</Col>
+            <Col id="MAXSPEED">340</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Aventador</Col>
+            <Col id="YEAR">20110808</Col>
+            <Col id="ENGINE">6500cc V12 DOHC</Col>
+            <Col id="POWER">700</Col>
+            <Col id="TORQUE">70.3</Col>
+            <Col id="WEIGHT">1575</Col>
+            <Col id="MAXSPEED">370</Col>
+          </Row>
+          <Row>
+            <Col id="NAME">Veneno</Col>
+            <Col id="YEAR">20130911</Col>
+            <Col id="POWER">750</Col>
+            <Col id="ENGINE">6500cc V12 DOHC</Col>
+            <Col id="MAXSPEED">355</Col>
+            <Col id="WEIGHT">1450</Col>
+            <Col id="TORQUE">45.3</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

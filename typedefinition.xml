@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TypeDefinition version="2.3">
+  <Modules>
+    <Module url="CompBase.json"/>
+    <Module url="ComComp.json"/>
+    <Module url="Grid.json"/>
+    <Module url="ListView.json"/>
+    <Module url="DeviceAPI.json"/>
+    <Module url="extlib::checkcombo.json"/>
+    <Module url="History.json"/>
+    <Module url="extlib::testModulSample.json"/>
+    <Module url="extlib::Chart.json"/>
+    <Module url="Graphics.json"/>
+  </Modules>
+  <Components>
+    <Component type="JavaScript" id="Button" classname="nexacro.Button"/>
+    <Component type="JavaScript" id="Combo" classname="nexacro.Combo"/>
+    <Component type="JavaScript" id="Edit" classname="nexacro.Edit"/>
+    <Component type="JavaScript" id="MaskEdit" classname="nexacro.MaskEdit"/>
+    <Component type="JavaScript" id="TextArea" classname="nexacro.TextArea"/>
+    <Component type="JavaScript" id="Static" classname="nexacro.Static"/>
+    <Component type="JavaScript" id="Div" classname="nexacro.Div"/>
+    <Component type="JavaScript" id="PopupDiv" classname="nexacro.PopupDiv"/>
+    <Component type="JavaScript" id="Radio" classname="nexacro.Radio"/>
+    <Component type="JavaScript" id="CheckBox" classname="nexacro.CheckBox"/>
+    <Component type="JavaScript" id="ListBox" classname="nexacro.ListBox"/>
+    <Component type="JavaScript" id="Grid" classname="nexacro.Grid"/>
+    <Component type="JavaScript" id="Spin" classname="nexacro.Spin"/>
+    <Component type="JavaScript" id="Menu" classname="nexacro.Menu"/>
+    <Component type="JavaScript" id="PopupMenu" classname="nexacro.PopupMenu"/>
+    <Component type="JavaScript" id="Tab" classname="nexacro.Tab"/>
+    <Component type="JavaScript" id="GroupBox" classname="nexacro.GroupBox"/>
+    <Component type="JavaScript" id="Calendar" classname="nexacro.Calendar"/>
+    <Component type="JavaScript" id="ImageViewer" classname="nexacro.ImageViewer"/>
+    <Component type="JavaScript" id="ProgressBar" classname="nexacro.ProgressBar"/>
+    <Component type="JavaScript" id="Plugin" classname="nexacro.Plugin"/>
+    <Component type="JavaScript" id="Dataset" classname="nexacro.NormalDataset"/>
+    <Component type="JavaScript" id="ListView" classname="nexacro.ListView"/>
+    <Component type="JavaScript" id="FileDialog" classname="nexacro.FileDialog"/>
+    <Component type="JavaScript" id="FileDownTransfer" classname="nexacro.FileDownTransfer"/>
+    <Component type="JavaScript" id="FileUpload" classname="nexacro.FileUpload"/>
+    <Component type="JavaScript" id="FileDownload" classname="nexacro.FileDownload"/>
+    <Component type="JavaScript" id="FileUpTransfer" classname="nexacro.FileUpTransfer"/>
+    <Component type="JavaScript" id="VirtualFile" classname="nexacro.VirtualFile"/>
+    <Component type="JavaScript" id="GoogleMap" classname="nexacro.GoogleMap"/>
+    <Component type="JavaScript" id="WebBrowser" classname="nexacro.WebBrowser"/>
+    <Component type="JavaScript" id="checkcombo" classname="nexacro.checkcombo" iconindex="24" defaultwidth="150" defaultheight="20"/>
+    <Component type="JavaScript" id="workflow" classname="nexacro.workflow" defaultwidth="990" defaultheight="480"/>
+    <Component type="JavaScript" id="BasicChart" classname="nexacro.BasicChart" iconindex="400" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="PyramidChart" classname="nexacro.PyramidChart" iconindex="407" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="FloatChart" classname="nexacro.FloatChart" iconindex="406" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="RoseChart" classname="nexacro.RoseChart" iconindex="405" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="RadarChart" classname="nexacro.RadarChart" iconindex="404" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="GaugeChart" classname="nexacro.GaugeChart" iconindex="403" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="PieChart" classname="nexacro.PieChart" iconindex="402" iconextra="true" prefixid=""/>
+    <Component type="JavaScript" id="BubbleChart" classname="nexacro.BubbleChart" iconindex="401" iconextra="true"/>
+    <Component type="JavaScript" id="Graphics" classname="nexacro.Graphics"/>
+  </Components>
+  <Services>
+    <Service prefixid="theme" type="resource" url="./_resource_/_theme_/" cachelevel="session" include_subdir="true"/>
+    <Service prefixid="initvalue" type="resource" url="./_resource_/_initvalue_/" cachelevel="session" include_subdir="false"/>
+    <Service prefixid="xcssrc" type="resource" url="./_resource_/_xcss_/" cachelevel="session" include_subdir="false"/>
+    <Service prefixid="imagerc" type="resource" url="./_resource_/_images_/" cachelevel="session" include_subdir="true"/>
+    <Service prefixid="font" type="resource" url="./_resource_/_font_/" version="0" communicationversion="0" cachelevel="session" include_subdir="false"/>
+    <Service prefixid="Base" type="form" cachelevel="session" url="./Base/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="admin" type="form" cachelevel="session" url="./admin/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="file" type="file" cachelevel="session" url="./file/" version="0" communicationversion="0" include_subdir="true"/>
+    <Service prefixid="lib" type="js" cachelevel="session" url="./lib/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="lib_learn" type="js" cachelevel="session" url="./lib_learn/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="lib_techtip" type="js" cachelevel="session" url="./lib_techtip/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="learn" type="form" cachelevel="session" url="./learn/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="techtip" type="form" cachelevel="session" url="./techtip/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="dev_svr" type="JSP" cachelevel="none" url="http://localhost/service/" version="0" communicationversion="0" include_subdir="false"/>
+    <Service prefixid="sample" type="form" url="./sample/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
+  </Services>
+  <Protocols/>
+  <Update>
+    <Os name="Android" url="http://121.134.99.143/playSample/ui/" timeout="30" retry="3" autoupdate="auto" updatetype="update">
+      <Version name="common">
+        <Resource type="Engine" file="playSample.apk" version="0" targetpath="./"/>
+        <Resource type="Module" file="nexacro17lib.zip" version="0" targetpath="./" description=""/>
+        <Resource type="Resource" file="Resource.zip" version="0" targetpath="./" description=""/>
+      </Version>
+    </Os>
+  </Update>
+  <DeviceAdaptors/>
+  <Deploy>
+    <Os name="Android"/>
+  </Deploy>
+</TypeDefinition>

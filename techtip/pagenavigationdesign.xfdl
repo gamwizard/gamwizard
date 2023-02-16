@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="pagenavigationdesign" width="1120" height="790" titletext="New Form" onload="pagenavigationdesign_onload">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Static id="Static00" taborder="0" text="Type1" left="40" top="20" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_00" taborder="1" text="Type6" left="40" top="370" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_00_00" taborder="2" text="Type7" left="40" top="440" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_00_01" taborder="3" text="Type8" left="40" top="510" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02" taborder="4" text="Type2" left="40" top="90" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02_00" taborder="5" text="Type3" left="40" top="160" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02_00_00" taborder="6" text="Type4" left="40" top="230" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02_01" taborder="7" text="Type5" left="40" top="300" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02_00_01" taborder="8" text="Type9" left="40" top="580" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Static id="Static00_02_00_01_00" taborder="9" text="Type10" left="40" top="650" width="60" height="35" cssclass="static_WF_title" visible="true"/>
+        <Div id="divPage01" taborder="10" text="Div00" left="100" top="10" width="477" height="35" url="techtip::pagenavigationdesign_type01.xfdl"/>
+        <Div id="divPage02" taborder="11" text="Div00" left="100" top="80" width="555" height="35" url="techtip::pagenavigationdesign_type02.xfdl"/>
+        <Div id="divPage03" taborder="12" text="Div00" left="100" top="150" width="490" height="35" url="techtip::pagenavigationdesign_type03.xfdl"/>
+        <Div id="divPage04" taborder="13" text="Div00" left="100" top="220" width="512" height="35" url="techtip::pagenavigationdesign_type04.xfdl"/>
+        <Div id="divPage05" taborder="14" text="Div00" left="100" top="290" width="545" height="35" url="techtip::pagenavigationdesign_type05.xfdl"/>
+        <Div id="divPage06" taborder="15" text="Div00" left="100" top="360" width="516" height="35" url="techtip::pagenavigationdesign_type06.xfdl"/>
+        <Div id="divPage07" taborder="16" text="Div00" left="100" top="430" width="516" height="35" url="techtip::pagenavigationdesign_type07.xfdl"/>
+        <Div id="divPage08" taborder="17" text="Div00" left="110" top="505" width="340" height="25" url="techtip::pagenavigationdesign_type08.xfdl"/>
+        <Div id="divPage09" taborder="18" text="Div00" left="100" top="570" width="470" height="35" url="techtip::pagenavigationdesign_type09.xfdl"/>
+        <Div id="divPage10" taborder="19" text="Div00" left="100" top="640" width="470" height="35" url="techtip::pagenavigationdesign_type10.xfdl"/>
+        <Static id="Static00_01" taborder="20" text="사이간격 : -1" left="690" top="10" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_00" taborder="21" text="사이간격 : 2" left="690" top="360" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_00_00" taborder="22" text="사이간격 : 2" left="690" top="430" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_00_00_00" taborder="23" text="width : 15&#13;&#10;height : 25&#13;&#10;사이간격 : 10" left="690" top="488" width="80" height="50" color="red" visible="true"/>
+        <Static id="Static00_01_01" taborder="24" text="사이간격 : 5" left="690" top="80" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_01_00" taborder="25" text="사이간격 : 0" left="690" top="150" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_01_00_00" taborder="26" text="사이간격 : 2" left="690" top="220" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_01_01" taborder="27" text="사이간격 : 5" left="690" top="290" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_01_00_01" taborder="28" text="사이간격 : 0" left="690" top="570" width="80" height="35" color="red" visible="true"/>
+        <Static id="Static00_01_01_00_01_00" taborder="29" text="사이간격 : 0" left="690" top="640" width="80" height="35" color="red" visible="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > pagenavigationdesign
+*  techtip [디자인] Page Navication Design (페이지 네비게이션 디자인)
+
+*  @FileName	pagenavigationdesign.xfdl 
+*******************************************************************************
+*  2021.06.16		투비대원&투비미뇽		최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.pagenavigationdesign_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//페이징 초기화 함수 호출
+	this.divPage01.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage02.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage03.form.initPages(200, 10, 5, this.fnPageCallback);
+	this.divPage04.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage05.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage06.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage07.form.initPages(200, 10, 5, this.fnPageCallback);
+	this.divPage08.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage09.form.initPages(200, 10, 10, this.fnPageCallback);
+	this.divPage10.form.initPages(200, 10, 5, this.fnPageCallback);
+		
+	//페이지 이동함수 호출
+	this.divPage01.form.setPage(1);
+	this.divPage02.form.setPage(1);
+	this.divPage03.form.setPage(1);
+	this.divPage04.form.setPage(1);
+	this.divPage05.form.setPage(1);
+	this.divPage06.form.setPage(1);
+	this.divPage07.form.setPage(1);
+	this.divPage08.form.setPage(1);
+	this.divPage09.form.setPage(1);
+	this.divPage10.form.setPage(1);
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+/**
+* @description 		: 페이징 후처리 함수
+* @param nPage	    : 변경된 페이지 Index
+* @return 			: 없음
+*/
+this.fnPageCallback = function(nPage)
+{
+	trace(nPage);
+}]]></Script>
+  </Form>
+</FDL>

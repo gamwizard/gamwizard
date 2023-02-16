@@ -1,0 +1,1927 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="scheduler" width="1027" height="875" titletext="New Form" onload="scheduler_onload">
+    <Layouts>
+      <Layout height="875" mobileorientation="landscape" width="1027">
+        <Graphics id="grpScheduler" taborder="0" left="10" top="54" ondblclick="grpScheduler_ondblclick" onclick="grpScheduler_onclick" onsize="grpScheduler_onsize" minwidth="100" maxwidth="" minheight="100" maxheight="" onmousemove="grpScheduler_onmousemove" bottom="16" right="10"/>
+        <Static id="stYearMonth" taborder="1" text="2021년 10월" left="65" top="26" width="100" height="28" cssclass="static_WF_year"/>
+        <Button id="btnToday" taborder="2" text="오늘" left="211" top="26" width="52" height="28" cssclass="btn_WF_today" onclick="btnToday_onclick"/>
+        <Button id="btnNext" taborder="3" left="170" top="26" width="25" height="28" onclick="btnNext_onclick" cssclass="btn_WF_right"/>
+        <Button id="btnPrev" taborder="4" left="35" top="26" width="25" height="28" onclick="btnPrev_onclick" cssclass="btn_WF_left"/>
+        <Button id="btnNew" taborder="5" text="신규일정" top="26" width="82" height="28" cssclass="btn_WF_new" onclick="btnNew_onclick" right="10"/>
+        <Div id="divPop" taborder="6" text="Div00" left="1040" top="30" width="200" height="202" visible="false">
+          <Layouts>
+            <Layout>
+              <Graphics id="grpSchedulerPop" taborder="0" left="0" top="0" right="0" bottom="0" ondblclick="divPop_grpSchedulerPop_ondblclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > scheduler
+*  techtip Graphics Component를 활용한 월 스케줄러
+*  @FileName	workflow.xfdl 
+*******************************************************************************
+*  2020.06.12		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+**************************************************************************/
+include "lib::lib_base.xjs";
+include "lib::lib_date.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+**************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+**************************************************************************/
+this.scheduler_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	var objDate = new Date(2021, 9,1)
+	//스케줄러 설정정보 만들기
+	var objConfig = {
+						//오늘일자
+						"todate" : null,
+						
+						//현재 표현일자
+						"date" : objDate,
+						
+						//스케줄 정보를 가지고 있는 데이터셋
+						"binddataset" : this.dsSchedule,
+						
+						//요일 영역
+						"week" : {
+									//요일 표현 텍스트 리스트
+									"weekformat" : ["일", "월", "화", "수", "목", "금", "토"],
+									
+									//요일 영역 높이
+									"height" : 30,
+									
+									//요일 배경 속성
+									"graphicsrect" : {
+												"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+												"fillstyle" : "#ffffff",
+												"strokepen" : "1px solid #CCCCCC"
+											 },
+											 
+									//요일 텍스트 속성
+									"graphicstext" : {
+												"x" : 0, "y" : 0,
+												"text" : "",
+												"textAlign" : "center",
+												"verticalAlign" : "middle",
+												"font" : "13px NanumGothic",
+												"color" : "#000000",
+												"color_sun" : "#FF1D1D",
+												"color_sat" : "#000000",
+											 }
+									
+									
+								 },
+						
+						//일자 영역
+						"day" : {
+									//기본일자 텍스트 색상
+									"textcolor" : "#000000",
+									
+									//일요일 텍스트 색상
+									"textcolor_sun" : "#FF1D1D",
+									
+									//토요일 텍스트 색상
+									"textcolor_sat" : "#000000",
+									
+									//이전 or 이후 월 텍스트 색상
+									"textcolor_disable" : "#888888",
+									
+									//일자 배경 속성
+									"graphicsrect" : {
+												"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+												"fillstyle" : "#ffffff",
+												"strokepen" : "1px solid #CCCCCC"
+											 },
+											 
+									//일자 텍스트 속성
+									"graphicstext" : {
+												"x" : 0, "y" : 0,
+												"text" : "",
+												"textAlign" : "center",
+												"verticalAlign" : "top",
+												"font" : "13px NanumGothic",
+												"color" : ""
+											 }
+								},
+						//일정 영역		
+						"schedule" : {
+										//일정 타입별 배경색
+										"type" : {
+													"01" : "#FF5252",
+													"02" : "#7C4DFF",
+													"03" : "#00B0FF",
+													"04" : "#61C81C",
+													"05" : "#FF9100",
+													"99" : "#757575"
+												 },
+												 
+										//일정 영역 높이
+										"height" : 22,
+										
+										//일정 간 간격
+										"gap" : 4,
+										
+										//일정 배경 속성
+										"graphicsrect" : {
+															"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+															"fillstyle" : "#ffffff",
+															"strokepen" : "0px none",
+															"radiusx" : "4",
+															"radiusy" : "4"
+														 },
+														 
+										//일정 텍스트 속성
+										"graphicstext" : {
+													"x" : 0, "y" : 0,
+													"text" : "",
+													"textAlign" : "left",
+													"verticalAlign" : "middle",
+													"font" : '13px NanumGothic',
+													"color" : "#ffffff"
+												 }
+									 },
+						//더보기 영역		
+						"more" : {
+									//더보기 높이
+									"height" : 22,
+									
+									//더보기 배경 속성
+									"graphicsrect" : {
+														"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+														"fillstyle" : "",
+														"strokepen" : "0px none"
+													 },
+									
+									//더보기 텍스트 속성
+									"graphicstext" : {
+														"x" : 0, "y" : 0,
+														"text" : "더보기",
+														"textAlign" : "left",
+														"verticalAlign" : "middle",
+														"font" : "13px NanumGothic",
+														"color" : "#777777"
+													 }
+								}
+					}
+	
+	//스케줄러 초기화 함수 호출
+	this.gfnInitScheduler(this.grpScheduler, objConfig);
+	
+	//스케줄러 현재월 텍스트 구해오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(this.grpScheduler.config.date, "yyyy년 MM월");
+	
+	//현재월 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description 신규일정 버튼 onclick 시 처리내역
+*/
+this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//팝업오픈 함수 호출
+	this.fnOpenSchedulePop("new");
+};
+
+this.btnToday_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = new Date();
+	
+	//이전월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objDate, "yyyy년 MM월");
+	
+	//이전월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//이전월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objDate);
+};
+
+/**
+ * @description 이전 버튼 onclick 시 처리내역
+*/
+this.btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = this.grpScheduler.config.date;
+	
+	//이전월 정보 가져오기
+	var objPrevDate = this.gfnAddMonth(objDate, -1);
+	
+	//이전월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objPrevDate, "yyyy년 MM월");
+	
+	//이전월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//이전월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objPrevDate);
+};
+
+/**
+ * @description 다음 버튼 onclick 시 처리내역
+*/
+this.btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = this.grpScheduler.config.date;
+	
+	//다음월 정보 가져오기
+	var objNextDate = this.gfnAddMonth(objDate, 1);
+	
+	//다음월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objNextDate, "yyyy년 MM월");
+	
+	//다음월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//다음월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objNextDate);
+};
+
+/**
+ * @description Graphics Component onsize 시 처리내역
+*/
+this.grpScheduler_onsize = function(obj:nexacro.Graphics,e:nexacro.SizeEventInfo)
+{
+	//Graphics 컴포넌트의 사이즈가 변경되었을 경우
+	//스케줄러 설정함수를 호출하여 사이즈 갱신
+	this.gfnSetScheduler(this.grpScheduler);
+};
+
+/**
+ * @description Graphics Component onclick 시 처리내역
+*/
+this.grpScheduler_onclick = function(obj:nexacro.Graphics,e:nexacro.ClickEventInfo)
+{
+	//클릭된 위치의 Graphic 오브젝트 가져오기
+	var objHitTest = obj.hitTestAll(e.canvasx, e.canvasy)[0];
+			
+	var objSchedulePop = obj.getObjectByID("schedulepop");
+	
+	if(objSchedulePop)
+	{
+		if(objHitTest.id.split("_")[0]!="schedule")
+		{
+			this.gfnLoadScheduler(obj);
+			return;
+		}
+	}
+	
+	//클릭된 오브젝트가 더보기일 경우
+	if(objHitTest.id.split("_")[0]=="more")
+	{
+		//더보기 일정 팝업 함수 호출
+		this.gfnLoadSchedulePop(obj, objHitTest);
+		this.divPop.set_visible(true);
+	}else
+	{
+		this.divPop.set_visible(false);
+	}
+};
+
+/**
+ * @description Graphics Component ondblclick 시 처리내역
+*/
+this.grpScheduler_ondblclick = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	var oArg;
+	var nRow;
+	var sId;
+	var sDate;
+	var sType;
+	var sTitle;
+	var sContent;
+	var objSchedule;
+	
+	//더블 클릭된 위치의 Graphic 오브젝트 가져오기
+	var objGraphic = obj.hitTestAll(e.canvasx, e.canvasy)[0];
+	
+	//스케줄러 설정정보 가져오기
+	var objConfig = obj.config;
+	
+	//스케줄러와 연결된 데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	
+	//더블 클릭된 오브젝트가 일정영역일 경우
+	if(objGraphic.id.split("_")[0]=="schedule")
+	{
+		//일정 그룹 오브젝트 가져오기
+		objSchedule = objGraphic.parent;
+		
+		//일정의 ID 가져오기
+		sId = objGraphic.id.split("_")[1];
+		
+		//데이터셋에서 ID에 해당하는 일정 찾기
+		nRow = objDs.findRow("id", sId);
+		
+		//일정 일자 가져오기
+		sSDate = objDs.getColumn(nRow, "sdate");
+		
+		//일정 일자 가져오기
+		sEDate = objDs.getColumn(nRow, "edate");
+		
+		//일정 타입 가져오기
+		sType = objDs.getColumn(nRow, "type");
+		
+		//일정 제목 가져오기
+		sTitle = objDs.getColumn(nRow, "title");
+		
+		//일정 내용 가져오기
+		sContent = objDs.getColumn(nRow, "content");
+		
+		//팝업오픈 함수 호출
+		this.fnOpenSchedulePop("modify", sId, sSDate, sEDate, sType, sTitle, sContent);
+		
+		return;
+	}
+	
+	var objHitTests = obj.hitTestAll(e.canvasx, e.canvasy);
+	
+	for(var i=0;i<objHitTests.length;i++)
+	{
+		objGraphic = objHitTests[i];
+		
+		//더블 클릭된 오브젝트가 일자영역일 경우
+		if(objGraphic.id.split("_")[0]=="day")
+		{
+			//일자 그룹 오브젝트 가져오기
+			objDay = objGraphic.parent;
+			
+			//일자 정보 가져오기(ex) day_20200612 --> 20200612)
+			sDate = objDay.id.split("_")[1];
+			
+			//팝업오픈 함수 호출
+			this.fnOpenSchedulePop("new", null, sDate);
+			
+			return;
+		}
+	}
+};
+
+this.divPop_grpSchedulerPop_ondblclick = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	var oArg;
+	var nRow;
+	var sId;
+	var sDate;
+	var sType;
+	var sTitle;
+	var sContent;
+	var objSchedule;
+	
+	//더블 클릭된 위치의 Graphic 오브젝트 가져오기
+	var objGraphic = obj.hitTestAll(e.canvasx, e.canvasy)[0];
+	
+	//스케줄러 설정정보 가져오기
+	var objConfig = this.grpScheduler.config;
+	
+	//스케줄러와 연결된 데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	
+	//더블 클릭된 오브젝트가 일정영역일 경우
+	if(objGraphic.id.split("_")[0]=="schedule")
+	{
+		//일정 그룹 오브젝트 가져오기
+		objSchedule = objGraphic.parent;
+		
+		//일정의 ID 가져오기
+		sId = objGraphic.id.split("_")[1];
+		
+		//데이터셋에서 ID에 해당하는 일정 찾기
+		nRow = objDs.findRow("id", sId);
+		
+		//일정 일자 가져오기
+		sSDate = objDs.getColumn(nRow, "sdate");
+		
+		//일정 일자 가져오기
+		sEDate = objDs.getColumn(nRow, "edate");
+		
+		//일정 타입 가져오기
+		sType = objDs.getColumn(nRow, "type");
+		
+		//일정 제목 가져오기
+		sTitle = objDs.getColumn(nRow, "title");
+		
+		//일정 내용 가져오기
+		sContent = objDs.getColumn(nRow, "content");
+		
+		//팝업오픈 함수 호출
+		this.fnOpenSchedulePop("modify", sId, sSDate, sEDate, sType, sTitle, sContent);
+		
+		return;
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+**************************************************************************/
+/**
+* @description 	      	: 팝업 호출 함수
+* @param sPopupType		: 팝업 타입(new : 신규, modify 수정)
+* @param sId    		: 일정 ID
+* @param sDate    		: 일정 일자
+* @param sType    		: 일정 타입
+* @param sTitle    		: 일정 제목
+* @param sContent    	: 일정 내용
+* @return             	: 없음
+*/
+this.fnOpenSchedulePop = function(sPopupType, sId, sSDate, sEDate, sType, sTitle, sContent)
+{
+	var oArg = { "popuptype" : sPopupType, "scheduleid" : "", "sdate" : "", "edate" : "", "type" : "", "title" : "", "content" : "" };
+	
+	if(sId)oArg.scheduleid = sId;
+	if(sSDate)oArg.sdate = sSDate;
+	if(sEDate)oArg.edate = sEDate;
+	if(sType)oArg.type = sType;
+	if(sTitle)oArg.title = sTitle;
+	if(sContent)oArg.content = sContent;
+	
+	this.gfnShowModal("popupModal", oArg, "techtip::schedulerv3_popup.xfdl", "fnPopupCallBack", this, 421, 370, true, false, null);
+}
+
+/**
+* @description 	      	: 팝업 콜백 함수
+* @param sFormId		: 팝업 ID
+* @param sArg    		: 일정 정보
+* @return             	: 없음
+*/
+this.fnPopupCallBack = function(sFormId, sArg)
+{
+	if(sFormId == 'popupModal')
+	{
+		//일정 정보가 있을 경우
+		if(sArg)
+		{
+			var nRow;
+			
+			//일정 정보를 JSON오브젝트로 만들기
+			var objRtn = JSON.parse(sArg);
+			
+			//수정일 경우
+			if(objRtn.popuptype=="modify")
+			{
+				//데이터셋에서 ID에 해당하는 일정 찾기
+				nRow = this.dsSchedule.findRow("id", objRtn.id);
+				
+				//일정 정보 변경
+				this.dsSchedule.setColumn(nRow, "title", objRtn.title);
+				this.dsSchedule.setColumn(nRow, "sdate", objRtn.sdate);
+				this.dsSchedule.setColumn(nRow, "edate", objRtn.edate);
+				this.dsSchedule.setColumn(nRow, "type", objRtn.type);
+				this.dsSchedule.setColumn(nRow, "content", objRtn.content);
+			}
+			//신규일 경우
+			else if(objRtn.popuptype=="new")
+			{
+				//신규 Row 추가
+				nRow = this.dsSchedule.addRow();
+				
+				//일정 정보 등록
+				this.dsSchedule.setColumn(nRow, "id", nexacro.round(Math.random()*1000, 0));
+				this.dsSchedule.setColumn(nRow, "title", objRtn.title);
+				this.dsSchedule.setColumn(nRow, "sdate", objRtn.sdate);
+				this.dsSchedule.setColumn(nRow, "edate", objRtn.edate);
+				this.dsSchedule.setColumn(nRow, "type", objRtn.type);
+				this.dsSchedule.setColumn(nRow, "content", objRtn.content);
+			}
+			
+			//스케줄 조회 함수 호출
+			this.gfnLoadScheduler(this.grpScheduler);
+		}
+	}
+}
+
+/**
+* @description 	      		: 팝업 공통 함수
+* @param sPopupId  			: 팝업 ID
+* @param arrArguments    	: 전달할 Arguments
+* @param sPopupUrl    		: 팝업 URL
+* @param popupCallback    	: 팝업 Callback 함수명
+* @param obj    			: 부모 Form 오브젝트
+* @param nPopupWidth    	: 팝업 Width
+* @param nPopupHeight    	: 팝업 Height
+* @param bShowFrameTitle    : 타이틀바 표현 여부
+* @param bShowFrameStatus	: 스테이터스바 표현 여부
+* @param sAlignType			: 팝업 표시 위치 
+* @return             		: 없음
+*/
+this.gfnShowModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType)
+{
+	// 현재 구동되는 정보를 업데이트 한다.
+	var childFrame = new ChildFrame();
+	var parentFrame = obj.getOwnerFrame();
+	
+	var sOpenAlignType = "center middle";
+
+	// TO-DO 팝업사이즈 미지정 시 디폴트 값 적용
+	if (this.gfnIsNull(nPopupWidth)) 
+	{
+		nPopupWidth = obj.confing.popupWidth;
+	}
+
+	if (this.gfnIsNull(nPopupHeight)) 
+	{
+		nPopupHeight = obj.confing.popupHeight;
+	}
+
+	var sShowStatus;
+	if (this.gfnIsNull(bShowFrameStatus) || bShowFrameStatus == false) 
+	{
+		sShowStatus = false;
+	}
+	else if (bShowFrameStatus == true) 
+	{
+		sShowStatus = true;
+	}
+	
+	if (!this.gfnIsNull(sAlignType)) 
+	{
+		sOpenAlignType = sAlignType;
+	}
+
+	var nPopupLeft = "";
+	var nPopupTop = "";
+
+	// 팝업 포지션 값 위치 설정
+	nPopupLeft = 0;
+	nPopupTop = 0;
+	
+	/* ===== Statusbar 옵션 추가 - Start ===== */
+	if (sShowStatus == true) 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4 + 25, null, null, sPopupUrl);
+		childFrame.set_statusbarheight(25);
+		childFrame.set_showstatusbar(true);
+	}
+	else 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4, null, null, sPopupUrl);
+	}
+	
+	/* ===== Statusbar 옵션 추가 - End   ===== */
+	childFrame.set_openalign(sOpenAlignType);
+	childFrame.set_overlaycolor("RGBA(30, 144, 255, 0.75)");
+	childFrame.set_autosize(false);	
+	childFrame.set_dragmovetype("normal");
+
+	if (this.gfnIsNull(bShowFrameTitle) || bShowFrameTitle == true) 
+	{
+		childFrame.set_showtitlebar(true);
+		childFrame.set_border("3 solid #351b6f");
+		childFrame.set_border("normal");
+	}else{
+		childFrame.set_showtitlebar(false);
+	}
+	
+	// 동적으로 생성한 ChildFrame을 Modal Dialog로 보여줌.
+	childFrame.showModal(parentFrame, arrArguments, obj, popupCallback, true);
+};
+
+
+/*---------------------------------schedulerv3.xjs 함수 부분-------------------------------------*/
+
+/**
+* @description 	    	: 스케줄러 초기화 함수
+* @param objGraphics  	: 스케줄러 설정할 Graphics Component
+* @param objConfig   	: 초기화 설정 값
+* @return           	: 없음
+*/
+this.gfnInitScheduler = function(objGraphics, objConfig)
+{
+	//Graphics 컴포넌트에 config 정보 추가
+	objGraphics.config = objConfig;
+	
+	//스케줄러 설정 함수 호출
+	this.gfnSetScheduler(objGraphics);
+}
+
+/**
+* @description 	    	: 스케줄러 설정 함수
+* @param objGraphics  	: 스케줄러 설정할 Graphics Component
+* @param objDate	   	: 설정할 일자 오브젝트
+* @return           	: 없음
+*/
+this.gfnSetScheduler = function(objGraphics, objDate)
+{
+	var i, j;
+	
+	var nRightGap = 0
+	var nBottomGap = 0;
+	
+	//스케줄러 설정 정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	var objWeek;
+	var objWeekText;
+	var objWeekGroup;
+	
+	//요일 영역 설정정보 가져오기
+	var objWeekConfig = objConfig.week;
+	
+	//요일 영역 배경 설정 정보 가져오기
+	var objWeekRectProp = objWeekConfig.graphicsrect;
+	
+	//요일 영역 텍스트 설정 정보 가져오기
+	var objWeekTextProp = objWeekConfig.graphicstext;
+	
+	//요일 표현 텍스트 리스트 가져오기
+	var arrWeekFormat = objWeekConfig.weekformat;
+	
+	//요일영역 Left 좌표 초기화
+	var nWeekGroupLeft = 0;
+	
+	//요일영역 Top 좌표 초기화
+	var nWeekGroupTop = 0;
+	
+	//요일영역 Width 값 초기화
+	//(스케줄러 Width를 7로 나눠서 사용)
+	var nWeekGroupWidth = nexacro.floor(objGraphics.getOffsetWidth()/7);
+	
+	//요일영역 Height 값 가져오기
+	var nWeekGroupHeight = objWeekConfig.height;
+	
+	//일자 영역 오브젝트
+	var objDay;
+	
+	//일자 영역 텍스트 오브젝트
+	var objDayText;
+	
+	//일자 그룹 영역 오브젝트
+	var objDayGroup;
+	
+	//일정 그룹 영역 오브젝트
+	var objScheduleGroup;
+	
+	//일자 영역 설정 정보 가져오기
+	var objDayConfig = objConfig.day;
+	
+	//일자 영역 배경 설정 정보 가져오기
+	var objDayRectProp = objDayConfig.graphicsrect;
+	
+	//일자 영역 텍스트 설정 정보 가져오기
+	var objDayTextProp = objDayConfig.graphicstext;
+	
+	//일자 영역 Left 좌표 초기화
+	var nDayGroupLeft = 0;
+	
+	//일자 영역 Top 좌표 초기화
+	var nDayGroupTop = 0;
+	
+	//일자 Left 좌표 초기화
+	var nDayLeft = 0;
+	
+	//일자 Top 좌표 초기화
+	var nDayTop = 0;
+	
+	//일자 Width 값 초기화(요일영역과 동일)
+	var nDayWidth = nWeekGroupWidth;
+	
+	//일자 Height 값
+	var nDayHeight;
+	
+	//스케줄러 상에 일자 위치를 설정하기 위한 변수
+	var nDayPos;
+	
+	//일자의 전체 값(yyyyMMdd)
+	var sFullDate;
+	
+	//텍스트 색상 값
+	var sTextColor;
+	
+	//GraphicsGroup Property를 설정하기 위한 변수
+	var objProperties;
+		
+	//파라미터로 넘어온 일자 오브젝트가 없을 경우
+	if(!objDate)
+	{
+		//스케줄러에 설정된 표현일자가 없을 경우
+		//오늘날짜 기준으로 설정
+		if(!objGraphics.config.date)
+		{
+			objDate = new Date();
+			objGraphics.config.date = objDate;
+			objGraphics.config.todate = objDate;
+		}
+		//스케줄러에 설정된 포현일자가 있을 경우
+		else
+		{
+			//스케줄러의 표현일자로 설정
+			objDate = objGraphics.config.date;
+		}
+	}
+	
+	//설정할 년월 값 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objDate, "yyyyMM");
+	
+	//설정할 년월의 시작일자 설정하기
+	var sFirstDate = sYearMonth + "01";
+	
+	//시작일자를 Date 오브젝트로 만들기
+	var objFirstDate = this.gfnStrToDate(sFirstDate);
+	
+	//시작일자의 요일 값 가져오기(0~6)
+	var nFirstDay = objFirstDate.getDay();
+	
+	//스케줄러에 표현될 주(Week) 갯수
+	var nWeekCount = this.gfnGetCountWeeksInMonth(sYearMonth);
+	
+	//시작일자를 설정값 현재 표현일자에 설정하기
+	objConfig.date = objFirstDate;
+	
+	//Graphics 컴포넌트 초기화
+	objGraphics.clear();
+	
+	//요일 영역 GraphicsGroup 오브젝트 만들기
+	objProperties = { "x" : nWeekGroupLeft, "y" : nWeekGroupTop };
+	objWeekGroup = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+	
+	for(i=0;i<7;i++)
+	{
+		//마지막 요일일 경우
+		if(i==6)
+		{
+			//Graphics 컴포넌트 Right와 마지막 요일 영역의 Width를 맞추기 위한 계산
+			//Graphics 컴포넌트 Width - 마지막 요일의 Right - 요일의 Border값(1px)
+			nRightGap = objGraphics.getOffsetWidth() - (nWeekGroupLeft+nWeekGroupWidth) - 1;
+		}
+		
+		//요일 배경의 Left 좌표 설정
+		objWeekRectProp.x = nWeekGroupLeft;
+		
+		//요일 배경의 Top 좌표 설정
+		objWeekRectProp.y = nWeekGroupTop;
+		
+		//요일 배경의 Width값 설정
+		objWeekRectProp.width = nWeekGroupWidth + nRightGap;
+		
+		//요일 배경의 Height값 설정
+		objWeekRectProp.height = nWeekGroupHeight;
+		
+		//요일 배경 오브젝트 만들기 
+		objWeek = this.gfnSetGraphicProperties("GraphicsRect", objWeekRectProp);
+		
+		//요일 그룹에 요일 배경 추가
+		objWeekGroup.addChild("week_"+i, objWeek);
+		
+		if(objWeekTextProp.textAlign=="center")
+		{
+			//요일 텍스트 Left 좌표 설정
+			//중앙에 표시될 수 있도록 Center 좌표값 구하기
+			objWeekTextProp.x = nWeekGroupLeft + nWeekGroupWidth/2;
+		}else if(objWeekTextProp.textAlign=="left")
+		{
+			//요일 텍스트 Left 좌표 설정
+			objWeekTextProp.x = nWeekGroupLeft + 5;
+		}else if(objWeekTextProp.textAlign=="right")
+		{
+			//요일 텍스트 Left 좌표 설정
+			objWeekTextProp.x = nWeekGroupLeft + nWeekGroupWidth - 5;
+		}	
+		
+			//요일 텍스트 Top 좌표 설정
+			//중앙에 표시될 수 있도록 Center 좌표값 구하기
+			objWeekTextProp.y = nWeekGroupTop + nWeekGroupHeight/2;
+		
+		
+		//요일 텍스트의 텍스트 설정
+		objWeekTextProp.text = arrWeekFormat[i];
+		
+		//요일 텍스트 오브젝트 만들기
+		objWeekText = this.gfnSetGraphicProperties("GraphicsText", objWeekTextProp);
+		
+		if(i==0)
+		{
+			objWeekText.set_color(objWeekTextProp.color_sun);
+		}else if(i==6)
+		{
+			objWeekText.set_color(objWeekTextProp.color_sat);
+		}
+		
+		//요일 그룹에 요일 텍스트 오브젝트 추가
+		objWeekGroup.addChild("week_"+i+"_text", objWeekText);
+		
+		//다음 요일의 Left 좌표 설정
+		nWeekGroupLeft += nWeekGroupWidth;
+	}
+	
+	//요일 그룹을 Graphics 컴포넌트에 추가
+	objGraphics.addChild("weekgroup", objWeekGroup);
+	
+	//일자 영역의 Top 좌표 설정
+	nDayGroupTop = nWeekGroupTop + nWeekGroupHeight;
+	
+	//일자 영역 GraphicsGroup 오브젝트 만들기
+	objProperties = { "x" : nDayGroupLeft, "y" : nDayGroupTop };
+	objDayGroup = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+	
+	//일정 영역 GraphicsGroup 오브젝트 만들기
+	objProperties = { "x" : nDayGroupLeft, "y" : nDayGroupTop };
+	objScheduleGroup = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+	
+	//일자 Top 좌표 설정
+	nDayTop = 0;
+	
+	//일자 Width 값 설정
+	nDayWidth = nWeekGroupWidth;
+	
+	//일자 Height 값 설정
+	//(Graphics 컴포넌트의 Height - 요일영역의 Height)/ 표현될 주(Week) 갯수
+	nDayHeight = nexacro.floor((objGraphics.getOffsetHeight()-nWeekGroupHeight)/nWeekCount);
+	
+	for(i=0;i<nWeekCount;i++)
+	{
+		//일자 Left 초기화
+		nDayLeft = 0;
+		
+		//주차별 마지막 일자 오른쪽 여백 값 초기화
+		nRightGap = 0;
+		
+		//마지막주차일 경우
+		if(i==nWeekCount-1)
+		{
+			//Graphics 컴포넌트 Bottom와 마지막 주차 영역의 Height를 맞추기 위한 계산
+			//Graphics 컴포넌트 Height - 마지막 주차의 Bottom - 일자의 Border값(1px)
+			nBottomGap = objGraphics.getOffsetHeight() - (nDayGroupTop + nDayTop + nDayHeight) - 1;
+		}
+		
+		for(j=0;j<7;j++)
+		{
+			//설정할 일자의 위치값
+			//이전월의 일자, 다음월의 일자를 처리하기 위함
+			nDayPos = (i*7) + j - nFirstDay;
+			
+			//설정할 일자 계산
+			objDate = this.gfnAddDate(objFirstDate, nDayPos);
+			
+			//설정할 일자의 전체 값(yyyyMMdd)
+			sFullDate = this.gfnGetMaskFormatDateToString(objDate, "yyyyMMdd");
+			
+			//마지막 요일에 해당하는 일자일 경우
+			if(j==6)
+			{
+				//Graphics 컴포넌트 Right와 마지막 요일 영역의 Width를 맞추기 위한 계산
+				//Graphics 컴포넌트 Width - 마지막 요일의 Right - 요일의 Border값(1px)
+				nRightGap = objGraphics.getOffsetWidth() - (nDayLeft+nDayWidth) - 1;
+			}
+			
+			//일자 GraphicsGroup 오브젝트 만들기
+			objProperties = {
+								"x" : nDayLeft, "y" : nDayTop
+							};
+			objDay = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+			
+			//일자 배경의 Width값 설정
+			objDayRectProp.width = nDayWidth + nRightGap;
+			
+			//일자 배경의 Height값 설정
+			objDayRectProp.height = nDayHeight + nBottomGap;
+			
+			//일자 배경 오브젝트 만들기
+			objDayBg = this.gfnSetGraphicProperties("GraphicsRect", objDayRectProp);
+			
+			//일자 GraphicsGroup에 일자 배경 오브젝트 추가
+			objDay.addChild("day_bg", objDayBg);
+			
+			
+			//일자 텍스트 색상 가져오기
+			//일요일, 토요일, 이전월 or 이후월 일자, 현재월 일자
+			if(objDate.getMonth()!=objFirstDate.getMonth())sTextColor = objConfig.day.textcolor_disable;
+			else if(objDate.getDay()==0)sTextColor = objConfig.day.textcolor_sun;
+			else if(objDate.getDay()==6)sTextColor = objConfig.day.textcolor_sat;
+			else sTextColor = objConfig.day.textcolor;
+			
+			if(objDayTextProp.textAlign=="center")
+			{
+				//일자 텍스트 Left 좌표 설정(일자 영역 기준 가운데 정렬로 보이도록 설정)
+				//일자 배경 Width/2
+				objDayTextProp.x = nDayWidth/2;
+			}else if(objDayTextProp.textAlign=="left")
+			{
+				//일자 텍스트 Left 좌표 설정(일자 영역 기준 왼쪽 정렬로 보이도록 설정)
+				//일자 배경 left + 패딩(5px)
+				objDayTextProp.x = 5;
+			}else if(objDayTextProp.textAlign=="right")
+			{
+				//일자 텍스트 Left 좌표 설정(일자 영역 기준 오른쪽 정렬로 보이도록 설정)
+				//일자 배경 Width - 패딩(5px)
+				objDayTextProp.x = nDayWidth - 5;
+			}
+			
+			//일자 텍스트 Top 좌표 설정 
+			//패딩(5px)
+			objDayTextProp.y = 5;
+			
+			//일자 텍스트의 텍스트 값 설정
+			objDayTextProp.text = objDate.getDate();
+			
+			//일자 텍스트 색상 설정
+			objDayTextProp.color = sTextColor;
+				
+			var sTargetDate = this.gfnGetMaskFormatDateToString(objDate, "yyyyMMdd");
+			var objToDate = new Date();
+			var sToDate = this.gfnGetMaskFormatDateToString(objToDate, "yyyyMMdd");
+			
+			if(this.gfnGetDiffDay(sTargetDate, sToDate)==0)
+			{
+				//일자 텍스트 색상 설정
+				objDayTextProp.color = "#ffffff";
+				
+				objProperties = {
+									"x" : objDayTextProp.x -1 ,
+									"y" : 12,
+									"fillstyle" : "#0077FF",
+									"width" : 22,
+									"height" : 22
+								};
+				
+				//오늘일자 텍스트 배경 오브젝트 만들기
+				objTodayBg = this.gfnSetGraphicProperties("GraphicsEllipse", objProperties);
+				
+				//일자 GraphicGroup에 오늘일자 텍스트 배경 오브젝트 추가
+				objDay.addChild("today_bg", objTodayBg);
+			}
+			
+			//일자 텍스트 오브젝트 만들기
+			objDayText = this.gfnSetGraphicProperties("GraphicsText", objDayTextProp);
+			
+			//일자 GraphicGroup에 일자 텍스트 오브젝트 추가
+			objDay.addChild("day_text", objDayText);
+			
+			//일자 그룹에 일자 오브젝트 추가
+			objDayGroup.addChild("day_"+sFullDate, objDay);
+			
+			//다음 일자의 Left 좌표 값 설정
+			nDayLeft += nDayWidth;
+		}
+		
+		//다음 일자의 Top 좌표 값 설정
+		nDayTop += nDayHeight;
+	}
+	
+	//일자 그룹을 Graphics 컴포넌트에 추가
+	objGraphics.addChild("daygroup", objDayGroup);
+	
+	//일정 그룹을 Graphics 컴포넌트에 추가
+	objGraphics.addChild("schedulegroup", objScheduleGroup);
+	
+	//Graphics 컴포넌트 다시그리기
+	objGraphics.redraw();
+	
+	//스케줄 조회 함수 호출
+	this.gfnLoadScheduler(objGraphics);
+}
+
+/**
+* @description 	    	: 스케줄 조회 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @return           	: 없음
+*/
+this.gfnLoadScheduler = function(objGraphics)
+{
+	var i;
+	
+	//스케줄러 설정 정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	//스케줄러와 연결된 데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	
+	//일정 ID
+	var sId;
+	
+	//일정 일자
+	var sSDate;
+	
+	//일정 일자
+	var sEDate;
+	
+	//일정 타이틀
+	var sTitle;
+	
+	//일정 타입 
+	var sType;
+	
+	//현재 일자
+	var sTargetDate;
+	
+	//일자 오브젝트
+	var objDay;
+	
+	//일자 그룹 오브젝트 가져오기
+	var objDayGroup = objGraphics.getObjectByID("daygroup").getObjects();
+	
+	var objScheduleGroup = objGraphics.getObjectByID("schedulegroup");
+	
+	//일정 설정 정보 가져오기
+	var objScheduleConfig = objConfig.schedule;
+	
+	//일정 타입별 배경색 정보 가져오기
+	var objScheduleType = objScheduleConfig.type;
+	
+	//일정 배경 속성 정보
+	var objScheduleRectProp;
+	
+	//일정 텍스트 속성 정보
+	var objScheduleTextProp;
+	
+	var objSchedule;
+	var objSchedules;
+	var objScheduleBg;
+	var objScheduleText;
+	
+	//일정 Left 좌표 초기화
+	var nLeft = 0;
+	
+	//일정 Top 좌표 초기화 값
+	var nTopDef = objConfig.week.height;
+	
+	//일정 Top 좌표 초기화
+	var nTop = 0;
+	
+	var nWidth;
+	
+	//일정 Height 값 초기화
+	var nHeight = objScheduleConfig.height;
+	
+	//일정 Gap 값 초기화
+	var nGap = objScheduleConfig.gap;
+	
+	var nDayWidth;
+	var nDayHeight;
+	
+	//스케줄러에 표현된 일자 갯수(이전, 이후 월 일자 포함
+	var nDayCount = objDayGroup.length;
+	
+	//스케줄 갯수
+	var nScheduleCount;
+	
+	//성능향상을 위해 데이터셋 Enable Event False 시작
+	objDs.set_enableevent(false);
+	
+	//스케줄러 시작일자 구하기
+	var sStartDate = objDayGroup[0].id.split("_")[1];
+	
+	//스케줄러 종료일자 구하기
+	var sEndDate = objDayGroup[objDayGroup.length-1].id.split("_")[1];
+	
+	//일정 그룹 영역 초기화
+	objScheduleGroup.clear();
+	
+	//현재 스케줄러 기간에 포함된 일정 데이터 가져오기
+	objDs.filter("!((sdate<'"+sStartDate+"'&&edate<'"+sStartDate+"')||"+"(sdate>'"+sEndDate+"'&&edate>'"+sEndDate+"'))");
+	
+	for(i=0;i<objDs.rowcount;i++)
+	{
+		//일정 데이터 가져오기
+		sId = objDs.getColumn(i, "id");
+		sSDate = objDs.getColumn(i, "sdate");
+		sEDate = objDs.getColumn(i, "edate");
+		sTitle = objDs.getColumn(i, "title");
+		sType = objDs.getColumn(i, "type");
+		
+		//일정의 시작일이 현재 스케줄러 시작일 보다 클경우 
+		//스케줄러 시작일로 설정
+		if(sSDate<sStartDate)sSDate = sStartDate;
+		
+		//일정의 종료일이 현재 스케줄러 종료일 보다 클경우 
+		//스케줄러 종료일로 설정
+		if(sEDate>sEndDate)sEDate = sEndDate;
+		
+		//일정의 기간 구하기
+		var nDays = this.gfnGetDiffDay(sSDate, sEDate)+1;
+		
+		//시작일의 일자 오브젝트 가져오기
+		objSDay = objGraphics.getObjectByID("day_"+sSDate);	
+		
+		//일정의 기간만큼 Loop 실행
+		for(var j=0;j<nDays;j++)
+		{
+			//현재 Loop 일자 가져오기
+			sEDate = this.gfnAddDate(sSDate, j);
+			
+			//현재 Loop 일자의 일자 오브젝트 가져오기
+			objEDay = objGraphics.getObjectByID("day_"+sEDate);
+			
+			//현재 Loop 일자가 현재 주차의 마지막 일자일 경우
+			//또는 일정의 마지막 일자일 경우
+			//시작일자부터 현재 일자까지 일정 오브젝트 만들기
+			if((objEDay.getRect().left+objEDay.getRect().width) == objGraphics.getOffsetWidth()||j==nDays-1)
+			{	
+				//일정 배경 정보 가져오기
+				objScheduleRectProp = objScheduleConfig.graphicsrect;
+			
+				//일정 텍스트 정보 가져오기
+				objScheduleTextProp = objScheduleConfig.graphicstext;
+				
+				//시작일자의 Left값 가져오기(Border처리를 위해 +1)
+				nLeft = objSDay.getRect().left + 1 + 5;
+				
+				//일정표현이 가능한 Top값 구하는 함수 호출
+				nTop = this.gfnGetScheduleTop(objGraphics, objSDay, objEDay);
+				
+				
+				//일정을 표현할 수 있을 경우
+				if(nTop!=-1)
+				{
+					//일정의 Width값 구하기
+					//마지막일자 Left + Width - 시작일자 Left - (Border처리를 위한 -1)
+					nWidth = objEDay.getRect().left + objEDay.getRect().width - nLeft - 1 - 5 ;
+					
+					//일정의 Left, Top, Width, Height값 설정
+					objScheduleRectProp.x = nLeft;
+					objScheduleRectProp.y = nTop;
+					objScheduleRectProp.width = nWidth;
+					objScheduleRectProp.height = nHeight;
+					
+					//일정 타입에 따른 일정 배경의 FillStyle 값 설정
+					objScheduleRectProp.fillstyle = objScheduleType[sType];
+					
+					//일정 배경 오브젝트 만들기
+					objScheduleBg = this.gfnSetGraphicProperties("GraphicsRect", objScheduleRectProp);
+										
+					//일정에 일정 배경 오브젝트 추가
+					objScheduleGroup.addChild("schedule_"+sId+"_bg_"+j, objScheduleBg);
+					
+					//일정 텍스트 Left 좌표 설정
+					objScheduleTextProp.x = nLeft + 5;
+					
+					//일정 텍스트 Top 좌표 설정
+					objScheduleTextProp.y = nTop + nHeight/2;
+					
+					//일정 텍스트의 텍스트 값 설정
+					objScheduleTextProp.text = sTitle;
+					
+					//일정 텍스트 오브젝트 만들기
+					objScheduleText = this.gfnSetGraphicProperties("GraphicsText", objScheduleTextProp);
+					
+					//일정에 일정 텍스트 오브젝트 추가
+					objScheduleGroup.addChild("schedule_"+sId+"_text_"+j, objScheduleText);
+				}
+				//일정을 표현할 수 없을 경우 More버튼 만들기
+				else
+				{
+					//More버튼 만들기 함수 호출
+					this.gfnLoadMore(objGraphics, objSDay, objEDay);
+				}
+				
+				//현재 Loop 일자의 다음일자(다음 주차의 시작일)를 시작일자 오브젝트로 설정
+				objSDay = objGraphics.getObjectByID("day_"+this.gfnAddDate(sSDate, j+1));
+			}
+		}
+		
+		//Graphics 컴포넌트 다시그리기
+		objGraphics.redraw();
+	}
+		
+	//성능향상을 위해 데이터셋 Enable Event False 종료
+	objDs.set_enableevent(true);
+	
+}
+
+/**
+* @description 	    	: More버튼 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objSDay  		: More버튼을 만들기 시작할 일자 오브젝트
+* @param objEDay  		: More버튼을 만들기 종료할 일자 오브젝트
+* @return           	: 없음
+*/
+this.gfnLoadMore = function(objGraphics, objSDay, objEDay)
+{
+	//스케줄러 설정 정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	//더보기 설정 정보 가져오기
+	var objMoreConfig = objConfig.more;
+	
+	//더보기 배경 속성 정보
+	var objMoreRectProp;
+	
+	//더보기 텍스트 속성 정보
+	var objMoreTextProp;
+	
+	//더보기 Height 값 가져오기
+	var nMoreHeight = objMoreConfig.height;
+	
+	//일정 Top 좌표 초기화 값
+	var nTopDef = objConfig.week.height;
+	
+	//시작일자 가져오기
+	var sSDate = objSDay.id.split("_")[1];
+	
+	//종료일자 가져오기
+	var sEDate = objEDay.id.split("_")[1];
+	
+	//일정의 기간 구하기
+	var nDays = this.gfnGetDiffDay(sSDate, sEDate)+1;
+	
+	//현재 일자 
+	var sTargetDate;
+	
+	//현재 일자 오브젝트
+	var objTargetDay;
+	
+	//위치 정보 오브젝트
+	var objRect;
+	
+	var nX, nY, nWidth, nHeight;
+	
+	//일정 그룹 오브젝트 가져오기
+	var objScheduleGroup = objGraphics.getObjectByID("schedulegroup");
+	
+	//현재 기간 만큼 Loop 실행
+	for(var i=0;i<nDays;i++)
+	{
+		//현재 Loop 일자 구하기
+		sTargetDate = this.gfnAddDate(sSDate, i);
+		
+		//현재 일자에 해당하는 More버튼이 없으면 생성
+		if(!objGraphics.getObjectByID("more_"+sTargetDate))
+		{
+		
+			//현재 Loop 일자 오브젝트 가져오기
+			objTargetDay = objGraphics.getObjectByID("day_"+sTargetDate);
+			
+			//현재 Loop 일자 오브젝트의 위치값 구하기
+			objRect = objTargetDay.getRect();
+			
+			nX = objRect.left + 1;
+			nY = objRect.top + objRect.height - nMoreHeight - nTopDef - 1;
+			nMoreWidth = objRect.width - 2;
+			
+			//더보기 배경 속성 정보 가져오기
+			objMoreRectProp = objMoreConfig.graphicsrect;
+			
+			//더보기 텍스트 속성 정보 가져오기
+			objMoreTextProp = objMoreConfig.graphicstext;
+			
+			//더보기 GraphicsGroup 오브젝트 만들기
+			objProperties = {
+								"x" : nX, "y" : nY
+							};
+			
+			objMore = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+			
+			//더보기 배경 Width 값 설정
+			objMoreRectProp.width = nMoreWidth;
+			
+			//더보기 배경 Height 값 설정
+			objMoreRectProp.height = nMoreHeight;
+			
+			//더보기 배경 오브젝트 만들기
+			objScheduleBg = this.gfnSetGraphicProperties("GraphicsRect", objMoreRectProp);
+			
+			//더보기에 더보기 배경 오브젝트 추가
+			objMore.addChild("more_bg", objScheduleBg);
+			
+			//더보기 텍스트 Left 좌표 설정
+			objMoreTextProp.x = 5;
+			
+			//더보기 텍스트 Top 좌표 설정
+			objMoreTextProp.y = nMoreHeight/2;
+			
+			//더보기 텍스트 오브젝트 만들기
+			objScheduleText = this.gfnSetGraphicProperties("GraphicsText", objMoreTextProp);
+			
+			//더보기에 더보기 텍스트 오브젝트 추가
+			objMore.addChild("more_text", objScheduleText);
+			
+			//일자에 더보기 오브젝트 추가
+			objScheduleGroup.addChild("more_"+sTargetDate, objMore);
+		}
+	}
+}
+
+/**
+* @description 	    	: 더보기 일정 팝업 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objHitTest  	: 선택된 Graphic 오브젝트
+* @return           	: 없음
+*/
+this.gfnLoadSchedulePop = function(objGraphics, objHitTest)
+{
+	this.divPop.form.grpSchedulerPop.clear();
+	
+	//더보기 오브젝트 가져오기
+	var objMore = objHitTest.parent;
+	
+	if(!objMore)return;
+	
+	//일자영역 오브젝트 가져오기
+	var objTargetDay = objGraphics.getObjectByID("day_"+objMore.id.split("_")[1]);
+	
+	if(!objTargetDay)return;
+	
+	//일자영역 텍스트 오브젝트 가져오기
+	var objDayText = objTargetDay.getObjectByID("day_text");
+	
+	//일자영역 위치정보 가져오기
+	var objRect = objTargetDay.getRect();
+	
+	//더보기 팝업의 위치정보 만들기
+	var nDayLeft = objGraphics.getOffsetLeft() + objRect.left - 15;
+	var nDayTop = objGraphics.getOffsetTop() + objRect.top - 15;
+	var nDayWidth = objRect.width + 30;
+	var nDayHeight = objRect.height + 40;
+	
+	//설정정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	//일자 영역 설정 정보 가져오기
+	var objDayConfig = objConfig.day;
+	
+	//일자 영역 배경 설정 정보 가져오기
+	var objDayRectProp = objDayConfig.graphicsrect;
+	
+	//일자 영역 텍스트 설정 정보 가져오기
+	var objDayTextProp = objDayConfig.graphicstext;
+	
+	//일정 그룹 오브젝트 가져오기
+	var objScheduleGroup = objGraphics.getObjectByID("schedulegroup");
+	
+	this.divPop.move(nDayLeft, nDayTop, nDayWidth+20, nDayHeight);
+	
+	//일자 GraphicsGroup 오브젝트 만들기
+	objProperties = {
+						"x" : 0, "y" : 0
+					};
+					
+	objDay = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+	
+	//일자 배경의 Width값 설정
+	objDayRectProp.width = nDayWidth-1;
+	
+	//일자 배경의 Height값 설정
+	objDayRectProp.height = nDayHeight-1;
+	
+	//일자 배경 오브젝트 만들기
+	objDayBg = this.gfnSetGraphicProperties("GraphicsRect", objDayRectProp);
+	
+	objDayBg.set_strokepen("0px none");
+	
+	//일자 GraphicsGroup에 일자 배경 오브젝트 추가
+	objDay.addChild("day_bg", objDayBg);
+	
+	//일자 텍스트 Left 좌표 설정(일자 영역 기준 오른쪽 정렬로 보이도록 설정)
+	//일자 배경 Width - 패딩(5px)
+	objDayTextProp.x = nDayWidth - 5;
+	
+	if(objDayTextProp.textAlign=="center")
+	{
+		//일자 텍스트 Left 좌표 설정(일자 영역 기준 가운데 정렬로 보이도록 설정)
+		//일자 배경 Width/2
+		objDayTextProp.x = nDayWidth/2;
+	}else if(objDayTextProp.textAlign=="left")
+	{
+		//일자 텍스트 Left 좌표 설정(일자 영역 기준 왼쪽 정렬로 보이도록 설정)
+		//일자 배경 left + 패딩(5px)
+		objDayTextProp.x = 15;
+	}else if(objDayTextProp.textAlign=="right")
+	{
+		//일자 텍스트 Left 좌표 설정(일자 영역 기준 오른쪽 정렬로 보이도록 설정)
+		//일자 배경 Width - 패딩(5px)
+		objDayTextProp.x = nDayWidth - 5;
+	}
+	
+	//일자 텍스트의 텍스트 값 설정
+	objDayTextProp.text = objDayText.text;
+	
+	//일자 텍스트 색상 설정
+	objDayTextProp.color = objDayText.color;
+	
+	//일자 텍스트 오브젝트 만들기
+	objDayText = this.gfnSetGraphicProperties("GraphicsText", objDayTextProp);
+	
+	//일자 GraphicGroup에 일자 텍스트 오브젝트 추가
+	objDay.addChild("day_text", objDayText);
+	
+	objDayText.set_font("bold 13px NanumGothic");
+	
+	//일자 그룹에 일자 오브젝트 추가
+	this.divPop.form.grpSchedulerPop.addChild("schedulepop", objDay);
+	
+	//해당일자의 일정 만들기 함수 호출
+	this.fnLoadScheduleByDay(this.divPop.form.grpSchedulerPop, objGraphics.config, objTargetDay);		
+	
+	//스케줄러 다시그리기
+	this.divPop.form.grpSchedulerPop.redraw();
+}
+
+/**
+* @description 	    	: 해당일자의 일정 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objHitTest  	: 해당일자 오브젝트
+* @return           	: 없음
+*/
+this.fnLoadScheduleByDay = function(objGraphics, objConfig, objTargetDay)
+{
+	
+	//스케줄러 설정 정보 가져오기
+	//var objConfig = objGraphics.config;
+	
+	//스케줄러와 연결된 데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	
+	//일정 Top 좌표 초기화 값
+	var nTopDef = objConfig.week.height;
+	
+	//일정 설정 정보 가져오기
+	var objScheduleConfig = objConfig.schedule;
+	
+	//일정 타입별 배경색 정보 가져오기
+	var objScheduleType = objScheduleConfig.type;
+	
+	//일정 배경 속성 정보
+	var objScheduleRectProp;
+	
+	//일정 텍스트 속성 정보
+	var objScheduleTextProp;
+	
+	//일정 Gap 값 초기화
+	var nGap = objScheduleConfig.gap;
+	
+	//일정 ID
+	var sId;
+	
+	//일정 일자
+	var sSDate;
+	
+	//일정 일자
+	var sEDate;
+	
+	//일정 타이틀
+	var sTitle;
+	
+	//일정 타입 
+	var sType;
+	
+	// 현재 일자 가져오기
+	var sDate = objTargetDay.id.split("_")[1];
+	
+	//일정 그룹 오브젝트 가져오기
+	var objSchedulePop = objGraphics.getObjectByID("schedulepop");
+	
+	//일정 위치 정보 설정
+	var nLeft;
+	var nTop = nTopDef;
+	var nWidth = objSchedulePop.getRect().width;
+	var nHeight = objScheduleConfig.height;
+	
+	//현재 일자에 해당하는 일정 정보 가져오기
+	objDs.filter("!((sdate<'"+sDate+"'&&edate<'"+sDate+"')||"+"(sdate>'"+sDate+"'&&edate>'"+sDate+"'))");
+	
+	//일정의 갯수만큼 Loop
+	for(var i=0;i<objDs.rowcount;i++)
+	{
+		//일정 배경 정보 가져오기
+		objScheduleRectProp = objScheduleConfig.graphicsrect;
+		
+		//일정 텍스트 정보 가져오기
+		objScheduleTextProp = objScheduleConfig.graphicstext;
+		
+		//일정 데이터 가져오기
+		sId = objDs.getColumn(i, "id");
+		sSDate = objDs.getColumn(i, "sdate");
+		sEDate = objDs.getColumn(i, "edate");
+		sTitle = objDs.getColumn(i, "title");
+		sType = objDs.getColumn(i, "type");
+		
+		//일정 GraphicsGroup 오브젝트 만들기
+		objProperties = {
+						"x" : 0, "y" : nTop + nGap
+				};
+				
+		objSchedule = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+		
+		//일정 배경 오브젝트 만들기 함수 호출
+		objScheduleBg = this.gfnLoadScheduleBg(sId, sDate, sSDate, sEDate, nWidth, nHeight, objScheduleType[sType], objScheduleRectProp);
+				
+		//일정에 일정 배경 오브젝트 추가
+		objSchedule.addChild("schedule_"+sId+"_bg", objScheduleBg);
+		
+		//일정 텍스트 Left 좌표 설정
+		objScheduleTextProp.x = 25;
+		
+		//일정 텍스트 Top 좌표 설정
+		objScheduleTextProp.y = nHeight/2;
+		
+		//일정 텍스트의 텍스트 값 설정
+		objScheduleTextProp.text = sTitle;
+		
+		//일정 텍스트 오브젝트 만들기
+		objScheduleText = this.gfnSetGraphicProperties("GraphicsText", objScheduleTextProp);
+		
+		//일정에 일정 텍스트 오브젝트 추가
+		objSchedule.addChild("schedule_"+sId+"_text", objScheduleText);
+		
+		//일자에 일정 오브젝트 추가
+		objSchedulePop.addChild(sId, objSchedule);
+		
+		//다음 일정의 Top 좌표 설정
+		nTop = objSchedule.y+objScheduleRectProp.height;
+	}
+	
+	//일정 팝업 배경 오브젝트 가져오기
+	var objPopBg = objSchedulePop.getObjectByID("day_bg");
+	
+	//배경오브젝트가 일정 오브젝트들 보다 작을 경우 
+	//일정 오브젝트에 맞춰 사이즈 변경
+	//if(objPopBg.height < nTop + nGap)objPopBg.set_height(nTop + nGap);
+	this.divPop.form.grpSchedulerPop.setOffsetHeight(nTop + nGap);	
+	this.divPop.form.resetScroll();
+}
+
+/**
+* @description 	    			: 일정 배경 오브젝트 만들기 함수
+* @param sDate		  			: 일정 팝업 일자
+* @param sSDate  				: 일정 시작 일자
+* @param sEDate  				: 일정 종료 일자
+* @param nWidth  				: 일정 팝업 Width
+* @param nHeight  				: 일정 height
+* @param sFillStyle  			: 일정 FillStyle
+* @param objScheduleRectProp	: 일정 배경 설정 값
+* @return objScheduleBg			: 일정 배경 오브젝트
+*/
+
+this.gfnLoadScheduleBg = function(sId, sDate, sSDate, sEDate, nWidth, nHeight, sFillStyle, objScheduleRectProp)
+{
+	//일정 배경 x, y 초기화
+	objScheduleRectProp.x = 0;
+	objScheduleRectProp.y = 0;
+	
+	//일정 GraphicsGroup 오브젝트 만들기
+	var objProperties = {
+					"x" : 0, "y" : 0
+			};
+			
+	var objScheduleBgGroup = this.gfnSetGraphicProperties("GraphicsGroup", objProperties);
+		
+	//일정 배경 FillStyle 적용
+	objScheduleRectProp.fillstyle = sFillStyle;
+	
+	//일정 배경 오브젝트 만들기
+	var objScheduleBgLeft = this.gfnSetGraphicProperties("GraphicsPath", objScheduleRectProp);
+	var objScheduleBgRight = this.gfnSetGraphicProperties("GraphicsPath", objScheduleRectProp);
+	
+	var objScheduleBg = this.gfnSetGraphicProperties("GraphicsRect", objScheduleRectProp);
+	
+	objScheduleBg.set_x(10);
+	objScheduleBg.set_y(0);
+	objScheduleBg.set_width(nWidth-20);
+	objScheduleBg.set_height(nHeight);
+	
+	//일정 시작일자가 일정 팝업 일자보다 작을 경우
+	if(this.gfnGetDiffDay(sDate, sSDate)!=0)
+	{
+		// < 모양 만들기
+		objScheduleBgLeft.moveTo(30, nHeight);
+		objScheduleBgLeft.lineTo(20, nHeight);
+		objScheduleBgLeft.lineTo(10, nHeight/2);
+		objScheduleBgLeft.lineTo(20, 0);
+		objScheduleBgLeft.lineTo(30, 0);
+		objScheduleBgLeft.lineTo(30, nHeight);
+		objScheduleBg.set_x(20);
+		objScheduleBgGroup.addChild("schedule_"+sId+"_bgleft", objScheduleBgLeft);
+	}
+		
+	//일정 종료일자가 일정 팝업 일자보다 클 경우
+	if(this.gfnGetDiffDay(sDate, sEDate)!=0)
+	{
+		// > 모양 만들기
+		objScheduleBgRight.moveTo(nWidth-30, 0);
+		objScheduleBgRight.lineTo(nWidth-20, 0);
+		objScheduleBgRight.lineTo(nWidth-10, nHeight/2);
+		objScheduleBgRight.lineTo(nWidth-20, nHeight);
+		objScheduleBgRight.lineTo(nWidth-30, nHeight);
+		objScheduleBgRight.lineTo(nWidth-30, 0);
+		objScheduleBg.set_width(nWidth - 20 - objScheduleBg.x);
+		
+		objScheduleBgGroup.addChild("schedule_"+sId+"_bgright", objScheduleBgRight);
+	}else
+	{
+		objScheduleBg.set_width(nWidth - 10 - objScheduleBg.x);
+	}
+	
+	objScheduleBgGroup.addChild("schedule_"+sId+"_bg", objScheduleBg);
+	
+	//일정 배경 오브젝트 리턴
+	return objScheduleBgGroup;
+}
+
+/**
+* @description 	    			: 일정표현이 가능한 Top값 구하는 함수
+* @param objGraphics  			: 설정할 Graphics Component
+* @param objSDay  				: 시작 일자 오브젝트
+* @param objEDay  				: 종료 일자 오브젝트
+* @return nTargetTop			: Top 좌표 값
+*/
+this.gfnGetScheduleTop = function(objGraphics, objSDay, objEDay)
+{
+	//스케줄러 설정 정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	//일정 설정 정보 가져오기
+	var objScheduleConfig = objConfig.schedule;
+	
+	//일정 Top 좌표 초기화 값
+	var nTopDef = objConfig.week.height;
+	
+	//일정 Gap 값 초기화
+	var nGap = objScheduleConfig.gap;
+		
+	//일정 Height 값 초기화
+	var nHeight = objScheduleConfig.height;
+	
+	//더보기 설정 정보 가져오기
+	var objMoreConfig = objConfig.more;
+	
+	//더보기 Height 값 가져오기
+	var nMoreHeight = objMoreConfig.height;
+	
+	//시작일자 가져오기
+	var sSDate = objSDay.id.split("_")[1];
+	
+	//종료일자 가져오기
+	var sEDate = objEDay.id.split("_")[1];
+	
+	//현재 일자 
+	var sTargetDate;
+	
+	//현재 일자 오브젝트
+	var objTargetDay;
+	
+	//현재 타겟 일정 오브젝트
+	var objTargetSchedule;
+	
+	//일정의 기간 구하기
+	var nDays = this.gfnGetDiffDay(sSDate, sEDate)+1;
+	
+	var objRect;
+	var nLeft;
+	var nTop = 0;
+	var nTargetTop;
+	var nWidth;
+	var nHeight;
+	var nX, nY;
+	
+	var bChk = true;
+	
+	while(1)
+	{
+		bChk = true;
+		
+		//기간 만큼 Loop
+		for(var i=0;i<nDays;i++)
+		{
+			//현재 Loop 일자 가져오기
+			sTargetDate = this.gfnAddDate(sSDate, i);
+			
+			//현재 Loop 일자 오브젝트 가져오기
+			objTargetDay = objGraphics.getObjectByID("day_"+sTargetDate);
+			
+			//현재 Loop 일자 오브젝트의 위치 정보 가져오기
+			objRect = objTargetDay.getRect();
+			
+			//HitTest할 좌표값 구하기
+			//해당 일자 일정영역에 일정 오브젝트가 있는지 여부 확인
+			nX = objRect.left + (objRect.width/2);
+			nY = objRect.top + nTopDef + nGap + nTop;
+			objTargetSchedule = objGraphics.hitTestAll(nX, nY)[0];
+			
+			//해당좌표에 일정이 있으면 false
+			if(objTargetSchedule)if(objTargetSchedule.id.split("_")[0]=="schedule")bChk = false;
+		}
+		
+		//다음 체크할 Top 좌표값 설정
+		nTop = nTop + 20 + nGap;
+		
+		//다음 HitTest할 nX좌표값이 더보기버튼 표현위치보다 클 경우 
+		//return -1하여 더보기 버튼 생성
+		if((nY+nHeight)>objRect.top + objRect.height - nMoreHeight)return -1;
+		
+		//모든위치에 일정을 표현할 수 있으면 Break
+		if(bChk==true)break;
+	}
+	
+	nTargetTop = nY - nTopDef;
+	
+	return nTargetTop;
+}
+
+/**
+* @description 	    	: 해당 월의 주(Week) 갯수 구하는 함수
+* @param sYearMonth  	: 확인할 년월 텍스트(202006)
+* @return           	: 주(Week) 갯수
+*/
+this.gfnGetCountWeeksInMonth = function(sYearMonth) 
+{
+
+    var nYear = nexacro.toNumber(sYearMonth.substr(0, 4));
+	var nMonth = nexacro.toNumber(sYearMonth.substr(4, 2));
+
+    var objFirstOfMonth = new Date(nYear, nMonth-1, 1);
+    var objLastOfMonth = new Date(nYear, nMonth, 0);
+
+    var nDays = objFirstOfMonth.getDay() + objLastOfMonth.getDate();
+	
+    return nexacro.ceil( nDays / 7);
+}
+
+/**
+* @description 	    : Graphics 하위 오브젝트 생성 및 속성 설정 함수
+* @param sCompId  	: 오브젝트 명
+* @param jsnProps   : 오브젝트 속성 값
+* @return           : Graphics 하위 오브젝트
+*/
+this.gfnSetGraphicProperties = function(sCompId, jsnProps)
+{
+	//Graphics 하위 오브젝트 생성
+	var objComp = new nexacro[sCompId];
+	var objFunc;
+	var sProp;
+	
+	//설정정보를 오브젝트의 속성으로 설정
+	for(sProp in jsnProps)
+	{
+		//속성 설정함수 가져오기
+		objFunc = objComp["set_"+sProp];
+		
+		if(objFunc)
+		{
+			//속성 설정함수 실행
+			objFunc.call(objComp, jsnProps[sProp]);
+		}
+	}
+	
+	//생성된 Graphics 하위 오브젝트 리턴
+	return objComp;
+}
+]]></Script>
+    <Objects>
+      <Dataset id="dsSchedule">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="sdate" type="STRING" size="256"/>
+          <Column id="edate" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="content" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="id">01</Col>
+            <Col id="sdate">20211001</Col>
+            <Col id="edate">20211001</Col>
+            <Col id="title">국군의날</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">02</Col>
+            <Col id="sdate">20211003</Col>
+            <Col id="edate">20211003</Col>
+            <Col id="title">개천절</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">03</Col>
+            <Col id="sdate">20211004</Col>
+            <Col id="edate">20211004</Col>
+            <Col id="title">대체휴일</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">04</Col>
+            <Col id="sdate">20211009</Col>
+            <Col id="edate">20211009</Col>
+            <Col id="title">한글날</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">05</Col>
+            <Col id="sdate">20211011</Col>
+            <Col id="edate">20211011</Col>
+            <Col id="title">대체휴일</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">06</Col>
+            <Col id="sdate">20211011</Col>
+            <Col id="edate">20211011</Col>
+            <Col id="title">주간보고</Col>
+            <Col id="content">주간보고</Col>
+            <Col id="type">02</Col>
+          </Row>
+          <Row>
+            <Col id="id">07</Col>
+            <Col id="sdate">20211012</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">오전회의</Col>
+            <Col id="content">오전회의</Col>
+            <Col id="type">02</Col>
+          </Row>
+          <Row>
+            <Col id="id">08</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">공지사항</Col>
+            <Col id="content">공지사항</Col>
+            <Col id="type">01</Col>
+          </Row>
+          <Row>
+            <Col id="id">09</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">오후반차</Col>
+            <Col id="content">오후반차</Col>
+            <Col id="type">04</Col>
+          </Row>
+          <Row>
+            <Col id="id">10</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">외부회의</Col>
+            <Col id="content">외부회의</Col>
+            <Col id="type">03</Col>
+          </Row>
+          <Row>
+            <Col id="id">11</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">내부교육</Col>
+            <Col id="content">내부교육</Col>
+            <Col id="type">05</Col>
+          </Row>
+          <Row>
+            <Col id="id">12</Col>
+            <Col id="sdate">20211015</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">외부회의</Col>
+            <Col id="content">외부회의</Col>
+            <Col id="type">03</Col>
+          </Row>
+          <Row>
+            <Col id="id">13</Col>
+            <Col id="type">05</Col>
+            <Col id="sdate">20211015</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">온라인 교육</Col>
+            <Col id="content">온라인 교육</Col>
+          </Row>
+          <Row>
+            <Col id="id">14</Col>
+            <Col id="sdate">20211018</Col>
+            <Col id="edate">20211021</Col>
+            <Col id="title">공지사항</Col>
+            <Col id="content">공지사항</Col>
+            <Col id="type">01</Col>
+          </Row>
+          <Row>
+            <Col id="id">15</Col>
+            <Col id="sdate">20211018</Col>
+            <Col id="edate">20211022</Col>
+            <Col id="title">Nexacro N 컨퍼런스</Col>
+            <Col id="content">Nexacro N 컨퍼런스</Col>
+            <Col id="type">05</Col>
+          </Row>
+          <Row>
+            <Col id="id">16</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">테스트일정2</Col>
+            <Col id="content">테스트일정2</Col>
+            <Col id="type">05</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

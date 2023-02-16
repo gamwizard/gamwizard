@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="fromtocalendar" width="800" height="500" titletext="FromTo Calendar(시작/종료일을 선택하는 멀티 캘린더)" onload="fromtocalendar_onload">
+    <Layouts>
+      <Layout height="500" mobileorientation="landscape" width="800">
+        <Calendar id="calStart" taborder="0" left="10" top="10" width="110" height="20"/>
+        <Calendar id="calEnd" taborder="1" left="130" top="10" width="110" height="20"/>
+        <Button id="btnDropdown" taborder="2" text="" left="249" top="10" width="40" height="20" onclick="btnDropdown_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > fromtocalendar
+*  techtip 시작/종료일을 선택하는 멀티 캘린더
+*  @FileName	fromtocalendar.xfdl 
+*******************************************************************************
+*  2019.12.06		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_base.xjs";
+include "lib_techtip::lib_fromtocalendar.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+this.fromtocalendar_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//FromToCalendar 설정값 만들기
+	var objConfig = {
+						calstart		: this.calStart,
+						calend			: this.calEnd,
+						btndrop			: this.btnDropdown,
+						popdrop 		: null
+				    };
+				
+	//FromToCalendar 초기화 함수 호출
+	this.gfnFromToCalendar(objConfig);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+
+]]></Script>
+  </Form>
+</FDL>

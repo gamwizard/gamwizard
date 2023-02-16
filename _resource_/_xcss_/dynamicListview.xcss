@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[
+/**********************Static***********************************************/
+.Static.st_WF_linebox
+{
+	background : #ffffff;
+	color : #333333;
+	-nexa-border : 1px solid #dbdee2;
+	font : 12px Gulim;
+	-nexa-text-align : left;
+	-nexa-padding : 0px 0px 0px 5px;
+}
+
+/**********************ListView***********************************************/
+.ListView.lstvSample, 
+.ListView.lstvSample[status=readonly]
+{
+	-nexa-border : 1px solid #d5d5d5;
+	background : #ffffff;
+	color : #666666;
+}
+.ListView.lstvSample[status=mouseover],
+.ListView.lstvSample[status=focused]
+{
+	-nexa-border : 1px solid #5a86cd;
+}
+.ListView.lstvSample[status=disabled]
+{
+	background : #ffffff;
+}
+.ListView.lstvSample .body,
+.ListView.lstvSample .body[status=readonly], .ListView .detail[status=readonly],
+.ListView.lstvSample .body[status=focused], .ListView .detail[status=focused],
+.ListView.lstvSample .body[status=mouseover], .ListView .detail[status=mouseover]
+{
+	-nexa-border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : 12px Gulim;
+}
+.ListView.lstvSample .detail
+{
+	/*-nexa-border : 0px none, 0px none, 1px solid #d5d5d5, 0px none;*/
+	background : #ffffff;
+	font : 12px Gulim;
+}
+.ListView.lstvSample .body[userstatus=selected]
+{
+	background : #ffffff;
+}
+.ListView.lstvSample .detail[userstatus=selected]
+{
+	background : #ffffff;
+}
+.ListView.lstvSample .body[status=disabled], .ListView .detail[status=disabled]
+{
+	color : #999999;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_titleLine, .ListView.lstvSample .body .cell.lv_WF_titleLine[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_titleLine[status=focused]
+{
+	font : bold 20px Gulim;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_titleLine2, .ListView.lstvSample .body .cell.lv_WF_titleLine2[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_titleLine2[status=focused]
+{
+	font : bold 20px Gulim;
+	-nexa-text-align : center;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_titleLine3, .ListView.lstvSample .body .cell.lv_WF_titleLine3[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_titleLine3[status=focused]
+{
+	color : #555555;
+	font : bold 20px "Gulim";
+	-nexa-text-align : center;
+}
+
+
+.ListView.lstvSample .body .cell.lv_WF_subtitleLine, .ListView.lstvSample .body .cell.lv_WF_subtitleLine[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_subtitleLine[status=focused]
+{
+	font : bold 12px Gulim;
+	color : #dcbf39;
+	-nexa-text-align : center;	
+}
+
+.ListView.lstvSample .body .cell.lv_WF_subLine, .ListView.lstvSample .body .cell.lv_WF_subLine[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_subLine[status=focused]
+{
+	/*-nexa-border : 0px none, 0px none, 1px solid #dbdee2, 0px none;*/
+	font : 12px Gulim;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_areatag, .ListView.lstvSample .body .cell.lv_WF_areatag[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_areatag[status=focused]
+{
+	background : #f7e698;
+	color : #333333;
+	-nexa-border : 1px solid #dcbf39;
+	font : 12px Gulim;
+	-nexa-text-align : center;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_typetag, .ListView.lstvSample .body .cell.lv_WF_typetag[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_lv_WF_typetagareatag[status=focused]
+{
+	background : #0075ec;
+	color : #ffffff;
+	-nexa-border : 1px solid #005ebd;
+	font : 12px Gulim;
+	-nexa-text-align : center;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_detailbox, .ListView.lstvSample .body .cell.lv_WF_detailbox[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_detailbox[status=focused]
+{
+	background : #0075ec;
+	color : #ffffff;
+	-nexa-border : 1px solid #005ebd;
+	font : 12px Gulim;
+	-nexa-text-align : center;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_linebox, .ListView.lstvSample .body .cell.lv_WF_linebox[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_linebox[status=focused]
+{
+	background : #ffffff;
+	color : #333333;
+	-nexa-border : 1px solid #dbdee2;
+	font : 12px Gulim;
+	-nexa-text-align : left;
+	-nexa-padding : 0px 0px 0px 5px;
+}
+
+.ListView.lstvSample .body .cell.lv_WF_linedetail, .ListView.lstvSample .body .cell.lv_WF_linedetail[status=mouseover], .ListView.lstvSample .body .cell.lv_WF_linedetail[status=focused]
+{
+	background : #ededed;	
+	color : #f7905f;
+	-nexa-border : 1px solid #a3a4a8;
+	-nexa-text-align : center;
+	-nexa-padding : 20px;
+	-nexa-vertical-align : middle;
+	-nexa-word-wrap : english;
+	font : 15px Gulim;
+}
+
+.ListView.lstvSample .body .cell, .ListView .detail .cell,
+.ListView.lstvSample .body .cell[status=disabled], .ListView.lstvSample .detail .cell[status=disabled],
+.ListView.lstvSample .body .cell[status=readonly], .ListView.lstvSample .detail .cell[status=readonly],
+.ListView.lstvSample .body .cell[status=focused], .ListView.lstvSample .detail .cell[status=focused]
+{
+	-nexa-border :0px solid;
+	-nexa-padding : 4px 4px 4px 4px;
+}
+.ListView.lstvSample .body .cell[status=mouseover], .ListView.lstvSample .detail .cell[status=mouseover]
+{
+	-nexa-border : 0px solid;
+}]]></XCSS>

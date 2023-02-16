@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="custommenu" width="800" height="400" titletext="Custom Menu (버튼으로 메뉴만들기)">
+    <Layouts>
+      <Layout height="400" width="800">
+        <Div id="divMenu" taborder="0" left="0" top="45" height="40" right="0"/>
+        <Button id="btnCreateMenu" taborder="1" text="메뉴만들기" top="8" height="30" right="10" width="100" onclick="btnCreateMenu_onclick"/>
+        <PopupDiv id="popMenu" visible="false" left="10" top="110" width="220" height="100" border="1px solid #000000"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsMenu">
+        <ColumnInfo>
+          <Column id="menuid" type="STRING" size="256"/>
+          <Column id="menutitle" type="STRING" size="256"/>
+          <Column id="menulvl" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="menuid">01</Col>
+            <Col id="menutitle">메뉴1</Col>
+            <Col id="menulvl">0</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0101</Col>
+            <Col id="menutitle">메뉴1-1</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0102</Col>
+            <Col id="menutitle">메뉴1-2</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0103</Col>
+            <Col id="menutitle">메뉴1-3</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">02</Col>
+            <Col id="menutitle">메뉴2</Col>
+            <Col id="menulvl">0</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0201</Col>
+            <Col id="menutitle">메뉴2-1</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0202</Col>
+            <Col id="menutitle">메뉴2-2</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">03</Col>
+            <Col id="menutitle">메뉴3</Col>
+            <Col id="menulvl">0</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0301</Col>
+            <Col id="menutitle">메뉴3-1</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0302</Col>
+            <Col id="menutitle">메뉴3-2</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0303</Col>
+            <Col id="menutitle">메뉴3-3</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+          <Row>
+            <Col id="menuid">0304</Col>
+            <Col id="menutitle">메뉴3-4</Col>
+            <Col id="menulvl">1</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.btnCreateMenu_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objDsMenu = this.dsMenu;
+	
+	this.gfnCreateMenu(objDsMenu);
+};
+
+this.gfnCreateMenu = function(objDsMenu)
+{
+	var nLeft = 0;
+	var nTop = 0;
+	var nWidth = 0;
+	var nRight = 0;
+	
+	var nMenuCnt;
+	
+	var objMenu;
+	var sMenuId;
+	var sMenuTitle;
+	
+	objDsMenu.filter("menulvl=='0'");
+	
+	nMenuCnt = objDsMenu.rowcount;
+	
+	this.gfnClearDiv(this.divMenu);
+	
+	for(var i=0;i<nMenuCnt;i++)
+	{
+		sMenuId = objDsMenu.getColumn(i, "menuid");
+		sMenuTitle = objDsMenu.getColumn(i, "menutitle");
+		
+		objMenu = new Button("btnTopMenu_"+sMenuId, nLeft, nTop, nWidth, null, null, nRight);
+		this.divMenu.form.addChild(objMenu.name, objMenu);
+		objMenu.show();
+		objMenu.set_text(sMenuTitle);
+		objMenu.menuid = sMenuId;
+		objMenu.set_fittocontents("width");
+		objMenu.set_padding("0px 50px");
+		
+		nLeft = objMenu.name+":0px";
+	}
+	objDsMenu.filter("");
+	this.divMenu.form.resetScroll();
+		
+	this.divMenu.addEventHandler("onmousemove", this.gfnMenu_onmousemove, this);
+}
+
+this.gfnClearDiv = function(objDiv)
+{
+	var objForm = objDiv.form;
+	var objComps = objForm.components;
+	var objTarget;
+	
+	var nCnt = objComps.length;
+	
+	for(var i=nCnt-1;i>=0;i--)
+	{
+		objTarget = objComps[i];
+		objForm.removeChild(objTarget.name);
+		objTarget.destroy();
+		objTarget = null;
+	}
+}
+
+this.gfnMenu_onmousemove = function(obj:nexacro.Div,e:nexacro.MouseEventInfo)
+{
+	var sMenuId;
+	var objBtnMenu;
+	var bCheck = false;
+	var objRect;
+	
+	if(e.fromobject instanceof nexacro.Button)
+	{
+		objBtnMenu = e.fromobject;
+		
+		if(this.popMenu.isPopup()==false)
+		{
+			bCheck = true;
+		}else if(this.popMenu.menuid!=objBtnMenu.menuid)
+		{
+			bCheck = true;
+		}
+	}
+	
+	if(bCheck == true)
+	{
+		sMenuId = objBtnMenu.menuid;
+		
+		this.popMenu.closePopup();
+		this.gfnClearDiv(this.popMenu);
+		
+		objRect = this.gfnCreatePopupMenu(sMenuId);
+		this.popMenu.menuid = sMenuId;
+		this.popMenu.trackPopupByComponent(objBtnMenu, 0, objBtnMenu.getOffsetHeight(), objRect.width, objRect.height, "", false);
+	}
+};
+
+this.gfnCreatePopupMenu = function(sMenuId)
+{
+	var nLeft = 0;
+	var nTop = 0;
+	var nWidth = 0;
+	var nHeight = 30;
+	var nLineGap = 10;
+	var nMaxWidth = 0;
+	var nMaxHeight = 0;
+	
+	var objRect = {"width" : 0, "height" : 0};
+	
+	var sPopMenuId;
+	var sPopMenuTitle;
+	var objBtnPopMenu;
+	
+	var nMenuCnt;
+	
+	this.dsMenu.filter("menuid.indexOf('"+sMenuId+"')==0 && menulvl==1");
+	
+	nMenuCnt = this.dsMenu.rowcount;
+	
+	for(var i=0;i<nMenuCnt; i++)
+	{
+		sPopMenuId = this.dsMenu.getColumn(i, "menuid");
+		sPopMenuTitle = this.dsMenu.getColumn(i, "menutitle");
+		
+		objMenu = new Button("btnPopMenu_"+sPopMenuId, nLeft, nTop, nWidth, nHeight, null, null);
+		this.popMenu.form.addChild(objMenu.name, objMenu);
+		objMenu.show();
+		objMenu.set_text(sPopMenuTitle);
+		objMenu.menuid = sPopMenuId;
+		objMenu.set_fittocontents("width");
+		objMenu.set_padding("0px 50px");
+		
+		this.popMenu.form.resetScroll();
+		
+		if(objMenu.getOffsetWidth()>nMaxWidth)nMaxWidth = objMenu.getOffsetWidth();
+		
+		if(objMenu.getOffsetTop() + objMenu.getOffsetHeight()>nMaxHeight)nMaxHeight = objMenu.getOffsetTop() + objMenu.getOffsetHeight();
+		
+		nTop = objMenu.name+":"+nLineGap+"px";
+	}
+	
+	this.dsMenu.filter("");
+	
+	objRect.width = nMaxWidth + 2;
+	objRect.height = nMaxHeight + 2;
+	
+	return objRect;
+}
+]]></Script>
+  </Form>
+</FDL>

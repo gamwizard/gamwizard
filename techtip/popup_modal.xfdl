@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popup_modal" width="400" height="250" titletext="popup showmodal" onclose="popup_onclose" onload="popup_modal_onload">
+    <Layouts>
+      <Layout height="250" mobileorientation="landscape" width="400">
+        <GroupBox id="GroupBox03" text="popup modal" taborder="0" enableevent="false" left="10" top="10" width="380" height="230"/>
+        <TextArea id="popupTextArea" taborder="1" left="20" top="35" height="155" width="360"/>
+        <Button id="btnSend" taborder="2" text="send" left="92" width="90" height="30" onclick="btnSend_onclick" bottom="21"/>
+        <Button id="btnCall" taborder="3" text="Call Method" left="190" width="90" height="30" onclick="btnCall_onclick" bottom="21"/>
+        <Button id="Button00" taborder="4" text="Button00" left="161" top="63" width="120" height="50" onclick="Button00_onclick"/>
+        <Button id="Button00_00" taborder="5" text="Button00" left="170" top="110" width="120" height="50" onclick="Button00_00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip modal form sample 
+*  @MenuPath    techtip > popup_modal
+*  @FileName	popup_modal.xfdl 
+*  @Desction	modal form sample
+*******************************************************************************
+*  2019.07.18		nana			최초 생성
+*******************************************************************************
+*/
+this.popup_modal_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//trace(this.opener.name);
+	
+	//get arguments
+	if (this.getOwnerFrame().objArguments != null) 
+	{
+		var objTextArea = this.getOwnerFrame().objArguments;
+		this.popupTextArea.set_value(objTextArea.text);
+	}
+};
+
+this.popup_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	//call back
+	this.close("OK");
+};
+
+this.btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.opener.ParentTextarea.set_value(this.modalTextarea.value);
+	this.opener.config.objTextArea.set_value(this.popupTextArea.value);
+};
+
+this.btnCall_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.opener.getMethod_parent();
+	this.opener.config.objFunction.call();
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent._on_maxbutton_click();
+};
+
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent._on_maxbutton_click();
+	this.parent._on_normalbutton_click();
+};
+]]></Script>
+  </Form>
+</FDL>

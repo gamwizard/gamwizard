@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="changelanguagemessage" width="1120" height="790" titletext="New Form">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Grid id="grdMessage" taborder="0" left="10" top="50" binddataset="gdsMessage" bottom="10" right="10">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="200"/>
+                <Column size="500"/>
+                <Column size="500"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="msgId"/>
+                <Cell col="1" text="msgTextKO"/>
+                <Cell col="2" text="msgTextEN"/>
+                <Cell col="3" text="msgType"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:msgId" edittype="normal" editautoselect="true"/>
+                <Cell col="1" text="bind:msgTextKO" edittype="normal" editautoselect="true"/>
+                <Cell col="2" text="bind:msgTextEN" edittype="normal" editautoselect="true"/>
+                <Cell col="3" text="bind:msgType"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnConfirmEn" taborder="2" text="Confirm(영어)" top="10" width="100" height="30" right="10" onclick="btnConfirmEn_onclick"/>
+        <Button id="btnConfirmKo" taborder="1" text="Confirm(한국어)" top="10" height="30" right="btnConfirmEn:10" width="100" onclick="btnConfirmKo_onclick"/>
+        <Button id="btnAlertEn" taborder="3" text="Alert(영어)" top="10" height="30" right="btnConfirmKo:10" width="100" onclick="btnAlertEn_onclick"/>
+        <Button id="btnAlertKo00_00" taborder="4" text="Alert(한국어)" top="10" height="30" right="btnAlertEn:10" width="100" onclick="btnAlertKo_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="gdsMessage">
+        <ColumnInfo>
+          <Column id="msgId" type="STRING" size="256"/>
+          <Column id="msgTextKO" type="STRING" size="256"/>
+          <Column id="msgTextEN" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="msgId">msg.server.error</Col>
+            <Col id="msgTextKO">서버 오류입니다.\n관리자에게 문의하세요.</Col>
+            <Col id="msgTextEN">Server error. Please contact your administrator.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.server.error.msg</Col>
+            <Col id="msgTextKO">서버에서 다음과 같은 에러메시지를 받았습니다.\n{0}</Col>
+            <Col id="msgTextEN">The server received the following error message.s\n{0}</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.session.timeout</Col>
+            <Col id="msgTextKO">세션이 종료되었습니다. 다시 로그인해주세요.</Col>
+            <Col id="msgTextEN">Your session has expired, please login again.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.login.url.error</Col>
+            <Col id="msgTextKO">정상적인 경로로 접속하시기 바랍니다.</Col>
+            <Col id="msgTextEN">invalid access! please, login first at www.tobesoft.com</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.login.error</Col>
+            <Col id="msgTextKO">해당하는 사용자 정보가 없습니다.</Col>
+            <Col id="msgTextEN">No user found.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.call.nofile</Col>
+            <Col id="msgTextKO">해당하는 메뉴에 Program File이 등록되지 않았습니다.</Col>
+            <Col id="msgTextEN">the requested menu does not exist!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.nomenu</Col>
+            <Col id="msgTextKO">해당 Menu가 존재하지 않습니다.</Col>
+            <Col id="msgTextEN">The specified menu doesn't exist.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.logout</Col>
+            <Col id="msgTextKO">로그아웃 하시겠습니까?</Col>
+            <Col id="msgTextEN">Are you sure you want to log out?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.movepage</Col>
+            <Col id="msgTextKO">변경된 데이터가 있습니다. 현재 화면을 닫겠습니까?</Col>
+            <Col id="msgTextEN">There are unsaved data. Would you like to leave now?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.search</Col>
+            <Col id="msgTextKO">검색을 진행하면 변경된 데이터가 사라집니다. \n계속 진행 하시겠습니까?</Col>
+            <Col id="msgTextEN">Any unsaved data will be discarded. \nWould you like to continue?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.moveropos</Col>
+            <Col id="msgTextKO">해당 row의 위치를 이동하면 변경된 데이터가 사라집니다. \n계속 진행 하시겠습니까?</Col>
+            <Col id="msgTextEN">If you move the selected row, your changes will be discarded. \nWould you like to continue?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.delete</Col>
+            <Col id="msgTextKO">선택된 자료를 삭제 하시겠습니까?</Col>
+            <Col id="msgTextEN">Are you sure you want to delete?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.deletesave</Col>
+            <Col id="msgTextKO">선택된 자료를 삭제 후 저장하시겠습니까?</Col>
+            <Col id="msgTextEN">Are you sure you want to delete and save?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">confirm.before.save</Col>
+            <Col id="msgTextKO">변경된 내역을 저장 하시겠습니까?</Col>
+            <Col id="msgTextEN">Would you like to save your changes?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.noselect</Col>
+            <Col id="msgTextKO">{0} 을(를) 선택해 주십시요.</Col>
+            <Col id="msgTextEN">Please, select {0}</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.search.nodata</Col>
+            <Col id="msgTextKO">지정된 조건에 해당하는 항목을 찾을 수 없습니다.</Col>
+            <Col id="msgTextEN">No data found.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.save.nodata</Col>
+            <Col id="msgTextKO">저장할 데이터가 없습니다.</Col>
+            <Col id="msgTextEN">No data to save.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.save.nochange</Col>
+            <Col id="msgTextKO">변경된 내역이 없습니다.</Col>
+            <Col id="msgTextEN">No changes found.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.save.success</Col>
+            <Col id="msgTextKO">저장 되었습니다.</Col>
+            <Col id="msgTextEN">Successfully saved!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.update.success</Col>
+            <Col id="msgTextKO">수정 되었습니다.</Col>
+            <Col id="msgTextEN">Successfully updated!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.delete.success</Col>
+            <Col id="msgTextKO">삭제 되었습니다.</Col>
+            <Col id="msgTextEN">Successfully deleted!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.action.success</Col>
+            <Col id="msgTextKO">처리 되었습니다.</Col>
+            <Col id="msgTextEN">Successfully processed!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.action.fail</Col>
+            <Col id="msgTextKO">프로세스가 실패하였습니다.</Col>
+            <Col id="msgTextEN">Failed process!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.updateafter</Col>
+            <Col id="msgTextKO">변경된 내역을 저장 후 작업하세요.</Col>
+            <Col id="msgTextEN">Please, save your changes first!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.delete.child</Col>
+            <Col id="msgTextKO">하위 자료가 있어 삭제할 수 없습니다.</Col>
+            <Col id="msgTextEN">the requested deletion could not be performed because dependent data found!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.grid.noselect</Col>
+            <Col id="msgTextKO">선택된 항목이 없습니다.</Col>
+            <Col id="msgTextEN">No item has been selected!</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.before.delete</Col>
+            <Col id="msgTextKO">정말로 삭제 하시겠습니까?</Col>
+            <Col id="msgTextEN">Are you sure you want to delete?</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator</Col>
+            <Col id="msgTextKO">{0}</Col>
+            <Col id="msgTextEN">{0}</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.required</Col>
+            <Col id="msgTextKO">{0} 은(는) 필수 입력 항목입니다.</Col>
+            <Col id="msgTextEN">{0} is a required field.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.length</Col>
+            <Col id="msgTextKO">{0} 의 입력값은 {1} 자리이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} must be equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.rangelength</Col>
+            <Col id="msgTextKO">{0} 은(는) {1} 와(과) {2} 사이의 자리이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} is between {1} and {2}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.maxlength</Col>
+            <Col id="msgTextKO">{0} 의 입력값의 길이는 {1} 이하이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} must be less than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.minlength</Col>
+            <Col id="msgTextKO">{0} 의 입력값의 길이는 {1} 이상이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} must be greater than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.maxlengthB</Col>
+            <Col id="msgTextKO">{0} 의 입력값의 길이는 {1} 이하이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} must be less than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.minlengthB</Col>
+            <Col id="msgTextKO">{0} 의 입력값의 길이는 {1} 이상이어야 합니다.</Col>
+            <Col id="msgTextEN">The length of {0} must be greater than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.digits</Col>
+            <Col id="msgTextKO">{0} 은(는) 숫자만 입력 가능합니다.</Col>
+            <Col id="msgTextEN">{0} must be a numeric value.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.min</Col>
+            <Col id="msgTextKO">{0} 은(는) {1} 이상의 숫자만 입력 가능합니다.</Col>
+            <Col id="msgTextEN">{0} must be a numeric value greater than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.max</Col>
+            <Col id="msgTextKO">{0} 은(는) {1} 이하의 숫자만 입력 가능합니다.</Col>
+            <Col id="msgTextEN">{0} must be a numeric value less than or equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.date</Col>
+            <Col id="msgTextKO">{0} 은(는) 유효하지 않은 날짜 형식입니다.</Col>
+            <Col id="msgTextEN">{0} is in invalid date format.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.dateym</Col>
+            <Col id="msgTextKO">{0} 은(는) 유효하지 않은 년월 형식입니다.</Col>
+            <Col id="msgTextEN">{0} is in invalid year/month format.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.fromto</Col>
+            <Col id="msgTextKO">{0} 의 날짜가 {1} 의 날짜보다 작습니다.</Col>
+            <Col id="msgTextEN">{0} is less than {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.comparebig</Col>
+            <Col id="msgTextKO">{0} 이(가) {1} 보다 작습니다.</Col>
+            <Col id="msgTextEN">{0} is less than {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.comparesmall</Col>
+            <Col id="msgTextKO">{0} 이(가) {1} 보다 큽니다.</Col>
+            <Col id="msgTextEN">{0} is greater than {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.equalto</Col>
+            <Col id="msgTextKO">{0} 이(가) {1} 와(과) 일치하지 않습니다.</Col>
+            <Col id="msgTextEN">{0} is not equal to {1}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.range</Col>
+            <Col id="msgTextKO">{0} 은(는) {1} 와(과) {2} 사이의 값입니다.</Col>
+            <Col id="msgTextEN">The value of {0} is between {1} and {2}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.declimit</Col>
+            <Col id="msgTextKO">{0} 은(는) 소숫점 {1} 자리로 구성되어야 합니다.</Col>
+            <Col id="msgTextEN">The fractional part of {0} must consiste of {1} digits.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.code</Col>
+            <Col id="msgTextKO">{0} 은(는) {1} 중 하나의 값이어야 합니다.</Col>
+            <Col id="msgTextEN">{0} must be the value of {1}</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.ssn</Col>
+            <Col id="msgTextKO">{0} 은(는) 올바른 주민번호가 아닙니다.</Col>
+            <Col id="msgTextEN">The entered Social Security Number is invalid.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.email</Col>
+            <Col id="msgTextKO">e-mail이 잘못된 형태로 입력 되었습니다.</Col>
+            <Col id="msgTextEN">The entered email address is invalid.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.url</Col>
+            <Col id="msgTextKO">웹사이트 주소가 잘못 입력 되었습니다.</Col>
+            <Col id="msgTextEN">The entered website address is invalid.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.phone</Col>
+            <Col id="msgTextKO">전화번호가 잘못된 형태로 입력 되었습니다.</Col>
+            <Col id="msgTextEN">The entered phone number is invalid.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.zipcode</Col>
+            <Col id="msgTextKO">우편번호가 잘못된 형태로 입력 되었습니다.</Col>
+            <Col id="msgTextEN">The entered ZIP code is invalid.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.multicombo.maxcnt</Col>
+            <Col id="msgTextKO">{0}개 이상 선택 할 수 없습니다.</Col>
+            <Col id="msgTextEN">You can't select more than {0}</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.maxdate</Col>
+            <Col id="msgTextKO">날짜의 입력 가능 범위를 벗어났습니다.</Col>
+            <Col id="msgTextEN">Invalid date.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.err.validator.date.great</Col>
+            <Col id="msgTextKO">종료일이 시작일보다 빠릅니다.</Col>
+            <Col id="msgTextEN">Invalid date range.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.exist</Col>
+            <Col id="msgTextKO">{0} 은(는) 중복된 파일이 존재합니다.</Col>
+            <Col id="msgTextEN">{0} duplicate files exist.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.filesize</Col>
+            <Col id="msgTextKO">첨부 파일의 용량은 최고 {0}MB까지 입니다.</Col>
+            <Col id="msgTextEN">Maximum allowed attachment size is {0} MB.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.filetotalsize</Col>
+            <Col id="msgTextKO">첨부 파일의 전체 용량은 최고 {0}MB까지 입니다.</Col>
+            <Col id="msgTextEN">Maximum allowed attachment total size is {0} MB.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.allowtype</Col>
+            <Col id="msgTextKO">{0} 은(는) 허용되지 않는 확장자입니다.[{1}]</Col>
+            <Col id="msgTextEN">{0} is an unacceptable extension.[{1}]</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.itemcount</Col>
+            <Col id="msgTextKO">첨부 파일은 {0}개 이상 등록 할 수 없습니다.</Col>
+            <Col id="msgTextEN">Attachments can not be registered in more than {0}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.file.uploadfail</Col>
+            <Col id="msgTextKO">{0}로(으로) 파일업로드가 실패하였습니다.</Col>
+            <Col id="msgTextEN">the file upload is failed because {0}.</Col>
+          </Row>
+          <Row>
+            <Col id="msgId">msg.exist.code</Col>
+            <Col id="msgTextKO">입력하는 Code ({0})값이 이미 등록되어 있습니다.</Col>
+            <Col id="msgTextEN">Code already exsits!</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[this.btnAlertKo_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Alert 호출
+	this.gfnMessage("ALERT", "KO", "msg.err.validator.length", ["주민번호", "13"]);
+};
+
+this.btnAlertEn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Alert 호출
+	this.gfnMessage("ALERT", "EN", "msg.err.validator.length", ["SSN", "13"]);
+};
+
+this.btnConfirmKo_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Confirm 호출
+	var rtn = this.gfnMessage("CONFIRM", "KO", "confirm.before.save");
+	
+	//리턴값 확인
+	trace("Confrim Return : " + rtn);
+};
+
+this.btnConfirmEn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Confirm 호출
+	var rtn = this.gfnMessage("CONFIRM", "EN", "confirm.before.save");
+	
+	//리턴값 확인
+	trace("Confrim Return : " + rtn);
+};
+
+//메시지 호출 함수
+this.gfnMessage = function(sMessageType, sLang, sMessageCode, arrParams, objCallBackFn)
+{
+	var sMessage;
+	
+	//출력할 메시지 Row 찾기
+	var nFRow = this.gdsMessage.findRow("msgId", sMessageCode);
+	
+	//출력할 메시지가 등록되어있지 않은 경우
+	if(nFRow==-1)
+	{
+		alert("등록된 메시지가 없습니다. 확인이 필요합니다.");
+		return false;
+	}
+	//출력할 메시지가 등록되어 있을 경우
+	else
+	{
+		//현재 언어에 해당하는 메시지 가져오기
+		sMessage = this.gdsMessage.getColumn(nFRow, "msgText"+sLang);
+	}
+	
+	//문자열 치원할 파라미터가 있을 경우
+	if(arrParams&&arrParams.length>0)
+	{
+		//문자열 치환 함수 호출
+		sMessage = this.gfnConvertMessage(sMessage, arrParams);
+	}
+	
+	//Alert 타입 메시지일 경우
+	if(sMessageType=="ALERT")
+	{
+		alert(sMessage);
+	}
+	//Confirm 타입 메시지일 경우
+	else if(sMessageType=="CONFIRM")
+	{
+		return confirm(sMessage);
+	}else
+	{
+		//커스텀 메시지 구현부
+	}
+}
+
+//문자열 치환 함수
+this.gfnConvertMessage = function(sMessage, arrParams)
+{
+    return sMessage.replace(/\{(\d+)\}/g, function() {
+        return arrParams[arguments[1]];
+    });
+};
+]]></Script>
+  </Form>
+</FDL>

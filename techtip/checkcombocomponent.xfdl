@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="checkcombocomponent" width="1280" height="720" titletext="Check Combo Component ( 체크콤보 기능을 구현한 사용자 컴포넌트)">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <checkcombo id="checkcombo00" taborder="0" left="195" top="10" width="150" height="20" checkdataset="dsChkCombo" checkcolumn="chk" codecolumn="code" valuecolumn="value" canchange="checkcombo00_canchange" onchanged="checkcombo00_onchanged"/>
+        <Grid id="Grid00" taborder="1" left="10" top="10" width="170" height="147" binddataset="dsComboList" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="150"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="combovalue"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:combovalue"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="2" text="코드확인" left="370" top="10" width="130" height="30" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="3" text="값확인" left="370" top="50" width="130" height="30" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="4" text="코드입력" left="370" top="90" width="130" height="30" onclick="Button02_onclick"/>
+        <Button id="Button03" taborder="5" text="값입력" left="370" top="130" width="130" height="30" onclick="Button03_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsChkCombo">
+        <ColumnInfo>
+          <Column id="chk" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">1</Col>
+            <Col id="value">값1</Col>
+          </Row>
+          <Row>
+            <Col id="code">2</Col>
+            <Col id="value">값2</Col>
+          </Row>
+          <Row>
+            <Col id="code">3</Col>
+            <Col id="value">값3</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsComboList">
+        <ColumnInfo>
+          <Column id="combovalue" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="combovalue">1</Col>
+          </Row>
+          <Row>
+            <Col id="combovalue">2</Col>
+          </Row>
+          <Row>
+            <Col id="combovalue">3</Col>
+          </Row>
+          <Row>
+            <Col id="combovalue">1,2</Col>
+          </Row>
+          <Row>
+            <Col id="combovalue">1,2,3</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	alert(this.checkcombo00.value);
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	alert(this.checkcombo00.text);
+};
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.checkcombo00.set_value("1,2,3");
+};
+
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.checkcombo00.set_text("값3");
+};
+
+this.checkcombo00_canchange = function(obj:nexacro.checkcombo, e:nexacro.ChangeEventInfo)
+{
+	trace("checkcombo00_canchange");
+	trace("e.pretext : "+e.pretext);
+	trace("e.posttext : "+e.posttext);
+	trace("e.prevalue : "+e.prevalue);
+	trace("e.postvalue : "+e.postvalue);
+	
+	if(e.postvalue=="1,3")
+	{
+		alert("값1,값3을 동시에 선택할 수 없습니다.")
+		return false;
+	}
+	
+	return true;
+};
+
+this.checkcombo00_onchanged = function(obj:nexacro.checkcombo, e:nexacro.ChangeEventInfo)
+{
+	trace("checkcombo00_onchanged");
+	trace("e.pretext : "+e.pretext);
+	trace("e.posttext : "+e.posttext);
+	trace("e.prevalue : "+e.prevalue);
+	trace("e.postvalue : "+e.postvalue);
+};
+]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="checkcombo00" propid="value" datasetid="dsComboList" columnid="combovalue"/>
+    </Bind>
+  </Form>
+</FDL>

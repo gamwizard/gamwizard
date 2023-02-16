@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	     : 월력 초기화 함수
+* @param objEdit     : 월력 설정 할 Calendar 컴포넌트
+* @param objConfig   : 월력 설정 할 Button 컴포넌트
+* @return            : 없음
+*/
+this.gfnInitMonthCalendar = function(objCal, objBtn)
+{
+	//월력 드롭다운 팝업 만들기 함수 호출
+	var objMonthCalPop = this.gfnCreateMonthCalPop(objCal);
+
+	//Calendar 컴포넌트에 드롭다운 버튼을 사용자 변수에 설정
+	objCal.targetbtn = objBtn;
+
+	//Calendar 컴포넌트에 드룹다운 팝업을 사용자 변수에 설정
+	objCal.targetpop = objMonthCalPop;
+
+	//드롭다운 버튼 동작시 실행될 Calendar 컴포넌트를 사용자 변수에 설정
+	objBtn.targetcal = objCal;
+
+	//월력팝업 동작시 실행될 Calendar 컴포넌트를 사용자 변수에 설정
+	objMonthCalPop.targetcal = objCal;
+
+	//월력 포멧 설정
+	objCal.set_dateformat("yyyy-MM");
+	objCal.set_editformat("yyyy-MM");
+
+	//기본 드롭다운 버튼 숨기기
+	objCal.set_buttonsize("0");
+
+	//드롭다운 버튼 클릭 이벤트 생성
+	objBtn.addEventHandler("onclick", this.gfnMonthCalendarDropButton_onclick, this);
+}
+
+/**
+* @description 	     : 월력 드롭다운 팝업 만들기 함수
+* @param objEdit     : 월력 설정 할 Calendar 컴포넌트
+* @return            : 없음
+*/
+this.gfnCreateMonthCalPop = function(objCal)
+{
+	var i;
+	var rtn;
+	var objMonthCalPop;
+	var sMonthCalPopId = objCal.id+"_combolist";
+	var objForm;
+
+	//기존에 생성된 팝업이 있을 경우 가져오기
+	if(this.gfnIsNull(this.components[sMonthCalPopId])==false)
+	{
+		//기존에 생성된 팝업을 리턴값으로 설정
+		rtn = this.components[sMonthCalPopId];
+	}
+	//기존에 생성된 팝업이 없을 경우 만들기
+	else
+	{
+		//드롭다운 팝업용 PopupDiv 생성
+		objMonthCalPop = new PopupDiv(sMonthCalPopId, 0, 0, 0, 0);
+		this.addChild(objMonthCalPop.name, objMonthCalPop);
+
+		//프로젝트 디자인에 맞게 설정 필요
+		objMonthCalPop.set_background("#ffffff");
+		objMonthCalPop.set_border("1px solid #000000");
+
+		objMonthCalPop.show();
+
+		//url연결 후 후속 처리를 위해 sync로 변경
+		objMonthCalPop.set_async(false);
+		objMonthCalPop.set_url("techtip::monthcalendar_inner.xfdl");
+
+		objForm = objMonthCalPop.form;
+
+		//버튼 클릭 시 이벤트 추가
+		objForm.btnPrev.addEventHandler("onclick", this.gfnMonthCalPopChangeYear_onclick, this);
+		objForm.btnNext.addEventHandler("onclick", this.gfnMonthCalPopChangeYear_onclick, this);
+
+		for(i=1;i<=12;i++)
+		{
+			objForm.components["btn"+i].addEventHandler("onclick", this.gfnMonthCalPopDay_onclick, this);
+		}
+
+		//생성된 드롭다운 팝업을 리턴값으로 설정
+		rtn = objMonthCalPop;
+	}
+
+	//드롭다운 팝업 리턴
+	return rtn;
+};
+
+/**
+* @description 	 : 드롭다운 팝업 호출 함수
+* @param obj     : 월력으로 설정 할 Calendar 컴포넌트
+* @return        : 없음
+*/
+this.gfnShowDropMonthCalPop = function(obj)
+{
+	var nLeft;
+	var nTop;
+	var objDropButton = obj.targetbtn;
+	var objTargetMonthCalPop = obj.targetpop;
+	var sValue = obj.value;
+
+	//드롭다운 팝업 데이터 변경 함수 호출
+	this.gfnChangeMonthCalPopValue(objTargetMonthCalPop, sValue);
+
+	//표현될 드롭다운리스트의 사이즈 계산
+	nLeft = 0;
+	nTop = objDropButton.getOffsetHeight();
+	nWidth = 210;
+	nHeight = 200;
+
+	//드롭다운리스트 호출
+	objTargetMonthCalPop.trackPopupByComponent(obj, nLeft, nTop, nWidth, nHeight);
+};
+
+/**
+* @description 	 			: 드롭다운 팝업 데이터 변경 함수
+* @param objMonthCalPop     : 드롭다운 팝업 PopupDiv 컴포넌트
+* @param sValue     		: 변경할 데이터 값
+* @return        			: 없음
+*/
+this.gfnChangeMonthCalPopValue = function(objMonthCalPop, sValue)
+{
+	var i;
+	var objDate;
+	var sYear;
+	var sMonth;
+	var objForm = objMonthCalPop.form;
+
+	//월 선택 초기화
+	for(i=1;i<=12;i++)
+	{
+		objForm.components["btn"+i].set_enable(true);
+	}
+
+	//값이 없을 경우 오늘날짜 기준으로 팝업
+	if(this.gfnIsNull(sValue)==true)
+	{
+		objDate = new Date();
+		sYear = objDate.getFullYear();
+		sMonth = nexacro.toNumber(objDate.getMonth()) + 1;
+	}
+	//값이 있을 경우 해당 년월 값으로 설정
+	else
+	{
+		sYear = sValue.substr(0,4);
+		sMonth = nexacro.toNumber(sValue.substr(4,2));
+
+		objForm.components["btn"+sMonth].set_enable(false);
+	}
+
+	//년도 Static에 값 설정
+	objForm.stYear.set_text(sYear);
+
+	//년월 설정 데이터 관리를 위한 사용자 변수 설정
+	objForm.year = sYear;
+	objForm.month = sMonth;
+}
+
+/**
+* @description 	   : 년도 변경 버튼 onclick 이벤트
+*/
+this.gfnMonthCalPopChangeYear_onclick = function(obj,e)
+{
+	var objMonthCalPop = obj.parent.parent;
+	var objCal = objMonthCalPop.targetcal;
+	var objForm = obj.parent;
+	var sYear = nexacro.toNumber(objForm.year);
+	var sMonth = objForm.month.toString().padLeft(2, "0");
+	var sPreValue;
+	var sValue;
+
+	//년도 변경
+	if(obj.name=="btnPrev")sYear--;
+	else if(obj.name=="btnNext")sYear++;
+
+	//이전 값 가져오기
+	sPreValue = objCal.value;
+
+	//변경된 값 변수에 설정
+	sValue = sYear+sMonth;
+
+	//값 변경에 대한 Event 호출
+	//Calendar의 onchanged 이벤트 발생됨
+	objCal._on_value_change(sPreValue, sValue);
+
+	//드롭다운 팝업 데이터 변경 함수 호출
+	this.gfnChangeMonthCalPopValue(objMonthCalPop, sValue);
+};
+
+/**
+* @description 	   : 월 변경 버튼 onclick 이벤트
+*/
+this.gfnMonthCalPopDay_onclick = function(obj,e)
+{
+	var objMonthCalPop = obj.parent.parent;
+	var objCal = objMonthCalPop.targetcal;
+	var objForm = obj.parent;
+	var sYear = nexacro.toNumber(objForm.year);
+	var sMonth = obj.text.toString().padLeft(2, "0");
+	var sPreValue;
+	var sValue;
+
+	//이전 값 가져오기
+	sPreValue = objCal.value;
+
+	//변경된 값 변수에 설정
+	sValue = sYear+sMonth;
+
+	//값 변경에 대한 Event 호출
+	//Calendar의 onchanged 이벤트 발생됨
+	objCal._on_value_change(sPreValue, sValue);
+
+	//드롭다운 팝업 데이터 변경 함수 호출
+	this.gfnChangeMonthCalPopValue(objMonthCalPop, sValue);
+};
+
+/**
+* @description 	   : 월력 드롭다운 버튼 onclick 이벤트
+*/
+this.gfnMonthCalendarDropButton_onclick = function(obj,e)
+{
+	var objtargetcal = obj.targetcal;
+
+	//드롭다운 리스트 호출 함수 실행
+	this.gfnShowDropMonthCalPop(objtargetcal);
+};
+]]></Script>

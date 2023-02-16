@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Grid .body .row .cell.disableCheckBox .cellcheckbox,
+.Grid .body .row .cell.disableCheckBox .cellcheckbox[status=mouseover], .Grid .body .row .cell.disableCheckBox .cellcheckbox[status=focused]
+{
+	color : #999999;
+	-nexa-icon : url('imagerc::gridcaseallcheck/chk_WF_Box_D.png');
+}
+
+.Grid .body .row .cell.disableCheckBox .cellcheckbox[userstatus=selected]
+{
+	color : #999999;
+	-nexa-icon : URL('imagerc::gridcaseallcheck/chk_WF_Box_DS.png');
+}
+]]></XCSS>

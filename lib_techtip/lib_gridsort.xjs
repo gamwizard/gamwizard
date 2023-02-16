@@ -1,0 +1,671 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip grid single & multi sort
+*  @MenuPath	lib_techtip > lib_gridsort
+*  @FileName	lib_gridsort.xjs 
+*  @Desction	grid single & multi sort script library
+*******************************************************************************
+*  2019.07.24		nana			최초 생성
+*  2020.03.02		nana			수정
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define config object and addEventHandler (form, grid)
+* @param objForm : form,
+*		 objConfig : {objGrid,[strMarkType,ascMark,descMark,multikey]}
+* @return
+*/
+this.fnInitGridSort = function(objForm,objConfig)
+{
+	//define config info.	
+
+	//default market type "text"
+	if (this.gfnIsNull(objConfig.strMarkType))
+	{
+		objConfig.strMarkType = "text";
+	}
+	
+	//default ascMark type "▲"
+	if (this.gfnIsNull(objConfig.ascMark))
+	{
+		objConfig.strMarkType = "▲";
+	}
+	
+	//default descMark type "▼"
+	if (this.gfnIsNull(objConfig.descMark))
+	{
+		objConfig.descMark = "▼";
+	}
+	
+	//default multikey type "all"
+	if (this.gfnIsNull(objConfig.multikey))
+	{
+		objConfig.multikey = "all";
+	}
+	
+	objConfig.objGrid.keyType	= objConfig.multikey;
+	objConfig.objGrid.marker	= objConfig.strMarkType;
+	objConfig.objGrid.ascMark	= objConfig.ascMark;
+	objConfig.objGrid.descMark 	= objConfig.descMark;
+	objConfig.objGrid.varFlag	= "";
+	objConfig.objGrid.colIdx1	= "";
+	
+	objConfig.objGrid.bindDS = objForm.all[objConfig.objGrid.binddataset];
+	
+	objConfig.objGrid.addEventHandler("onheadclick",this.grid_onheadclick,objForm);
+	
+//	objForm.config = objConfig;
+};
+
+/**
+* @description 정렬 상태 셋팅 (실제 정렬 처리는 fnExecuteSort 에서 담당)
+* @param  {grid} 대상 Grid Component
+          {headCellIndex} headCellIndex head cell index
+          {isMultiple} 다중선택여부
+          {sortStatus} 정렬상태 강제 지정 (미지정시 현재 상태 반전)
+* @return {boolean} 상태 변경 여부
+*/
+this.fnSetSortStatus = function(grid, headCellIndex, isMultiple, sortStatus)
+{
+	// head cell index 에 해당하는 body cell index
+	var bodyCellIndex = this.fnGetBodyCellIndex(grid, headCellIndex);
+	if (bodyCellIndex < 0)
+	{
+		return false;
+	}
+	// body cell index 에 해당하는 바인드 컬럼명
+	var columnName = this.fnGetBindColumnNameByIndex(grid, bodyCellIndex);
+	if (this.gfnIsNull(columnName))
+	{	
+		trace("Check Grid body cell bind value");		
+		return false;
+	}
+	
+	if (this.gfnIsNull(isMultiple))
+	{
+		isMultiple = false;
+	}
+	
+	if (this.gfnIsNull(sortStatus)) 
+	{
+		sortStatus = -1;
+	}
+	
+	// Cell별 정렬정보	
+	if (this.gfnIsNull(grid.cellInfos))
+	{
+		grid.cellInfos = {};
+	}
+	
+	// 정렬대상컬럼 (순서중요)
+	if (this.gfnIsNull(grid.sortItems))
+	{
+		grid.sortItems = [];
+	}
+	
+	var cellInfos = grid.cellInfos,
+		sortItems = grid.sortItems,
+		cellInfo = cellInfos[columnName],
+		sortItem,
+		status;
+	
+	if (this.gfnIsNull(cellInfo))
+	{
+		var headText = grid.getCellText(-1, headCellIndex);
+		cellInfo = cellInfos[columnName] = { index: headCellIndex, status: 0, text: headText };
+	}
+	
+	// set sort status
+	if (isMultiple) 
+	{		
+		status = cellInfo.status;
+		
+		if (sortStatus == -1) 
+		{
+			if (status == 0)
+			{
+				cellInfo.status = 1;
+			}
+			else if (status == 1)
+			{
+				cellInfo.status = 2;
+			}
+			else if (status == 2)
+			{
+				cellInfo.status = 0;
+			}
+		}
+		else
+		{
+			cellInfo.status = sortStatus;
+		}
+	}
+	else 
+	{
+		for (var p in cellInfos) 
+		{
+			if (!cellInfos.hasOwnProperty(p)) 
+			{
+				return;
+			}
+			
+			cellInfo = cellInfos[p];
+			
+			if (cellInfo.index == headCellIndex)
+			{
+				status = cellInfo.status;
+				
+				if (sortStatus == -1) 
+				{
+					if (status == 0)
+					{
+						cellInfo.status = 1;
+					} 
+					else if (status == 1)
+					{
+						cellInfo.status = 2;
+					}
+					else if (status == 2)
+					{
+						cellInfo.status = 0;
+					}
+				} 
+				else 
+				{
+					cellInfo.status = sortStatus;
+				}
+			} 
+			else 
+			{
+				cellInfo.status = 0;
+			}
+			
+			if (cellInfo.status == 0)
+			{
+				for (var j = 0, len2 = sortItems.length; j < len2; j++) 
+				{
+					if (sortItems[j] !== columnName)
+					{
+						sortItems.splice(j, 1);
+						
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	var hasItem = false;
+	
+	for (var i = 0, len = sortItems.length; i < len; i++) 
+	{
+		if (sortItems[i] == columnName)
+		{
+			hasItem = true;
+			break;
+		}
+	}
+	
+	if (!hasItem)
+	{
+		sortItems.push(columnName);
+	}
+	
+	return true;
+}
+
+/**
+* @description 정렬 적용
+* @param  {grid} 대상 Grid Component
+* @return 
+*/
+this.fnExecuteSort = function(grid) 
+{
+	var cellInfos = grid.cellInfos,
+		sortItems = grid.sortItems,
+		cellInfo,
+		sortItem,		
+	    columnName,
+		headCellIndex,
+		status,
+		sortString = "";
+	
+	if (this.gfnIsNull(cellInfos) || this.gfnIsNull(sortItems))
+	{
+		return;
+	}
+	
+	// keystring 조합
+	for (var i = 0, len = sortItems.length; i < len; i++) 
+	{
+		columnName = sortItems[i];
+		status = cellInfos[columnName].status;
+		
+		if (status > 0)
+		{
+			sortString += (status == 1 ? "+" : "-") + columnName;			
+		}
+	}
+	
+	var nCellIdx = grid.getBindCellIndex("body", columnName)
+	
+	if (grid.varFlag == "-" &&  nCellIdx == grid.colIdx1)
+	{
+		grid.varFlag="";		
+		this.fnClearSort(grid, nCellIdx);
+		
+		return;
+	}
+	
+	var ds = grid.bindDS;
+	
+	// keystring 확인
+	var curKeyString = ds.keystring;
+	var groupKeyString = "";
+	
+	if (curKeyString.length > 0 && curKeyString.indexOf(",") < 0)
+	{
+		var sIndex = curKeyString.indexOf("S:");
+		var gIndex = curKeyString.indexOf("G:");
+		
+		if (sIndex > -1)
+		{
+			groupKeyString = "";
+		}
+		else
+		{
+			if (gIndex < 0) 
+			{
+				groupKeyString = "G:"+curKeyString;
+			} 
+			else 
+			{
+				groupKeyString = curKeyString;
+			}
+		}
+	}
+	else
+	{
+		var temps = curKeyString.split(",");
+		var temp;
+		
+		for (var i = 0, len = temps.length; i < len; i++)
+		{
+			temp = temps[i];
+			
+			if (temp.length > 0 && temp.indexOf("S:") < 0)
+			{
+				if (temp.indexOf("G:") < 0)
+				{
+					groupKeyString = "G:"+temp;
+				}
+				else
+				{
+					groupKeyString = temp;
+				}
+			}
+		}
+	}
+	
+	if (sortString.length > 0)
+	{
+		var sortKeyString = "S:" + sortString;
+		
+		if (groupKeyString.length > 0) 
+		{
+			ds.set_keystring(sortKeyString + "," + groupKeyString);
+		}
+		else
+		{
+			ds.set_keystring(sortKeyString);
+		}
+		
+		grid.sortKeyString = sortKeyString;
+	} 
+	else
+	{		
+		ds.set_keystring(groupKeyString);
+		
+		grid.sortKeyString = "";
+	}
+	
+	this.varFlag = ds.keystring.substr(2, 1);	
+	this.colIdx1 = grid.getBindCellIndex("body", columnName);
+	
+	// 정렬표시
+	var index, text, marker, style;
+	
+	for (var p in cellInfos) 
+	{
+		if (!cellInfos.hasOwnProperty(p))
+		{
+			return;
+		}
+		
+		cellInfo = cellInfos[p];
+		status = cellInfo.status;
+		index = cellInfo.index;
+		text = cellInfo.text;
+		
+		marker = this.gfnDecode(status, 1, grid.ascMark, 2, grid.descMark, "");
+		
+		if (grid.marker == "text")
+		{
+			if(this.gfnIsNull(marker)==true)
+			{
+				grid.setCellProperty( "head", index, "text", text);
+			}
+			else
+			{
+				grid.setCellProperty( "head", index, "text", text + marker);
+			}
+		}
+		else if ( grid.marker == "image" )
+		{
+			var background = marker + " 50 5";
+		}
+	}
+}
+
+/**
+* @description 주어진 head cell 에 해당하는 정렬 상태 제거
+* @param  {grid} 대상 Grid Component
+          {headCellIndex} head cell index
+* @return 
+*/
+this.fnClearSort = function(grid, headCellIndex) 
+{
+	var bodyCellIndex = this.fnGetBodyCellIndex(grid, headCellIndex);
+	
+	if (bodyCellIndex < 0)
+	{
+		return;
+	}
+	
+	var columnName	= this.fnGetBindColumnNameByIndex(grid, bodyCellIndex),
+		cellInfos	= grid.cellInfos,
+		sortItems	= grid.sortItems;
+	
+	if (this.gfnIsNull(cellInfos) || this.gfnIsNull(sortItems))
+	{
+		return;
+	}
+	
+	if (this.gfnIsNull(columnName) || this.gfnIsNull(cellInfos[columnName]))
+	{
+		return;
+	}
+	
+	// 정렬상태를 변경
+	cellInfos[columnName].status = 0;
+	
+	// 정렬실행
+	this.fnExecuteSort(grid);
+	
+	// 컬럼정보제거
+	for (var i = 0, len = sortItems.length; i < len; i++) 
+	{
+		if (sortItems[i] == columnName)
+		{
+			sortItems.splice(i, 1);
+			break;
+		}
+	}
+	
+	// Cell 정보제거
+	delete cellInfos[columnName];
+} 
+
+/**
+* @description 현재 적용된 모든 정렬 상태 제거
+* @param  {grid} 대상 Grid Component
+* @return 
+*/
+this.fnClearAllSort = function(grid) 
+{
+	var cellInfos = grid.cellInfos;
+	var sortItems = grid.sortItems;
+	
+	if (this.gfnIsNull(cellInfos) || this.gfnIsNull(sortItems))
+	{
+		return;
+	}
+	
+	// 모든 정렬상태를 원래로 되돌림.
+	for (var p in cellInfos) 
+	{
+		if (!cellInfos.hasOwnProperty(p))
+		{
+			return;
+		}
+		
+		cellInfos[p].status = 0;
+	}
+	
+	// 정렬실행
+	this.fnExecuteSort(grid);
+	
+	// 정보 초기화
+	grid.cellInfos = {};
+	grid.sortItems = [];
+}
+
+/************************************************************************************************
+* 정렬 utility 관련 function 처리
+************************************************************************************************/
+ /**
+* @description body cell index로 binding 된 컬럼명 가져오기
+* @param  {grid} 대상 Grid Component
+          {index} index body cell index
+* @return {String} Column Id
+*/
+this.fnGetBindColumnNameByIndex = function(grid, index) 
+{
+	var text = "";
+	var columnid = "";
+	var subCell = grid.getCellProperty("body", index, "subcell");
+	
+	if (subCell > 0)
+	{
+		text = grid.getSubCellProperty("body", index, 0, "text");
+	}
+	else
+	{
+		text = grid.getCellProperty("body", index, "text");
+	}
+	
+	if (!this.gfnIsNull(text))
+	{
+		if (text.search(/^BIND\(/) > -1)
+		{	
+			columnid = text.replace(/^BIND\(/, "");
+			columnid = columnid.substr(0, columnid.length-1);
+		}
+		else if ( text.search(/^bind:/) > -1 ) 
+		{
+			columnid = text.replace(/^bind:/, "");
+		}
+	}
+		
+	return columnid;
+}
+
+/**
+* @description head cell에 match되는 body cell 가져오기
+* @param {grid} 대상 Grid Component
+         {headCellIndex} headCellIndex head cell index
+* @return {number} Cell Index
+*/
+this.fnGetBodyCellIndex = function(grid, headCellIndex) 
+{	
+	// Max Head Row Index
+	var maxHeadRow = 0;
+	
+	for (var i = 0, len = grid.getCellCount("head"); i < len; i++) 
+	{
+		var row = grid.getCellProperty("head", i, "row");
+		if (maxHeadRow < row) 
+		{
+			maxHeadRow = row;
+		}
+	}
+	// Max Body Row Index
+	var maxBodyRow = 0;
+	for (var i=0, len=grid.getCellCount("body"); i<len; i++) 
+	{
+		var row = grid.getCellProperty("body", i, "row");
+		
+		if (maxBodyRow < row) 
+		{
+			maxBodyRow = row;
+		}
+	}
+	
+	if (maxHeadRow == 0 && maxBodyRow == 0) 
+	{
+		return headCellIndex;
+	}
+	
+	// Body Row 가 1개 이상일 경우
+	// Head의 row 가 Body의 row 보다 클 경우 차이 row 를 뺀 것을 대상으로 찾고
+	// Body의 row 가 Head의 row 보다 크거나 같을 경우 row index가 같은 대상을 찾는다.			
+	var cellIndex = -1;
+	var sRow = -1;
+	var nRow = parseInt(grid.getCellProperty("head", headCellIndex, "row"));
+	var nCol = parseInt(grid.getCellProperty("head", headCellIndex, "col"));
+	var nColspan = parseInt(grid.getCellProperty("head", headCellIndex, "colspan"));				
+	
+	if (maxHeadRow > maxBodyRow) 
+	{
+		sRow = nRow - (maxHeadRow - maxBodyRow);
+		sRow = (sRow < 0 ? 0 : sRow);
+	} 
+	else
+	{
+		sRow = nRow;
+	}
+	
+	var cRow, cCol, cColspan;
+	
+	for (var i = 0, len = grid.getCellCount("body"); i < len; i++) 
+	{
+		cRow = parseInt(grid.getCellProperty("body", i, "row"));
+		cCol = parseInt(grid.getCellProperty("body", i, "col"));	
+		cColspan = parseInt(grid.getCellProperty("body", i, "colspan"));					
+		
+		// 실제로 매칭되는 body cell 이 없지만 colspan으로 첫번째 항목을 찾을 경우.
+		if (sRow == cRow && nCol == cCol && nColspan == cColspan) 
+		{		
+			cellIndex = i;
+			
+			break;
+		}
+	}
+	
+	return cellIndex;
+}
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description grid onheadclick event --> shift or ctrl key down check and execute sort
+*/
+this.grid_onheadclick = function (obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var multiple = false;
+	
+	if (obj.keyType == "shift")
+	{
+		if (e.shiftkey)
+		{
+			multiple = true;
+		}
+	}
+	else if (obj.keyType == "ctrl")
+	{
+		if (e.ctrlkey)
+		{
+			multiple = true;
+		}
+	}
+	else if (obj.keyType == "all")
+	{
+		if (e.shiftkey || e.ctrlkey)
+		{
+			multiple = true;
+		}
+	}
+	
+
+	if (this.fnSetSortStatus(obj, e.cell, multiple))
+	{
+		this.fnExecuteSort(obj);
+	}
+	
+}
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param {All} val – 체크할 문자열
+* @return {boolean} Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}
+
+/**
+* @description Grid에서 expression으로  표현할때 decode 문처럼 사용할 수 있는 기능
+* @param N/A
+* @return {String} varRtnValue - 반환된 문자열
+*/
+this.gfnDecode = function ()
+{
+	var varRtnValue = null;
+	var arrArgument = arguments;
+	var varValue = arrArgument[0];
+	var bIsDefault = false;
+	var nCount = 0;
+
+	if ((arrArgument.length % 2) == 0) 
+	{
+		nCount = arrArgument.length - 1;
+		bIsDefault = true;
+	}
+	else 
+	{
+		nCount = arrArgument.length;
+		bIsDefault = false;
+	}
+
+	for (var i = 1; i < nCount; i += 2) 
+	{
+		if (varValue == arrArgument[i]) 
+		{
+			varRtnValue = arrArgument[i + 1];
+			i = nCount;
+		}
+	}
+
+	if (varRtnValue == null && bIsDefault) 
+	{
+		varRtnValue = arrArgument[arrArgument.length - 1];
+	}
+
+	return varRtnValue;
+};]]></Script>

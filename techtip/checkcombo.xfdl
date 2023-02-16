@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="checkcombo" width="400" height="180" titletext="Check Combo (체크박스를 통해 다중 선택할 수 있는 콤보)" onload="checkcombo_onload">
+    <Layouts>
+      <Layout height="180" mobileorientation="landscape" width="400">
+        <Edit id="edtChkCombo" taborder="1" left="10" top="20" width="140" height="20" onchanged="edtChkCombo_onchanged" canchange="edtChkCombo_canchange"/>
+        <Button id="Button00" taborder="2" text="코드확인" left="260" top="20" width="130" height="30" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="3" text="값확인" left="260" top="60" width="130" height="30" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="4" text="코드입력" left="260" top="100" width="130" height="30" onclick="Button02_onclick"/>
+        <Button id="Button03" taborder="5" text="값입력" left="260" top="140" width="130" height="30" onclick="Button03_onclick"/>
+        <Button id="btnCheckCombo" taborder="0" left="150" top="20" width="20" height="20"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > checkcombo
+*  techtip 체크박스로 멀티선택이 가능한 콤보 샘플
+*  @FileName	checkcombo.xfdl 
+*******************************************************************************
+*  2019.08.23		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_checkcombo.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.checkcombo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//체크 콤보 설정값 만들기
+	var objConfig = {
+						dropbutton		: this.btnCheckCombo,
+						innerdataset	: this.dsChkCombo,
+						codecolumn		: "code",
+						datacolumn		: "value",
+						checkcolumn		: "chk"
+				    };
+				
+	//체크 콤보 초기화 함수 호출
+	this.gfnInitChkCombo(this.edtChkCombo, objConfig);
+};
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+ 
+this.edtChkCombo_onchanged = function(obj:nexacro.Edit,e:nexacro.ChangeEventInfo)
+{
+	trace("edtChkCombo_onchanged : " + e.posttext);
+	trace("edtChkCombo_onchanged : " + e.postvalue);
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	alert(this.edtChkCombo.code);
+};
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	alert(this.edtChkCombo.value);
+};
+
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//체크 콤보의 Code 값을 입력하는 함수 실행
+	this.gfnSetChkComboCode(this.edtChkCombo, "2");
+};
+
+this.Button03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//체크 콤보의 Data 값을 입력하는 함수 실행
+	this.gfnSetChkComboData(this.edtChkCombo, "값3,값1");
+};
+
+
+/**************************************************************************
+ * 공통 FUNCTION 영역
+ **************************************************************************/
+
+this.Combo00_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChangeEventInfo)
+{
+	
+};
+
+]]></Script>
+    <Objects>
+      <Dataset id="dsChkCombo">
+        <ColumnInfo>
+          <Column id="chk" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">1</Col>
+            <Col id="value">값1</Col>
+          </Row>
+          <Row>
+            <Col id="code">2</Col>
+            <Col id="value">값2</Col>
+          </Row>
+          <Row>
+            <Col id="code">3</Col>
+            <Col id="value">값3</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

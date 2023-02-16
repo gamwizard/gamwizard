@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="colorchangebutton" width="1120" height="790" titletext="New Form" onload="colorchangebutton_onload">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Button id="btnMenu01" taborder="0" left="44" top="28" width="50" height="50" onclick="Button_onclick" cssclass="btn_WF_admin"/>
+        <Button id="btnMenu02" taborder="1" left="btnMenu01:10" top="28" width="50" height="50" onclick="Button_onclick" cssclass="btn_WF_chart"/>
+        <Button id="btnMenu03" taborder="2" left="btnMenu02:10" top="28" width="50" height="50" onclick="Button_onclick" cssclass="btn_WF_setting"/>
+        <Button id="btnMenu04" taborder="3" left="btnMenu03:10" top="28" width="50" height="50" onclick="Button_onclick" cssclass="btn_WF_document"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > colorchangebutton
+*  techtip [디자인] Color Change Button (색상 변경 애니메이션 버튼)
+*  @FileName	colorchangebutton.xfdl 
+*******************************************************************************
+*  2021.03.30		mykim			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.colorchangebutton_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//사용할 버튼 관련 설정값
+	//BTN : 버튼 오브젝트
+	//CSSCLASS : 버튼 CSSCLASS ID
+	//LABEL : 버튼 라벨
+	//MINSIZE : 선택되지 않았을 때 버튼사이즈
+	//MAXSIZE : 선택되었을 때 버튼 사이즈
+	//BTNCOLOR : 선택되었을 때 버튼 색상
+	//BGCOOLOR : 선택되었을 때 배경화면 색상
+	var arrColor = [
+						{
+							"BTN" : this.btnMenu01, 
+							"CSSCLASS" : "btn_WF_admin",
+							"LABEL" : "Admin",
+							"MINSIZE" : 50, "MAXSIZE" : 150,
+							"COLOR"   : {"R":250, "G":190, "B":43},
+							"BGCOLOR" : {"R":228, "G":169, "B":36}
+						 },
+						{
+							"BTN" : this.btnMenu02, 
+							"CSSCLASS" : "btn_WF_chart",
+							"LABEL" : "Chart",
+							"MINSIZE" : 50, "MAXSIZE" : 150, 
+							"COLOR"   : {"R":244, "G":55, "B":104},
+							"BGCOLOR" : {"R":201, "G":33, "B":66}
+						},
+						{
+							"BTN" : this.btnMenu03, 
+							"CSSCLASS" : "btn_WF_setting",
+							"LABEL" : "Setting",
+							"MINSIZE" : 50, "MAXSIZE" : 180,
+							"COLOR"   : {"R":69,  "G":225, "B":163},
+							"BGCOLOR" : {"R":55,  "G":185, "B":131}
+						},
+						{
+							"BTN" : this.btnMenu04, 
+							"CSSCLASS" : "btn_WF_document",
+							"LABEL" : "Document",
+							"MINSIZE" : 50, "MAXSIZE" : 180, 
+							"COLOR"   : {"R":193, "G":82, "B":218},
+							"BGCOLOR" : {"R":159, "G":50, "B":184}
+						}
+					];
+	
+	//Color Change Button 초기화 함수 호출
+	this.fnInitAnimation(arrColor, this.btnMenu01);
+};
+
+//버튼 클릭 시 이벤트
+this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//이전 선택된 버튼 오브젝트
+	this.aniBtn.prevComp = this.aniBtn.nextComp;
+	
+	//현재 선택된 버튼 오브젝트
+	this.aniBtn.nextComp = obj;
+	
+	//이전 선택된 버튼 Enable true
+	this.aniBtn.prevComp.set_enable(true);
+	
+	//현재 선택된 버튼 Enable false
+	this.aniBtn.nextComp.set_enable(false);
+	
+	//애니메이션 실행
+	this.aniBtn.play();
+};
+
+//애니메이션 실행중 이벤트
+this.Animation_onrun = function(obj:nexacro.Animation,e:nexacro.AnimationEventInfo)
+{
+	//애니메이션 진행 함수 호출
+	this.fnRunAnimation(obj);
+}
+
+//애니메이션 실행 완료 이벤트
+this.Animation_oncomplete = function(obj:nexacro.Animation,e:nexacro.AnimationEventInfo)
+{
+	//애니메이션 진행 함수 호출
+	this.fnRunAnimation(obj);
+	
+	//애니메이션 Frame값 초기화
+	this.frameidx = 0;
+}
+
+/**
+* @description 		: Color Change Button 초기화 함수
+* @param arrColor  :  버튼관련 설정값 오브젝트
+* @param objBtn     : 최초 선택 될 버튼 오브젝트
+* @return 			: 없음
+*/
+this.fnInitAnimation = function(arrColor, objBtn)
+{
+	//애니메이션 오브젝트
+	var objAni;
+	
+	//컴포넌트 오브젝트
+	var objComp;
+	
+	//애니메이션 Frame값 초기화
+	this.frameidx = 0;
+	
+	//버튼 오브젝트에 설정값 적용
+	for(i=0;i<arrColor.length;i++)
+	{
+		objComp = arrColor[i].BTN;
+		objComp.set_cssclass(arrColor[i].CSSCLASS);
+		objComp.label = arrColor[i].LABEL;
+		objComp.anicolor = arrColor[i].COLOR;
+		objComp.anibgcolor = arrColor[i].BGCOLOR;
+		objComp.minsize = arrColor[i].MINSIZE;
+		objComp.maxsize = arrColor[i].MAXSIZE;
+	}
+	
+	//현재 선택된 버튼 Enable false
+	objBtn.set_enable(false);
+	
+	//애니메이션 오브젝트 만들기
+	objAni = new nexacro.Animation("aniBtn", this);
+	this.addChild(objAni.id, objAni);
+	objAni.set_duration(400);
+	objAni.set_easing("easeinoutback");
+	objAni.setEventHandler( "onrun", this.Animation_onrun, this);
+	objAni.setEventHandler( "oncomplete", this.Animation_oncomplete, this);
+	objAni.prevComp = null;
+	objAni.nextComp = objBtn;
+	objAni.addTarget("item1", this, "frameidx:100");
+	objAni.play();
+}
+
+/**
+* @description 		: 애니메이션 진행 함수
+* @param arrColor  :  애니메이션 오브젝트
+* @return 			: 없음
+*/
+this.fnRunAnimation = function(obj)
+{
+	//이전 선택된 버튼 오브젝트
+	var objPrevComp = obj.prevComp;
+	
+	//현재 선택된 버튼 오브젝트
+	var objNextComp = obj.nextComp;
+	
+	//애니메이션 Frame 값
+	var nFrameIdx = this.frameidx;
+	
+	var nMinSize;
+	var nMaxSize;
+	var nDiffSize;
+	var	nPrevSize;
+	var nNextSize;
+	
+	var sColor;
+	var sBGColor;
+	
+	var nRed;
+	var nGreen;
+	var nBlue;
+	var nPrevRed = 255;
+	var nPrevGreen = 255;
+	var nPrevBlue = 255;
+	
+	//애니메이션 Frame %값
+	var nPerIdx = nFrameIdx/100;
+	
+	//이전 선택된 버튼 오브젝트가 있을 경우
+	if(objPrevComp)
+	{
+		//선택 안됬을 때 버튼 사이즈
+		nMinSize = objPrevComp.minsize;
+		
+		//선택 되었을 때 버튼 사이즈
+		nMaxSize = objPrevComp.maxsize;
+		
+		//변경될 버튼 사이즈
+		nDiffSize = nMaxSize - nMinSize;
+		
+		//현재 Frame에서 표현될 버튼 사이즈
+		nPrevSize = nMaxSize - (nDiffSize * nPerIdx);
+		
+		//이전 선택된 버튼 Width 변경
+		objPrevComp.setOffsetWidth(nPrevSize);
+		
+		//이전 선택된 버튼 색상 가져오기
+		nRed = objPrevComp.anicolor.R;
+		nGreen = objPrevComp.anicolor.G;
+		nBlue = objPrevComp.anicolor.B;
+		
+		//현재 Frame에 표현될 색상값 구하기
+		sColor = this.fnChangeColor(nPerIdx, nRed, nGreen, nBlue, 255, 255, 255);
+		
+		//이전 선택된 버튼 색상 변경
+		objPrevComp.set_background(sColor);
+		
+		//이전 선택된 버튼 라벨 초기화
+		objPrevComp.set_text("");
+		
+		//이전 선택된 배경화면 색상 가져오기
+		nPrevRed = objPrevComp.anibgcolor.R;
+		nPrevGreen = objPrevComp.anibgcolor.G;
+		nPrevBlue = objPrevComp.anibgcolor.B;	
+	}
+	
+	//선택 안됬을 때 버튼 사이즈 가져오기
+	nMinSize = objNextComp.minsize;
+	
+	//선택 되었을 때 버튼 사이즈 가져오기
+	nMaxSize = objNextComp.maxsize;
+	
+	//변경될 버튼 사이즈
+	nDiffSize = nMaxSize - nMinSize;
+	
+	//현재 Frame에 표현될 버튼 사이즈 구하기
+	nNextSize = nMinSize + (nDiffSize * nPerIdx);
+	
+	//현재 선택된 버튼의 Width 변경
+	objNextComp.setOffsetWidth(nNextSize);
+	
+	//현재 선택된 배경화면 색상 가져오기
+	nRed = objNextComp.anicolor.R;
+	nGreen = objNextComp.anicolor.G;
+	nBlue = objNextComp.anicolor.B;
+	
+	//현재 Frame에 표현될 버튼 색상 구하기
+	sColor = this.fnChangeColor(nPerIdx, 255, 255, 255, nRed, nGreen, nBlue);
+	
+	//현재 선택된 버튼 색상 변경
+	objNextComp.set_background(sColor);
+	
+	//현재 선택된 버튼의 라벨 설정
+	objNextComp.set_text(objNextComp.label);
+	
+	//현재 선택된 배경화면 색상 가져오기
+	nRed = objNextComp.anibgcolor.R;
+	nGreen = objNextComp.anibgcolor.G;
+	nBlue = objNextComp.anibgcolor.B;
+	
+	//현재 Frame에 표현될 배경화면 색상 구하기
+	sColor = this.fnChangeColor(nPerIdx, nPrevRed, nPrevGreen, nPrevBlue, nRed, nGreen, nBlue);
+	
+	//배경화면 색상 변경
+	this.set_background(sColor);
+	
+	//컴포넌트 사이즈 변경을 적용하기 위한 resetscroll()
+	this.resetScroll();	
+}
+
+/**
+* @description 		: 배경색상 구하기 함수
+* @param nPersent  	: 현재 Frame %값
+* @param nPrevRed  	: 이전 색상값(Red)
+* @param nPrevGreen : 이전 색상값(Green)
+* @param nPrevBlue  : 이전 색상값(Blue)
+* @param nRed  		: 색상값(Red)
+* @param nGreen  	: 색상값(Green)
+* @param nBlue  	: 색상값(Blue)
+* @return 			: 색상값(ex : rgb(255, 255, 255) )
+*/
+this.fnChangeColor = function(nPersent, nPrevRed, nPrevGreen, nPrevBlue, nRed, nGreen, nBlue)
+{
+	var sRtn;
+	
+	//현재 색상과 이전 색상의 차이 구하기
+	var nDiffRed = nRed - nPrevRed;
+	var nDiffGreen = nGreen - nPrevGreen;
+	var nDiffBlue = nBlue - nPrevBlue;
+	
+	//현재 Frame에 표현될 색상 구하기
+	var nPerRed = nexacro.round(nPrevRed + (nDiffRed * nPersent));
+	var nPerGreen = nexacro.round(nPrevGreen + (nDiffGreen * nPersent));
+	var nPerBlue = nexacro.round(nPrevBlue + (nDiffBlue * nPersent));
+	
+	//색상값 만들기
+	sRtn = "rgb("+nPerRed+", "+nPerGreen+", "+nPerBlue+")";
+	
+	//색상값 리턴
+	return sRtn;
+}
+]]></Script>
+  </Form>
+</FDL>

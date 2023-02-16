@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	     : 카테고리 그리드 초기화 함수
+* @param objDiv      : 카테고리 설정할 Div
+*        objGrid	 : 카테고리 설정할 Grid
+* @return              : 없음
+*/
+this.gfnInitCategoryGrid = function(objDiv, objGrid)
+{
+	//카테고리로 설정할 Grid를 Div의 사용자 변수로 설정
+	objDiv.targetgrid = objGrid;
+
+	//Form Drag move 이벤트 설정
+	this.addEventHandler("ondragmove", this.gfnCategoryGridForm_ondragmove, this);
+
+	//Form Drop 이벤트 설정
+	this.addEventHandler("ondrop", this.gfnCategoryGridForm_ondrop, this);
+
+	//Grid Drag 이벤트 설정
+	objGrid.addEventHandler("ondrag", this.gfnCategoryGrid_ondrag, this);
+
+	//Div Drop 이벤트 설정
+	objDiv.addEventHandler("ondrop", this.gfnCategoryGridDiv_ondrop, this);
+}
+
+/**
+* @description 	     : Drag 객체 생성 함수
+* @param 			 : 없음
+* @return            : Drag 객체
+*/
+this.gfnGetDragComp = function()
+{
+	var objDragComp;
+
+	//이미 생성된 Drag 객체가 있을 경우
+	if(this.gfnIsNull(this.components["btnDrag"])==false)
+	{
+		//기존에 생성된 Drag객체를 설정
+		objDragComp = this.components["btnDrag"];
+	}
+	//신규 Drag 객체 생성이 필요한 경우
+	else
+	{
+		//Drag 객체 생성
+		objDragComp = new Button("btnDrag", 0, 0, 0, 0);
+		this.addChild(objDragComp.name, objDragComp);
+		objDragComp.show();
+	}
+
+	//Drag 객체 리턴
+	return  objDragComp;
+}
+
+/**
+* @description 	     : 카테고리 Div영역에 리스트 생성 함수
+* @param 			 : 카테고리 Div
+* @return            : 없음
+*/
+this.gfnAddColumnListDiv = function(objDiv)
+{
+	var i;
+	var objBtn;
+	var nLeft, nTop;
+	var nWidth = 100;
+	var nHeight = 24;
+	var objRmv;
+	var rtn;
+	var arrColumnList = objDiv.columnlist;
+	var arrColumnNameList = objDiv.columnnamelist;
+
+	//기존에 생성된 컴포넌트 Visible false 설정;
+	for(i=objDiv.form.components.length-1;i>=0;i--)
+	{
+		objDiv.form.components[i].set_visible(false);
+	}
+
+	//그룹 컬럼 리스트 만큼 Loop
+	for(i=0;i<arrColumnList.length;i++)
+	{
+		nLeft = 10+ i*(nWidth+10);
+		nTop = 10;
+
+		//기존에 생성된 컴포넌트가 없을 경우 신규 추가
+		if(this.gfnIsNull(objDiv.form.components["btnColumn"+i])==true)
+		{
+			//컴포넌트 생성
+			objBtn = new Button("btnColumn"+i, nLeft, nTop, nWidth, nHeight);
+			objDiv.form.addChild(objBtn.name, objBtn);
+
+			//컬럼 ID 사용자 변수로 설정
+			objBtn.columnid = arrColumnList[i];
+
+			//컬럼명 Text로 설정
+			objBtn.set_text(arrColumnNameList[i]);
+
+			//Drag & Drop 처리를 위해 이벤트 설정
+			objBtn.addEventHandler("ondrag", this.gfnCategoryGridItem_ondrag, this);
+			objBtn.addEventHandler("ondrop", this.gfnCategoryGridItem_ondrop, this);
+			objBtn.show();
+
+		}else
+		{
+			//컴포넌트 위치 이동
+			objDiv.form.components["btnColumn"+i].move(nLeft, nTop);
+
+			//컬럼 ID 사용자 변수로 설정
+			objDiv.form.components["btnColumn"+i].columnid = arrColumnList[i];
+
+			//컬럼명 Text로 설정
+			objDiv.form.components["btnColumn"+i].set_text(arrColumnNameList[i]);
+
+			//컴포넌트 Visible true 설정
+			objDiv.form.components["btnColumn"+i].set_visible(true);
+		}
+	}
+	objDiv.form.resetScroll();
+}
+
+
+/**
+* @description 	       : ReverseSubsum을 활용한 Tree만들기 함수
+* @param objGrid       : 설정할 그리드
+*        arrColumnList : Tree의 그룹으로 설정할 컬럼리스트
+*        nSize         : Tree를 표현할 컬럼의 Width
+* @return              : 없음
+*/
+this.gfnMakeReverseSubsumTree = function (objGrid, arrColumnList, nSize)
+{
+	var i;
+	var nCount = arrColumnList.length;
+	var objDs = objGrid.getBindDataset();
+	var sKeyString;
+
+	//성능향상을 위해 Redraw/Event 정지
+	objGrid.set_enableredraw(false);
+	objDs.set_enableevent(false);
+
+	//그룹핑된 컬럼이 없을 경우 초기화
+	if(nCount==0)
+	{
+		//그리드 컬럼 삭제
+		objGrid.deleteContentsCol("body", 0);
+
+		//그룹핑 설정 여부 false
+		objGrid.usereversesubsum = false;
+
+		//그룹핑 Keystring 초기화
+		objDs.set_keystring("");
+	}
+	//그룹핑된 컬럼이 있을 경우 그리드 컬럼 추가 및 설정
+	else
+	{
+		//데이터셋 keystring에 설정할 그룹키 생성
+		sKeyString = "G:";
+		for(i=0;i<nCount;i++)
+		{
+			if(i==0)sKeyString += arrColumnList[i];
+			else sKeyString += "," + arrColumnList[i];
+		}
+
+		//reversesubsum 설정
+		objDs.set_reversesubsum(true);
+
+		//keystring 설정
+		objDs.set_keystring(sKeyString);
+
+		//expr에서 사용하기위해 컬럼리스트를 데이터셋의 변수로 등록
+		objDs.treecolumnlist = arrColumnList;
+
+		//그룹핑 설정여부가 false일 경우 컬럼 추가 및 설정
+		if(objGrid.usereversesubsum != true)
+		{
+			//한번만 실행될 수 있도록 그룹핑 설정 값을 true로 설정
+			objGrid.usereversesubsum = true
+
+			//그리드에 Col 삽입
+			objGrid.insertContentsCol("body", 0);
+
+			//삽입된 Col의 사이즈 변경
+			objGrid.setFormatColProperty(0, "size", nSize);
+
+			//삽입된 Column의 displaytype을 treeitemcontrol로 설정
+			objGrid.setCellProperty("body", 0, "displaytype", "treeitemcontrol");
+
+			//삽입된 Column의 edittype을 tree 설정
+			objGrid.setCellProperty("body", 0, "edittype", "tree");
+
+			//삽입된 Column의 text를 그룹핑된 컬럼의 정보를 표현하기 위한 Expr함수 설정
+			objGrid.setCellProperty("body", 0, "text", "expr:dataset.parent.gfnSetSubSumText(currow, dataset, comp)");
+
+			//treelevel 값의 증가값이 rowlevel과 반대이므로 역순으로 계산 하기위한 Expr 설정
+			objGrid.setCellProperty("body", 0, "treelevel", "expr:dataset.treecolumnlist.length>0?dataset.treecolumnlist.length-dataset.getRowLevel(currow):'0'");
+		}
+	}
+
+	//성능향상을 위해 Redraw/Event 재실행
+	objDs.set_enableevent(true);
+	objGrid.set_enableredraw(true);
+}
+
+/**
+* @description 	 : SubsumText를 만들기위한 Expr 함수
+* @param nRow    : 설정할 Row Index
+*        objDs   : 참조할 데이터셋 오브젝트
+*        objGrid : 설정할 그리드 컴포넌트
+* @return        : SubsumText로 설정할 텍스트
+*/
+this.gfnSetSubSumText = function(nRow, objDs, objGrid)
+{
+	//현재 Row Idx의 Level 값
+	var nLevel = objDs.getRowLevel(nRow);
+
+	//Level이 0일 경우 텍스트를 공백으로 설정
+	if(nLevel==0) return "";
+
+	//Level이 0이 아닐 경우 [현재 레벨에 해당하는 컬럼의 값 (하위 노드의 갯수)] 형태의 텍스트 설정
+	return objDs.getColumn(nRow+nLevel, objDs.treecolumnlist[objDs.treecolumnlist.length-(nLevel)])+"("+objGrid.getTreeChildCount(nRow)+")";
+}
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+ /**
+* @description 	   : Form ondragmove 이벤트
+*/
+ this.gfnCategoryGridForm_ondragmove = function(obj,e)
+{
+	//Drag 객체 생성 함수 호출
+	var objDragComp = this.gfnGetDragComp();
+
+	//마우스를 따라 Drag 객체 이동
+	objDragComp.move(e.clientx+15, e.clienty+15);
+};
+
+/**
+* @description 	   : Form ondrop 이벤트
+*/
+this.gfnCategoryGridForm_ondrop = function(obj,e)
+{
+	var i;
+
+	//Drag 객체 생성 함수 호출
+	var objDragComp = this.gfnGetDragComp();
+
+	//Drag 발생한 영역 정보 가져오기(DIV/GRID)
+	var sFromComp = e.userdata.fromComp;
+
+	//Drag한 Column Id 정보 가져오기
+	var sColumnId = e.userdata.columnId;
+
+	var objDiv;
+	var objGrid;
+	var arrColumnList;
+	var nFindIdx;
+
+	//Drag 객체 Visible false 설정
+	objDragComp.set_visible(false);
+
+	//Div영역에서 Drag가 발생했을 경우
+	//그룹에서 해당 Column Id 삭제
+	if(sFromComp=="DIV")
+	{
+		//Div정보 가져오기
+		objDiv = e.sourceobject.parent.parent;
+
+		//Grid정보 가져오기
+		objGrid = objDiv.targetgrid;
+
+		//그룹 컬럼리스트 정보 가져오기
+		arrColumnList = objDiv.columnlist;
+
+		//그룹 컬럼리스트에서 삭제할 Column Id 위치 찾기
+		for(i=0;i<arrColumnList.length;i++)
+		{
+			if(arrColumnList[i]==sColumnId)
+			{
+				nFindIdx = i;
+				break;
+			}
+		}
+
+		//그룹 컬럼 리스트에서 삭제
+		objDiv.columnlist.splice(nFindIdx, 1);
+
+		//그룹 컬럼 명 리스트에서 삭제
+		objDiv.columnnamelist.splice(nFindIdx, 1);
+
+		//카테고리 Div영역에 리스트 생성 함수 호출
+		this.gfnAddColumnListDiv(objDiv);
+
+		//ReverseSubsum을 활용한 Tree만들기 함수 호출
+		this.gfnMakeReverseSubsumTree(objGrid, objDiv.columnlist, 200);
+	}
+};
+
+/**
+* @description 	   : Div ondrop 이벤트
+*/
+this.gfnCategoryGridDiv_ondrop = function(obj,e)
+{
+	//Drag 객체 생성 함수 호출
+	var objDragComp = this.gfnGetDragComp();
+
+	var arrColumnList;
+	var objGrid;
+
+	//Drag 발생한 영역 정보 가져오기(DIV/GRID)
+	var sFromComp = e.userdata.fromComp;
+
+	//Drag한 Column Id 정보 가져오기
+	var sColumnId = e.userdata.columnId;
+
+	//Drag 객체 Visible false 설정
+	objDragComp.set_visible(false);
+
+	//Grid영역에서 Drag가 발생했을 경우
+	//그룹에 해당 Column Id 추가
+	if(sFromComp=="GRID")
+	{
+		//기존에 만들어진 그룹 컬럼 리스트가 없을 경우 초기화
+		if(this.gfnIsNull(obj.columnlist)==true)
+		{
+			obj.columnlist = [];
+			obj.columnnamelist = [];
+		}
+
+		arrColumnList = obj.columnlist;
+		arrColumnNameList = obj.columnnamelist;
+
+		//Grid정보 가져오기
+		objGrid = objDragComp.targetgrid;
+
+		//Drag한 Column Id가 존재할 경우
+		//그룹 컬럼 리스트, 그룹 컬럼명 리스트에 추가
+		if(this.gfnIsNull(sColumnId)==false)
+		{
+			arrColumnList[arrColumnList.length] = sColumnId;
+			arrColumnNameList[arrColumnNameList.length] = objDragComp.text;
+		}
+
+		//카테고리 Div영역에 리스트 생성 함수 호출
+		this.gfnAddColumnListDiv(obj);
+
+		//ReverseSubsum을 활용한 Tree만들기 함수 호출
+		this.gfnMakeReverseSubsumTree(objGrid, arrColumnList, 200);
+	}
+};
+
+/**
+* @description 	   : Grid ondrag 이벤트
+*/
+this.gfnCategoryGrid_ondrag = function(obj,e)
+{
+	if(e.row==-1)
+	{
+		var objDragComp;
+		var sCellText;
+		var sColumnId;
+		var nWidth;
+		var nHeight;
+		var objUserData;
+
+		//drag하는 Cell의 텍스트 정보 가져오기
+		sCellText = obj.getCellText(e.row, e.cell);
+
+		if (this.gfnIsNull(sCellText)==false)
+		{
+			//Cell의 Width/Height정보 가져오기
+			nWidth = e.fromreferenceobject.getOffsetWidth();
+			nHeight = e.fromreferenceobject.getOffsetHeight();
+
+			//Drag 객체 생성 함수 호출
+			objDragComp = this.gfnGetDragComp();
+
+			//Cell 텍스트를 Drag 텍스트로 설정
+			objDragComp.set_text(sCellText);
+
+			//Cell의 Width/Height값과 동일하게 Drag 객체 설정
+			objDragComp.setOffsetWidth(nWidth);
+			objDragComp.setOffsetHeight(nHeight);
+
+			//Drag Col Index를 Drag 객체의 사용자 변수로 설정
+			objDragComp.targetcol = e.col;
+
+			//Drag Grid를 Drag 객체의 사용자 변수로 설정
+			objDragComp.targetgrid = obj;
+
+			objDragComp.set_visible(true);
+
+			//Drag한 Cell에 연결된 ColumnId값을 userdata로 설정
+			sColumnId = obj.getCellProperty("body", e.cell, "text").toString().replace("bind:", "");
+			objUserData = {"columnId" : sColumnId, "fromComp" : "GRID"};
+			e.userdata = objUserData;
+			return true;
+		}
+	}
+};
+
+/**
+* @description 	   : Div영역의 리스트 Item ondrag 이벤트
+*/
+this.gfnCategoryGridItem_ondrag = function(obj, e)
+{
+	var sText = obj.text;
+	var nWidth = obj.getOffsetWidth();
+	var nHeight = obj.getOffsetHeight();
+	var sColumnId = obj.columnid;
+
+	//Drag 객체 생성 함수 호출
+	objDragComp = this.gfnGetDragComp();
+
+	//Item의 텍스트를 Drag 객체의 텍스트로 설정
+	objDragComp.set_text(sText);
+
+	//Item의 Width/Height값과 동일하게 Drag 객체 설정
+	objDragComp.setOffsetWidth(nWidth);
+	objDragComp.setOffsetHeight(nHeight);
+	objDragComp.set_visible(true);
+
+	//Drag한 Item에 연결된 ColumnId값을 userdata로 설정
+	objUserData = {"columnId" : sColumnId, "fromComp" : "DIV"};
+	e.userdata = objUserData;
+
+	return true;
+}
+
+/**
+* @description 	   : Div영역의 리스트 Item ondrop 이벤트
+*/
+this.gfnCategoryGridItem_ondrop = function(obj, e)
+{
+	//Drag 객체 생성 함수 호출
+	var objDragComp = this.gfnGetDragComp();
+	var sFromComp = e.userdata.fromComp;
+	var sColumnId = e.userdata.columnId;
+	var sColumnText = objDragComp.text;
+	var objDiv = obj.parent.parent;
+
+	//Drag 객체 Visible false 설정
+	objDragComp.set_visible(false);
+
+	//Div영역에서 Drag가 발생하고
+	//Drag ColumnId가 Drop ColumnId와 다를경우 위치 변경
+	if(sFromComp=="DIV"&&sColumnId!=obj.columnid)
+	{
+		var sColumnList = "";
+		var arrColumnList = objDiv.columnlist;
+		var arrColumnNameList = objDiv.columnnamelist;
+		var i;
+
+		//그룹 컬럼 리스트의 위치를 변경
+		objDiv.columnlist = this.gfnMoveArrayIndex(arrColumnList, sColumnId, obj.columnid);
+
+		//그룹 컬럼명 리스트의 위치를 변경
+		objDiv.columnnamelist = this.gfnMoveArrayIndex(arrColumnNameList, sColumnText, obj.text);
+
+		//카테고리 Div영역에 리스트 생성 함수 호출
+		this.gfnAddColumnListDiv(objDiv);
+
+		//ReverseSubsum을 활용한 Tree만들기 함수 호출
+		this.gfnMakeReverseSubsumTree(objDiv.targetgrid, objDiv.columnlist, 200);
+
+		return true;
+	}
+}
+
+]]></Script>

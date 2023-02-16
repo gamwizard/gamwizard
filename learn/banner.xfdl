@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="banner" width="200" height="150" titletext="New Form" ontimer="banner_ontimer" onload="banner_onload" onlbuttondown="banner_onlbuttondown">
+    <Layouts>
+      <Layout height="150" mobileorientation="landscape" width="200" stepcount="4" stepindex="0">
+        <Static id="Static00" taborder="0" text="No.1" left="45" top="31" width="111" height="89" font="normal 22pt/normal &quot;Gulim&quot;" textAlign="center"/>
+        <Static id="Static01" taborder="1" text="No.2" left="45" top="31" width="111" height="89" font="normal 22pt/normal &quot;Gulim&quot;" textAlign="center" positionstep="1"/>
+        <Static id="Static02" taborder="2" text="No.3" left="45" top="31" width="111" height="89" font="normal 22pt/normal &quot;Gulim&quot;" textAlign="center" positionstep="2"/>
+        <Static id="Static03" taborder="3" text="No.4" left="45" top="31" width="111" height="89" font="normal 22pt/normal &quot;Gulim&quot;" textAlign="center" positionstep="3"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+// 지연반응 시간 및 타이머 ID
+this.DELAY_TIME = 200;
+this.DELAY_TIMER_ID = 22222;
+
+// 포커스 이동 타이머
+this.FOCUS_TIME = 1000;
+this.FOCUS_TIMER_ID = 33333;
+
+this.STEP_COUNT = 0;
+
+this.banner_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.STEP_COUNT = this.getLayoutInfo("default","stepcount");
+	
+	//폼 로드 시 ontimer 이벤트 호출
+	this.setTimer( this.FOCUS_TIMER_ID, this.FOCUS_TIME );
+};
+
+this.banner_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
+{
+	if(e.timerid == this.FOCUS_TIMER_ID)
+	{	
+		var pos = this.fnGetNextStep();
+		this.setStepIndex(pos);
+	}
+	else if(e.timerid == this.	DELAY_TIMER_ID)
+	{
+		this.killTimer(this.DELAY_TIMER_ID);
+		this.setTimer( this.FOCUS_TIMER_ID, this.FOCUS_TIME );
+	}
+};
+
+//stepindex 버튼 클릭 시 발생 이벤트
+this.banner_onlbuttondown = function(obj:nexacro.Form,e:nexacro.MouseEventInfo)
+{
+	this.killTimer(this.FOCUS_TIMER_ID);
+	this.setTimer(this.DELAY_TIMER_ID,this.DELAY_TIME);
+};
+
+//next step index return
+this.fnGetNextStep = function ()
+{
+	var nStepIndex = this.getStepIndex();
+	nStepIndex ++;
+	
+	if(nStepIndex >= this.STEP_COUNT)
+	{
+		nStepIndex = 0;
+	}
+	
+	return nStepIndex;
+};]]></Script>
+  </Form>
+</FDL>

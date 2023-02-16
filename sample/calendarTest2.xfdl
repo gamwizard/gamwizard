@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="calendarTest2" width="344" height="360" titletext="New Form">
+    <Layouts>
+      <Layout height="360" width="344">
+        <Div id="divDay" taborder="0" text="Div00" left="0" top="0" cssclass="div_WF_calendar" onsize="divDay_onsize" right="0" bottom="0">
+          <Layouts>
+            <Layout>
+              <Button id="btnYearMonth" taborder="0" text="2021년 5월" left="10" top="27" width="120" height="43" cssclass="btn_WF_period" onclick="divDay_btnYearMonth_onclick"/>
+              <Button id="btnPrev" taborder="50" top="27" width="40" height="40" cssclass="btn_WF_up" onclick="divDay_btnPrev_onclick" right="64"/>
+              <Button id="btnNext" taborder="51" top="27" width="40" height="40" cssclass="btn_WF_down" onclick="divDay_btnNext_onclick" right="18"/>
+              <Static id="stSun" taborder="1" text="일" left="10" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stMon" taborder="8" text="월" left="56" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stTue" taborder="15" text="화" left="102" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stWed" taborder="22" text="수" left="148" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stThu" taborder="29" text="목" left="194" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stFri" taborder="36" text="금" left="240" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stSta" taborder="43" text="토" left="286" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Button id="btn_0" taborder="2" text="25" left="10" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_1" taborder="9" text="26" left="56" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_2" taborder="16" text="27" left="102" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_3" taborder="23" text="28" left="148" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_4" taborder="30" text="29" left="194" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_5" taborder="37" text="30" left="240" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_6" taborder="44" text="1" left="286" top="110" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_7" taborder="3" text="2" left="10" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_8" taborder="10" text="3" left="56" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_9" taborder="17" text="4" left="102" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_10" taborder="24" text="5" left="148" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_11" taborder="31" text="6" left="194" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_12" taborder="38" text="7" left="240" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_13" taborder="45" text="8" left="286" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_14" taborder="4" text="9" left="10" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_15" taborder="11" text="10" left="56" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_16" taborder="18" text="11" left="102" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_17" taborder="25" text="12" left="148" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_18" taborder="32" text="13" left="194" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_19" taborder="39" text="14" left="240" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_20" taborder="46" text="15" left="286" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_21" taborder="5" text="16" left="10" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_22" taborder="12" text="17" left="56" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_23" taborder="19" text="18" left="102" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_24" taborder="26" text="19" left="148" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_25" taborder="33" text="20" left="194" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_26" taborder="40" text="21" left="240" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_27" taborder="47" text="22" left="286" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_28" taborder="6" text="23" left="10" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_29" taborder="13" text="24" left="56" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_30" taborder="20" text="25" left="102" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_31" taborder="27" text="26" left="148" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_32" taborder="34" text="27" left="194" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_33" taborder="41" text="28" left="240" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_34" taborder="48" text="29" left="286" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_35" taborder="7" text="30" left="10" top="310" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_36" taborder="14" text="31" left="56" top="310" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_37" taborder="21" text="1" left="102" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_38" taborder="28" text="2" left="148" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_39" taborder="35" text="3" left="194" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_40" taborder="42" text="4" left="240" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_41" taborder="49" text="5" left="286" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.divDay_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	var arrWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sta"]
+	var nTop = 70;
+	var nLeft = 10;
+	var nRight = 10;
+	var nBottom = 10;
+	
+	var nWidth = e.cx - nLeft -nRight;
+	var nHeight = e.cy - nTop - nBottom;
+	
+	var nCompWidth = nexacro.floor(nWidth/7);
+	var nCompHeight = nexacro.floor(nHeight/7);
+	
+	var objComponents = this.divDay.form.components;
+	
+	for(var i=0;i<7;i++)
+	{
+		objComp = objComponents["st"+arrWeek[i]];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%7==6)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+	
+	for(var i=0;i<42;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%7==6)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

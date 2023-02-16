@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   : 아코디언 초기화 함수
+* @param objConfig : 설정 오브젝트
+* @return          : 없음
+*/
+this.gfnInitAccordionmenu = function (objConfig)
+{
+	var i;
+	var arrBtnList = objConfig.btnlist;
+	var arrMenuList = objConfig.menulist;
+	var arrMenuMaxSize = objConfig.maxsizelist;
+	var arrMenuMinSize = objConfig.minsizelist;
+	var objBtn, objMenu, objMenuPrev, nMaxSize, nMinSize;
+	var nCount = arrBtnList.length;
+
+	var objTarget;
+
+	for(i=0;i<nCount;i++)
+	{
+		objBtn = arrBtnList[i];
+		objMenu = arrMenuList[i];
+		nMaxSize = arrMenuMaxSize[i];
+		nMinSize = arrMenuMinSize[i];
+
+		if(i==0)
+		{
+			objMenu.set_top(objBtn.name+":-1px");
+		}else
+		{
+			objMenuPrev = arrMenuList[i-1];
+			objBtn.set_top(objMenuPrev.name+":-1px");
+			objMenu.set_top(objBtn.name+":-1px");
+		}
+		objMenu.maxsize = nMaxSize;
+		objMenu.minsize = nMinSize;
+		objMenu.setOffsetHeight(nMinSize);
+		objBtn.targetmenu = objMenu;
+		objBtn.addEventHandler("onclick", this.btnMenu_onclick, this);
+	}
+
+	this.resetScroll();
+}
+
+/**
+* @description 		: 아코디언 버튼 클릭 시 실행 함수
+* @param obj        : 클릭된 버튼 오브젝트
+* @return 			: 없음
+*/
+this.gfnRunDrillDown = function(obj)
+{
+	var objMenu = obj.targetmenu;
+	var nMaxSize = objMenu.minsize;
+	var nMinSize = objMenu.maxsize;
+
+	//현재 메뉴의 크기가 최대사이즈와 같을경우
+	if(objMenu.getOffsetHeight()==nMaxSize)
+	{
+		//최소사이즈로 변경
+		objMenu.setOffsetHeight(nMinSize);
+	}
+	else
+	{
+		//최대 사이즈로 변경
+		objMenu.setOffsetHeight(nMaxSize);
+	}
+
+	this.resetScroll();
+}
+]]></Script>

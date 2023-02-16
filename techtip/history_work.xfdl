@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="history_work" width="300" height="380" titletext="New Form" onload="history_work_onload">
+    <Layouts>
+      <Layout height="380" mobileorientation="landscape" width="300">
+        <Static id="Static00" taborder="0" text="WorkPage" left="10" top="10" width="170" height="60" font="bold 24px/normal &quot;Gulim&quot;"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.history_work_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	if(system.navigatorname.indexOf("nexacro")==-1)
+	{
+		// 현재 hash 에 해당하는 data 를 얻어온다.
+		var hash = MyHistory.getLocationHash();
+		var data = MyHistory.getData(hash);
+		
+		this.doAction(data);
+	}
+}
+
+this.doAction = function(data)
+{
+	this.Static00.set_text(data.desc);
+}]]></Script>
+  </Form>
+</FDL>

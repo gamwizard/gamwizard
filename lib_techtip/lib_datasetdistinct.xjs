@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 			: 데이터 중복제거 함수
+* @param objTargetDs  	: 원본 데이터셋
+* @param objReturnDs    : 중복제거된 데이터셋
+* @param arrColumnList 	: 중복제거할 컬럼리스트
+* @return 				: 없음
+*/
+this.gfnGetDistinctData = function(objTargetDs, objReturnDs, arrColumnList)
+{
+	//Filter Expr String
+	var sFilterExpr		= "";
+	
+	//Find Row Expr String
+	var sFindRowExpr	= "1==1";
+	
+	//중복된 값인지 여부를 찾기 위한 Find Row Expr String 만들기
+	for (var i=0; i<arrColumnList.length; i++)
+	{
+		sFindRowExpr	+= "&&" + arrColumnList[i] + "=='\" + " + arrColumnList[i] + " + \"'";
+	}
+	
+	//성능 개선을 위해 enableevent false
+	objTargetDs.set_enableevent(false);
+	objReturnDs.set_enableevent(false);
+	
+	//현재Row와 FindRowExpr로 찾은 Row가 같을 경우만 필터
+	//즉 동일한 데이터 중 가장 첫번째 데이터만 남기고 필터
+	sFilterExpr	= "rowidx==dataset.findRowExpr(\"" + sFindRowExpr + "\")";
+	trace(sFilterExpr);
+	objTargetDs.filter(sFilterExpr);
+	
+	//필터된 데이터 복사
+	objReturnDs.copyData(objTargetDs, true);
+	
+	//필터 초기화
+	objTargetDs.filter("");
+	
+	//성능 개선을 위해 enableevent true
+	objTargetDs.set_enableevent(true);
+	objReturnDs.set_enableevent(true);
+}]]></Script>

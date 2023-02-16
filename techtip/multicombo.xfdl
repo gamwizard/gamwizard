@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="multicombo" width="500" height="400" titletext="Multi Combo(동적으로 다단 콤보 설정하기)" onload="multicombo_onload">
+    <Layouts>
+      <Layout height="400" mobileorientation="landscape" width="500">
+        <Combo id="cmbCode01" taborder="0" left="10" top="10" width="150" height="20" innerdataset="dsCode01" codecolumn="Code" datacolumn="Value"/>
+        <Combo id="cmbCode02" taborder="1" left="170" top="10" width="150" height="20" innerdataset="dsCode02" codecolumn="Code" datacolumn="Value"/>
+        <Combo id="cmbCode03" taborder="2" left="330" top="10" width="150" height="20" innerdataset="dsCode03" codecolumn="Code" datacolumn="Value"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsCode01">
+        <ColumnInfo>
+          <Column id="Code" type="STRING" size="256"/>
+          <Column id="Value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Code">-1</Col>
+            <Col id="Value">전체</Col>
+          </Row>
+          <Row>
+            <Col id="Code">01</Col>
+            <Col id="Value">컴퓨터/주변기기</Col>
+          </Row>
+          <Row>
+            <Col id="Code">02</Col>
+            <Col id="Value">스마트/주변기기</Col>
+          </Row>
+          <Row>
+            <Col id="Code">03</Col>
+            <Col id="Value">패션/의류</Col>
+          </Row>
+          <Row>
+            <Col id="Code">04</Col>
+            <Col id="Value">가방/슈즈/주얼리</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCode02">
+        <ColumnInfo>
+          <Column id="Code" type="STRING" size="256"/>
+          <Column id="Value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Code">-1</Col>
+            <Col id="Value">전체</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0101</Col>
+            <Col id="Value">모니터</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0102</Col>
+            <Col id="Value">키보드/마우스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0201</Col>
+            <Col id="Value">케이스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0202</Col>
+            <Col id="Value">보조베터리</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0203</Col>
+            <Col id="Value">보호필름</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0204</Col>
+            <Col id="Value">거치대/홀더</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0205</Col>
+            <Col id="Value">기타</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0301</Col>
+            <Col id="Value">상의</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0302</Col>
+            <Col id="Value">하의</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0303</Col>
+            <Col id="Value">이너웨어</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0304</Col>
+            <Col id="Value">기타소품</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0401</Col>
+            <Col id="Value">가방</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0402</Col>
+            <Col id="Value">슈즈</Col>
+          </Row>
+          <Row>
+            <Col id="Code">0403</Col>
+            <Col id="Value">주얼리</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCode03">
+        <ColumnInfo>
+          <Column id="Code" type="STRING" size="256"/>
+          <Column id="Value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Code">-1</Col>
+            <Col id="Value">전체</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010101</Col>
+            <Col id="Value">15인치모니터</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010102</Col>
+            <Col id="Value">14인치모니터</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010201</Col>
+            <Col id="Value">기계식키보드</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010202</Col>
+            <Col id="Value">일반키보드</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010203</Col>
+            <Col id="Value">유선마우스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">010204</Col>
+            <Col id="Value">무선마우스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020101</Col>
+            <Col id="Value">하드케이스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020102</Col>
+            <Col id="Value">소프트케이스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020201</Col>
+            <Col id="Value">1000mA배터리</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020202</Col>
+            <Col id="Value">5000mA배터리</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020203</Col>
+            <Col id="Value">15000mA배터리</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020301</Col>
+            <Col id="Value">방탄필름</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020302</Col>
+            <Col id="Value">젤리필름</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020303</Col>
+            <Col id="Value">일반필름</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020401</Col>
+            <Col id="Value">거치대</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020402</Col>
+            <Col id="Value">홀더</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020501</Col>
+            <Col id="Value">방수커버</Col>
+          </Row>
+          <Row>
+            <Col id="Code">020502</Col>
+            <Col id="Value">케이블</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030101</Col>
+            <Col id="Value">라운드티</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030102</Col>
+            <Col id="Value">브라우스</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030103</Col>
+            <Col id="Value">자켓</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030201</Col>
+            <Col id="Value">청바지</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030202</Col>
+            <Col id="Value">반바지</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030203</Col>
+            <Col id="Value">치마</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030301</Col>
+            <Col id="Value">양말</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030302</Col>
+            <Col id="Value">면티</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030401</Col>
+            <Col id="Value">모자</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030402</Col>
+            <Col id="Value">허리띠</Col>
+          </Row>
+          <Row>
+            <Col id="Code">030403</Col>
+            <Col id="Value">스카프</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040101</Col>
+            <Col id="Value">백팩</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040102</Col>
+            <Col id="Value">크로스백</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040201</Col>
+            <Col id="Value">운동화</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040202</Col>
+            <Col id="Value">단화</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040301</Col>
+            <Col id="Value">목걸이</Col>
+          </Row>
+          <Row>
+            <Col id="Code">040302</Col>
+            <Col id="Value">반지</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > multicombo
+*  techtip 멀티 콤보 동적 설정 샘플
+*  @FileName	multicombo.xfdl 
+*******************************************************************************
+*  2019.06.21		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_multicombo.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ /**
+ * @description 화면 onload시 처리내역
+*/
+this.multicombo_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	var arrComboList = [this.cmbCode01, this.cmbCode02, this.cmbCode03];
+	
+	this.gfnInitMultiCombo(arrComboList);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="cmbCode01" propid="value" datasetid="Dataset00" columnid="Column0"/>
+      <BindItem id="item1" compid="cmbCode02" propid="value" datasetid="Dataset00" columnid="Column1"/>
+      <BindItem id="item2" compid="cmbCode03" propid="value" datasetid="Dataset00" columnid="Column2"/>
+    </Bind>
+  </Form>
+</FDL>

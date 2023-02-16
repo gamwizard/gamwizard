@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   		: 조건에 따른 그리드 전체체크/체크해제 실행 함수
+* @param obj	   		: 설정 그리드
+* @param e		   		: 이벤트 오브젝트
+* @param sCheckUseExpr	: 체크/체크해제 실행할 조건식
+* @return          		: 없음
+*/
+this.gfnSetGridCheckCaseAll = function (obj, e, sCheckUseExpr)
+{
+	var sChk;
+	var sVal;
+	var objDs;
+	var nCellIdx  = e.cell;
+	var sColumnId;
+
+	//그리드에 연결된 데이터셋 가져오기
+	objDs  = obj.getBindDataset();
+
+	//데이터셋에 데이터가 없을 경우 리턴
+	if(objDs.rowcount < 1) return;
+
+	//전체 체크/체크해제할 컬럼명 구하기
+	sColumnId = obj.getCellProperty("body", nCellIdx, "text");
+	sColumnId = sColumnId.toString().replace("bind:", "");
+
+	//Head의 현재 Check설정 값 가져오기
+	sVal = obj.getCellProperty("head", nCellIdx, "text");
+
+	//현재 체크상태일 경우
+	if (sVal == "1" )
+	{
+		//Head의 값을 체크해제로 설정
+		obj.setCellProperty("head", nCellIdx, "text", "0");
+		sChk="0";
+	}
+	//현재 체크해제상태일 경우
+	else {
+		//Head의 값을 체크로 설정
+		obj.setCellProperty("head", nCellIdx, "text", "1");
+		sChk="1";
+	}
+
+
+	//성능 개선을 위해 이벤트 발생 정지
+	objDs.set_enableevent(false);
+
+	// Body에 전체 체크/체크해제 상태 적용
+	for(var i=0 ; i< objDs.rowcount ; i++)
+	{
+		if(objDs.findRowExpr(sCheckUseExpr, i, i+1)!=-1)
+		{
+			objDs.setColumn(i, sColumnId, sChk);
+		}
+	}
+
+	//성능 개선을 위해 이벤트 발생 재실행
+	objDs.set_enableevent(true);
+};]]></Script>

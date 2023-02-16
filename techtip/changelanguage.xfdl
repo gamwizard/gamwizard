@@ -1,0 +1,680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="changelanguage" width="1120" height="890" titletext="New Form">
+    <Layouts>
+      <Layout height="890" width="1120">
+        <Static id="Static08" taborder="0" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="421" text=""/>
+        <Static id="Static09" taborder="1" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="460"/>
+        <Static id="Static22" taborder="2" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="538"/>
+        <Static id="Static28" taborder="3" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="577"/>
+        <Static id="Static22_00" taborder="4" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="616"/>
+        <Grid id="grdList" taborder="5" left="20" binddataset="dsDealDetail" top="228" autofittype="col" height="174" right="30" onexpanddown="grdList_onexpanddown">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="150"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="150"/>
+                <Column size="150"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="38" band="head"/>
+                <Row size="38"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="품목명" subsumtext="L0022"/>
+                <Cell col="1" text="규격" subsumtext="L0023"/>
+                <Cell col="2" text="단위" subsumtext="L0024"/>
+                <Cell col="3" text="수량" subsumtext="L0025"/>
+                <Cell col="4" text="단가" subsumtext="L0026"/>
+                <Cell col="5" text="할인" subsumtext="L0027"/>
+                <Cell col="6" text="금액" subsumtext="L0028"/>
+                <Cell col="7" text="세액" subsumtext="L0029"/>
+                <Cell col="8" text="비고" subsumtext="L0030"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:PRODUCT_NAME" expandshow="show"/>
+                <Cell col="1" text="bind:STANDARD" textAlign="center"/>
+                <Cell col="2" text="bind:UNIT" combodataset="dsUnit" combodatacol="value" combocodecol="code" displaytype="combotext" textAlign="center"/>
+                <Cell col="3" text="bind:AMOUNT" edittype="normal" editautoselect="true" displaytype="number"/>
+                <Cell col="4" progressbarblocksize="50" text="bind:LAST_PRICE" editautoselect="true" displaytype="currency" edittype="normal"/>
+                <Cell col="5" text="bind:DISCOUNT_PRICE" displaytype="currency" edittype="normal"/>
+                <Cell col="6" text="bind:TOTAL_PRICE" displaytype="currency"/>
+                <Cell col="7" displaytype="currency" text="bind:TAX_PRICE"/>
+                <Cell col="8" text="bind:ETC" edittype="normal"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="Static01_00" taborder="6" left="129" top="55" height="40" cssclass="sta_cm_box02L" right="30"/>
+        <Static id="Static15" taborder="7" height="40" cssclass="sta_cm_box02L" right="30" left="129" top="499"/>
+        <Static id="stacalSalesDate" taborder="8" text="거래일" left="20" top="55" width="110" height="40" cssclass="sta_WF_titleStar" langcode="L0002"/>
+        <Calendar id="calSalesDate" taborder="9" left="139" top="61" width="120" height="28" autoselect="true"/>
+        <Static id="stacboDealType" taborder="10" text="과세유형" left="559" top="55" width="110" height="40" cssclass="sta_WF_titleStar" langcode="L0004"/>
+        <Combo id="cboDealType" taborder="11" text="" left="679" top="61" width="140" height="28" value="01" index="-1" innerdataset="dsDealType" codecolumn="code" datacolumn="value" autoselect="true"/>
+        <CheckBox id="chkAddin" taborder="12" text="단가액 세액포함" left="829" top="55" width="140" height="40" value="true" langcode="L0005"/>
+        <CheckBox id="chkAccount" taborder="13" text="세금, 계산서 수취" top="55" width="180" height="40" left="969" langcode="L0006"/>
+        <Static id="stardoAccuntType" taborder="14" text="거래타입" left="269" top="55" width="130" height="40" cssclass="sta_WF_titleStar" langcode="L0003"/>
+        <Static id="staedtCustomerName" taborder="15" text="거래처" left="20" top="94" width="110" height="40" cssclass="sta_WF_titleStar" langcode="L0007"/>
+        <Static id="Static08_01_00" taborder="16" left="129" top="94" height="40" cssclass="sta_cm_box02L" right="30" onclick="Static08_01_00_onclick"/>
+        <Static id="Static02_01" taborder="17" text="대표자" left="20" top="133" width="110" height="40" cssclass="sta_cm_box01L" langcode="L0011"/>
+        <Static id="Static03_01_00" taborder="18" left="129" top="133" height="40" cssclass="sta_cm_box02L" right="30"/>
+        <Edit id="edtRepesentName" taborder="19" left="139" top="139" width="120" height="28" text="REPRESENTATIVE_NAME" enable="false"/>
+        <Static id="Static01_00_04_00" taborder="20" text="사업자번호" left="269" top="133" width="130" height="40" cssclass="sta_cm_box01L" langcode="L0012"/>
+        <Static id="Static01_00_00" taborder="21" text="영업사원" left="829" top="94" width="110" height="40" cssclass="sta_cm_box01L" langcode="L0010"/>
+        <Static id="Static01_00_04" taborder="22" text="담당자" left="829" top="133" width="110" height="40" cssclass="sta_cm_box01L" langcode="L0014"/>
+        <Edit id="edtStaffName" taborder="23" left="949" top="139" width="137" height="28" text="217-81-46957" autoselect="true"/>
+        <Static id="Static01_01" taborder="24" text="전화번호" left="559" top="94" width="110" height="40" cssclass="sta_cm_box01L" langcode="L0009"/>
+        <Static id="Static02" taborder="25" text="업체구분" left="559" top="133" width="110" height="40" cssclass="sta_cm_box01L" langcode="L0013"/>
+        <Combo id="cboSalesman" taborder="26" text="" left="949" top="100" width="137" height="28" value="" index="-1" autoselect="true"/>
+        <Radio id="rdoAccuntType" taborder="27" left="409" top="61" width="140" height="26" rowcount="-1" codecolumn="code" datacolumn="value" index="0" text="" value="01" innerdataset="dsType" columncount="-1" direction="vertical"/>
+        <Static id="staMiddlebar" taborder="28" text="거래 상세" left="20" top="20" height="28" cssclass="sta_WF_title02" right="750" onclick="divManufactCo_staMiddlebar_onclick" langcode="L0001"/>
+        <Edit id="edtCustomerName" taborder="29" left="139" top="100" width="315" height="28" text="217-81-46957" enable="false"/>
+        <Button id="btnSearchCustomer" taborder="30" text="찾기 (Alt+^)" left="460" top="100" width="89" height="28" cssclass="btn_cm_basic01" onclick="btnSearchCustomer_onclick" enable="false" langcode="L0008"/>
+        <Button id="btnCash" taborder="31" text="현금" left="676" width="70" height="28" cssclass="btn_cm_basic01" top="427" onclick="PaymentButton_onclick" langcode="L0033"/>
+        <Button id="btnBank" taborder="32" text="은행" left="676" width="70" height="28" cssclass="btn_cm_basic01" top="466" onclick="PaymentButton_onclick" langcode="L0037"/>
+        <Button id="btnBill" taborder="33" text="어음기록" left="676" width="70" height="28" cssclass="btn_cm_basic01" top="505" onclick="PaymentButton_onclick" langcode="L0041"/>
+        <Button id="btnCard" taborder="34" text="카드" left="676" width="70" height="28" cssclass="btn_cm_basic01" top="544" onclick="PaymentButton_onclick" langcode="L0045"/>
+        <Static id="Static29_00" taborder="35" text="수량합계" left="760" width="130" height="40" cssclass="sta_cm_box01L" top="577" langcode="L0049"/>
+        <Static id="staCash" taborder="36" text="현금지급" left="350" width="130" height="40" cssclass="sta_cm_box01L" top="421" langcode="L0032"/>
+        <Static id="staBank" taborder="37" text="계좌이체" left="350" width="130" height="40" cssclass="sta_cm_box01L" top="460" langcode="L0036"/>
+        <Static id="staBill" taborder="38" text="어음" left="350" width="130" height="40" cssclass="sta_cm_box01L" top="499" langcode="L0040"/>
+        <Static id="staCard" taborder="39" text="카드지급" left="350" width="130" height="40" cssclass="sta_cm_box01L" top="538" langcode="L0044"/>
+        <Static id="Static29" taborder="40" text="지급액계" left="350" width="130" height="40" cssclass="sta_cm_box01L" top="577" langcode="L0048"/>
+        <Static id="Static23_00" taborder="41" left="350" width="130" height="40" cssclass="sta_cm_box01L" text="참고사항" top="616" langcode="L0051"/>
+        <Static id="Static01" taborder="42" text="할인전" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="421" langcode="L0031"/>
+        <Static id="Static07" taborder="43" text="할인" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="460" langcode="L0035"/>
+        <Static id="staDealPrice" taborder="44" text="매입/매출액" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="499" langcode="L0039"/>
+        <Static id="Static21" taborder="45" text="세액" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="538" langcode="L0043"/>
+        <Static id="Static27" taborder="46" text="합계" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="577" langcode="L0047"/>
+        <Static id="staCredit" taborder="47" text="외상" left="20" width="130" height="40" cssclass="sta_cm_box01L" top="616" langcode="L0050"/>
+        <Edit id="Edit07_00_00" taborder="48" left="490" top="622" height="28" width="590" autoselect="true"/>
+        <Button id="btnSave" taborder="49" text="저장(F9)" width="76" height="28" cssclass="btn_WF_add01" right="30" top="193" onclick="btnSave_onclick" langcode="L0021"/>
+        <Button id="btnDelete" taborder="50" text="품목삭제" top="193" width="76" height="28" cssclass="btn_WF_delete01" right="113" onclick="btnDelete_onclick" langcode="L0020"/>
+        <Button id="btnAdd" taborder="51" text="품목추가" top="193" width="76" height="28" cssclass="btn_WF_delete01" right="195" onclick="btnAdd_onclick" langcode="L0019"/>
+        <Button id="btnTaxBillPublish" taborder="52" text="세금계산서/계산서 발행(^+L)" width="200" height="28" cssclass="btn_cm_basic01" top="193" left="278" langcode="L0017"/>
+        <Button id="btnPrint" taborder="53" text="거래내역인쇄" width="150" height="28" cssclass="btn_cm_basic01" top="193" left="122" langcode="L0016"/>
+        <Button id="btnPriceReset" taborder="54" text="잔액조회" width="96" height="28" cssclass="btn_cm_basic01" top="193" left="20" langcode="L0015"/>
+        <Static id="staFundTotal" taborder="55" text="적립금 잔고" left="760" top="421" width="130" height="40" cssclass="sta_cm_box01L" langcode="L0034"/>
+        <Static id="staFundAdd" taborder="56" text="적립금 추가" left="760" top="460" width="130" height="40" cssclass="sta_cm_box01L" langcode="L0038"/>
+        <Static id="staFundUse" taborder="57" text="적립금 사용" left="760" top="499" width="130" height="40" cssclass="sta_cm_box01L" langcode="L0042"/>
+        <Button id="btnBillPublish" taborder="58" text="거래명세서/영수증 발행(^+P)" top="193" width="190" height="28" cssclass="btn_cm_basic01" left="484" langcode="L0018"/>
+        <Combo id="cboCoporType" taborder="59" top="139" width="140" height="28" value="" index="-1" innerdataset="dsCoporType" codecolumn="code" datacolumn="value" left="679" enable="false" text=""/>
+        <MaskEdit id="medtLast" taborder="60" left="160" top="427" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtDiscount" taborder="61" left="160" top="466" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtSales" taborder="62" left="160" top="505" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtTax" taborder="63" left="160" top="544" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtAll" taborder="64" left="160" top="583" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtCredit" taborder="65" left="160" top="622" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtCash" taborder="66" left="490" top="427" width="180" height="28" format="###,###,###" value="0" autoselect="true"/>
+        <MaskEdit id="medtBank" taborder="67" left="490" top="466" width="180" height="28" format="###,###,###" value="0" autoselect="true"/>
+        <MaskEdit id="medtBill" taborder="68" left="490" top="505" width="180" height="28" format="###,###,###" value="0" autoselect="true"/>
+        <MaskEdit id="medtPayment" taborder="69" left="490" top="583" width="256" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtCard" taborder="70" left="490" top="544" width="180" height="28" format="###,###,###" value="0" autoselect="true"/>
+        <MaskEdit id="medtFundAdd" taborder="71" left="900" top="466" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtFundUse" taborder="72" left="900" top="505" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtAmount" taborder="73" left="900" top="583" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtFundTotal" taborder="74" left="900" top="427" width="180" height="28" format="###,###,###" autoselect="true"/>
+        <MaskEdit id="medtTelNum" taborder="75" left="679" top="100" width="140" height="28" enable="false" format="@@@-@@@@-@@@@" type="string" onchanged="MaskEdit_onchanged"/>
+        <MaskEdit id="medtBusinessCode" taborder="76" left="409" top="139" width="140" height="28" enable="false" format="@@-@@@-{@@@@@}" type="string"/>
+        <Static id="stacalPaymentDate" taborder="77" text="결제 약속일" left="760" top="538" width="130" height="40" cssclass="sta_WF_titleStar" langcode="L0046"/>
+        <Calendar id="calPaymentDate" taborder="78" left="900" top="544" width="180" height="28" autoselect="true"/>
+        <Button id="btnKor" taborder="79" text="한국어" top="13" width="76" height="28" cssclass="btn_WF_delete01" right="111" onclick="btnKor_onclick" langcode="L0052"/>
+        <Button id="btnEng" taborder="80" text="영어" top="13" width="76" height="28" cssclass="btn_WF_delete01" right="31" onclick="btnEng_onclick" langcode="L0053"/>
+      </Layout>
+    </Layouts>
+    <Bind>
+      <BindItem id="item0" compid="calSalesDate" propid="value" datasetid="dsDeal" columnid="DEAL_DATE"/>
+      <BindItem id="item1" compid="cboDealType" propid="value" datasetid="dsDeal" columnid="TAX_TYPE"/>
+      <BindItem id="item2" compid="chkAddin" propid="value" datasetid="dsDeal" columnid="ADD_IN_TAX"/>
+      <BindItem id="item3" compid="chkAccount" propid="value" datasetid="dsDeal" columnid="ACCOUNT_BILL"/>
+      <BindItem id="item4" compid="edtRepesentName" propid="value" datasetid="dsDealCustomer" columnid="REPRESENT_NAME"/>
+      <BindItem id="item5" compid="edtStaffName" propid="value" datasetid="dsDeal" columnid="STAFF_NAME"/>
+      <BindItem id="item6" compid="cboSalesman" propid="value" datasetid="dsDeal" columnid="SALESMAN_CODE"/>
+      <BindItem id="item7" compid="rdoAccuntType" propid="value" datasetid="dsDeal" columnid="DEAL_TYPE"/>
+      <BindItem id="item8" compid="edtCustomerName" propid="value" datasetid="dsDealCustomer" columnid="CUSTOMER_NAME"/>
+      <BindItem id="item9" compid="cboCoporType" propid="value" datasetid="dsDealCustomer" columnid="CORPORATE_TYPE"/>
+      <BindItem id="item10" compid="medtLast" propid="value" datasetid="dsDeal" columnid="BEFORE_PRICE"/>
+      <BindItem id="item11" compid="medtDiscount" propid="value" datasetid="dsDeal" columnid="DISCOUNT_PRICE"/>
+      <BindItem id="item12" compid="medtSales" propid="value" datasetid="dsDeal" columnid="LAST_PRICE"/>
+      <BindItem id="item13" compid="medtTax" propid="value" datasetid="dsDeal" columnid="TAX_PRICE"/>
+      <BindItem id="item14" compid="medtAll" propid="value" datasetid="dsDeal" columnid="TOTAL_PRICE"/>
+      <BindItem id="item15" compid="medtCredit" propid="value" datasetid="dsDeal" columnid="CREDIT_PRICE"/>
+      <BindItem id="item16" compid="medtCash" propid="value" datasetid="dsDeal" columnid="CASH_PRICE"/>
+      <BindItem id="item17" compid="medtBank" propid="value" datasetid="dsDeal" columnid="ACCOUNT_PRICE"/>
+      <BindItem id="item18" compid="medtBill" propid="value" datasetid="dsDeal" columnid="BILL_PRICE"/>
+      <BindItem id="item19" compid="medtPayment" propid="value" datasetid="dsDeal" columnid="PAYMENT_PRICE"/>
+      <BindItem id="item20" compid="medtCard" propid="value" datasetid="dsDeal" columnid="CARD_PRICE"/>
+      <BindItem id="item21" compid="medtFundAdd" propid="value" datasetid="dsDeal" columnid="ADD_RESERVE_FUND"/>
+      <BindItem id="item22" compid="medtFundUse" propid="value" datasetid="dsDeal" columnid="USE_RESERVE_FUND"/>
+      <BindItem id="item23" compid="medtAmount" propid="value" datasetid="dsDeal" columnid="TOTAL_AMOUNT"/>
+      <BindItem id="item24" compid="medtFundTotal" propid="value" datasetid="dsDeal" columnid="ACCOUMULATE_FUND"/>
+      <BindItem id="item25" compid="medtTelNum" propid="value" datasetid="dsDealCustomer" columnid="STAFF_TELNUM"/>
+      <BindItem id="item26" compid="medtBusinessCode" propid="value" datasetid="dsDealCustomer" columnid="BUSINESS_CODE"/>
+      <BindItem id="item27" compid="calPaymentDate" propid="value" datasetid="dsDealCustomer" columnid="PAYMENT_DATE"/>
+    </Bind>
+    <Objects>
+      <Dataset id="dsType">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="value">매출거래</Col>
+            <Col id="code">01</Col>
+          </Row>
+          <Row>
+            <Col id="value">매입거래</Col>
+            <Col id="code">02</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsLang">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="ko" type="STRING" size="256"/>
+          <Column id="en" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">L0001</Col>
+            <Col id="ko">거래 상세</Col>
+            <Col id="en">Transaction details</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0002</Col>
+            <Col id="ko">거래일</Col>
+            <Col id="en">Trading day</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0003</Col>
+            <Col id="ko">거래타입</Col>
+            <Col id="en">Transaction type</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0004</Col>
+            <Col id="ko">과세유형</Col>
+            <Col id="en">Tax type</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0005</Col>
+            <Col id="ko">단가액 세액포함</Col>
+            <Col id="en">Unit price including tax</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0006</Col>
+            <Col id="ko">세금, 계산서 수취</Col>
+            <Col id="en">Tax, Bill receipt</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0007</Col>
+            <Col id="ko">거래처</Col>
+            <Col id="en">account</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0008</Col>
+            <Col id="ko">찾기 (Alt+^)</Col>
+            <Col id="en">Find (Alt+^)</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0009</Col>
+            <Col id="ko">전화번호</Col>
+            <Col id="en">Phone number</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0010</Col>
+            <Col id="ko">영업사원</Col>
+            <Col id="en">Salesperson</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0011</Col>
+            <Col id="ko">대표자</Col>
+            <Col id="en">representative</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0012</Col>
+            <Col id="ko">사업자번호</Col>
+            <Col id="en">Business Number</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0013</Col>
+            <Col id="ko">업체구분</Col>
+            <Col id="en">Company type</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0014</Col>
+            <Col id="ko">담당자</Col>
+            <Col id="en">manager</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0015</Col>
+            <Col id="ko">잔액조회</Col>
+            <Col id="en">Balance</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0016</Col>
+            <Col id="ko">거래내역인쇄</Col>
+            <Col id="en">Transaction history</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0017</Col>
+            <Col id="ko">세금계산서/계산서 발행(^+L)</Col>
+            <Col id="en">Tax bill(^+L)</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0018</Col>
+            <Col id="ko">거래명세서/영수증 발행(^+P)</Col>
+            <Col id="en">Trading statement(^+P)</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0019</Col>
+            <Col id="ko">품목추가</Col>
+            <Col id="en">Add item</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0020</Col>
+            <Col id="ko">품목삭제</Col>
+            <Col id="en">Delete item</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0021</Col>
+            <Col id="ko">저장(F9)</Col>
+            <Col id="en">Save(F9)</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0022</Col>
+            <Col id="ko">품목명</Col>
+            <Col id="en">Item name</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0023</Col>
+            <Col id="ko">규격</Col>
+            <Col id="en">standard</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0024</Col>
+            <Col id="ko">단위</Col>
+            <Col id="en">unit</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0025</Col>
+            <Col id="ko">수량</Col>
+            <Col id="en">Quantity</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0026</Col>
+            <Col id="ko">단가</Col>
+            <Col id="en">unit price</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0027</Col>
+            <Col id="ko">할인</Col>
+            <Col id="en">Sale</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0028</Col>
+            <Col id="ko">금액</Col>
+            <Col id="en">Price</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0029</Col>
+            <Col id="ko">세액</Col>
+            <Col id="en">Tax amount</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0030</Col>
+            <Col id="ko">비고</Col>
+            <Col id="en">Remark</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0031</Col>
+            <Col id="ko">할인전</Col>
+            <Col id="en">Before discount</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0032</Col>
+            <Col id="ko">현금지급</Col>
+            <Col id="en">Cash payments</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0033</Col>
+            <Col id="ko">현금</Col>
+            <Col id="en">cash</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0034</Col>
+            <Col id="ko">적립금 잔고</Col>
+            <Col id="en">Reserve balance</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0035</Col>
+            <Col id="ko">할인</Col>
+            <Col id="en">Sale</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0036</Col>
+            <Col id="ko">계좌이체</Col>
+            <Col id="en">Bank Transfer</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0037</Col>
+            <Col id="ko">은행</Col>
+            <Col id="en">Bank</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0038</Col>
+            <Col id="ko">적립금 추가</Col>
+            <Col id="en">Add points</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0039</Col>
+            <Col id="ko">매입/매출액</Col>
+            <Col id="en">Purchase/Sales</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0040</Col>
+            <Col id="ko">어음</Col>
+            <Col id="en">note</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0041</Col>
+            <Col id="ko">어음기록</Col>
+            <Col id="en">Bill record</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0042</Col>
+            <Col id="ko">적립금 사용</Col>
+            <Col id="en">Use of reserves</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0043</Col>
+            <Col id="ko">세액</Col>
+            <Col id="en">Tax amount</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0044</Col>
+            <Col id="ko">카드지급</Col>
+            <Col id="en">Card payment</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0045</Col>
+            <Col id="ko">카드</Col>
+            <Col id="en">Card</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0046</Col>
+            <Col id="ko">결제 약속일</Col>
+            <Col id="en">Payment date</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0047</Col>
+            <Col id="ko">합계</Col>
+            <Col id="en">Sum</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0048</Col>
+            <Col id="ko">지급액계</Col>
+            <Col id="en">Payment amount</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0049</Col>
+            <Col id="ko">수량합계</Col>
+            <Col id="en">Total quantity</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0050</Col>
+            <Col id="ko">외상</Col>
+            <Col id="en">credit</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0051</Col>
+            <Col id="ko">참고사항</Col>
+            <Col id="en">Note</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0052</Col>
+            <Col id="ko">한국어</Col>
+            <Col id="en">Kor</Col>
+          </Row>
+          <Row>
+            <Col id="code">L0053</Col>
+            <Col id="ko">영어</Col>
+            <Col id="en">Eng</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsDealType">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="value">과세거래</Col>
+            <Col id="code">01</Col>
+          </Row>
+          <Row>
+            <Col id="value">영세거래</Col>
+            <Col id="code">02</Col>
+          </Row>
+          <Row>
+            <Col id="value">면세거래</Col>
+            <Col id="code">03</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsType_en">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="value">Sales</Col>
+            <Col id="code">01</Col>
+          </Row>
+          <Row>
+            <Col id="value">Purchase</Col>
+            <Col id="code">02</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsDealType_en">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="value">Taxable</Col>
+            <Col id="code">01</Col>
+          </Row>
+          <Row>
+            <Col id="value">Small</Col>
+            <Col id="code">02</Col>
+          </Row>
+          <Row>
+            <Col id="value">Duty-free</Col>
+            <Col id="code">03</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.btnKor_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//선택된 언어에 맞춰 Radio, Combo 데이터셋 변경
+	this.rdoAccuntType.set_innerdataset("dsType");
+	this.cboDealType.set_innerdataset("dsDealType");
+	
+	//레이블 변경 함수 호출
+	this.gfnChangeLanguage("ko", this);
+};
+
+this.btnEng_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//선택된 언어에 맞춰 Radio, Combo 데이터셋 변경
+	this.rdoAccuntType.set_innerdataset("dsType_en");
+	this.cboDealType.set_innerdataset("dsDealType_en");
+	
+	//레이블 변경 함수 호출
+	this.gfnChangeLanguage("en", this);
+};
+
+//레이블 변경 함수
+this.gfnChangeLanguage = function(sLocale, objForm)
+{
+	//컴포넌트 리스트 가져오기
+	var objComps = objForm.components;
+	var objComp;
+	
+	//컴포넌트 갯수 가져오기
+	var nCount = objComps.length;
+	
+	var nFRow;
+	var sLangCode;
+	var sValue;
+	
+	this.dsLang.set_enableevent(false);
+	for(var i=0;i<nCount;i++)
+	{
+		//컴포넌트 가져오기
+		objComp = objComps[i];
+		
+		//컴포넌트가 Div일 경우
+		if(objComp instanceof nexacro.Div)
+		{
+			//레이블 변경 함수 재귀 호출
+			this.gfnChangeLanguage(sLocale, objComp.form);
+		}
+		//컴포넌트가 PopupDiv일 경우
+		else if(objComp instanceof nexacro.PopupDiv)
+		{
+			//레이블 변경 함수 재귀 호출
+			this.gfnChangeLanguage(sLocale, objComp.form);
+		}
+		//컴포넌트가 Tab일 경우
+		else if(objComp instanceof nexacro.Tab)
+		{
+			//Tab 페이지 갯수 가져오기
+			var nTabCount = objComp.tabpages.length;
+			for(var j=0;j<nTabCount;j++)
+			{
+				//Tab 페이지 가져오기
+				var objTabPage = objComp.tabpages[j];
+				
+				//레이블 변경 함수 재귀 호출
+				this.gfnChangeLanguage(sLocale, objTabPage.form)
+			}			
+		}
+		//컴포넌트가 Grid일 경우
+		else if(objComp instanceof nexacro.Grid)
+		{
+			//레이블 변경함수(그리드) 호출
+			this.gfnChangeLanguageGrid(sLocale, objComp);
+		}
+		//일반 컴포넌트일 경우
+		else
+		{
+			//컴포넌트에 설정한 언어코드 정보 가져오기
+			sLangCode = objComp.langcode;
+			
+			//언어코드가 있을 경우
+			if(sLangCode)
+			{
+				//언어코드에 해당하는 Row 찾기
+				nFRow = this.dsLang.findRow("code", sLangCode);
+				
+				//해당 코드 Row가 존재할 경우
+				if(nFRow!=-1)
+				{
+					//변경할 언어 레이블 정보 가져오기
+					sValue = this.dsLang.getColumn(nFRow, sLocale);
+					
+					//Static, Button, CheckBox일 경우
+					if(objComp instanceof nexacro.Static || objComp instanceof nexacro.Button || objComp instanceof nexacro.CheckBox)
+					{
+						//text 속성 값 변경
+						objComp.set_text(sValue);
+					}
+					//나머지 컴포넌트일 경우
+					else
+					{
+						//value 속성 값 변경
+						objComp.set_value(sValue);
+					}
+				}
+			}
+		}
+	}
+	
+	this.dsLang.set_enableevent(true);
+}
+
+//레이블 변경함수(그리드)
+this.gfnChangeLanguageGrid = function(sLocale, objGrid)
+{
+	//Head Cell 갯수 구하기
+	var nHeadCount = objGrid.getCellCount("head");
+	
+	//Summ Cell 갯수 구하기
+	var nSummCount = objGrid.getCellCount("summ");
+	
+	var nFRow;
+	var sLangCode;
+	var sValue;
+	
+	for(var i=0;i<nHeadCount;i++)
+	{
+		//Cell에 설정한 언어코드 정보 가져오기
+		sLangCode = objGrid.getCellProperty("head", i, "subsumtext");
+		
+		//언어코드가 있을 경우
+		if(sLangCode)
+		{
+			//언어코드에 해당하는 Row 찾기
+			nFRow = this.dsLang.findRow("code", sLangCode);
+			
+			//해당 코드 Row가 존재할 경우
+			if(nFRow!=-1)
+			{
+				//변경할 언어 레이블 정보 가져오기
+				sValue = this.dsLang.getColumn(nFRow, sLocale);
+				
+				//text 속성 값 변경
+				objGrid.setCellProperty("head", i, "text", sValue);
+			}
+		}
+	}
+	
+	for(var i=0;i<nSummCount;i++)
+	{
+		//Cell에 설정한 언어코드 정보 가져오기
+		sLangCode = objGrid.getCellProperty("summ", i, "subsumtext");
+		
+		//언어코드가 있을 경우
+		if(sLangCode)
+		{
+			//언어코드에 해당하는 Row 찾기
+			nFRow = this.dsLang.findRow("code", sLangCode);
+			
+			//해당 코드 Row가 존재할 경우
+			if(nFRow!=-1)
+			{
+				//변경할 언어 레이블 정보 가져오기
+				sValue = this.dsLang.getColumn(nFRow, sLocale);
+				
+				//text 속성 값 변경
+				objGrid.setCellProperty("summ", i, "text", sValue);
+			}
+		}
+	}
+}]]></Script>
+  </Form>
+</FDL>

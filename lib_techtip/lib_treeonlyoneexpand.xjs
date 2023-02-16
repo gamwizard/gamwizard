@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	    	: 하나의 노드만 Expand 처리하는 함수
+* @param obj  			: Expand 처리할 Grid
+* @param nRow   		: Expand 처리할 Dataset Row
+* @return           	: 없음
+*/
+this.gfnTreeExpandOnlyOne = function(obj, nRow)
+{
+	var objDs = obj.getBindDataset();
+	var nCnt = objDs.rowcount;
+	var bStatus;
+	var nRow;
+	var nFindRow;
+	var nTreeRow;
+	var arrScope = [];
+		
+	//해당 Dataset Row를 Array에 저장
+	arrScope[arrScope.length] = nRow;
+	
+	nFindRow = nRow;
+	
+	//Expand 동작이 발생한 Row의 Parent Row들을 찾아서 arrScope에 저장
+	while(1)
+	{
+		nFindRow = obj.getTreeParentRow(nFindRow, true);
+		
+		//최상위까지 찾았을 경우 break
+		if(nFindRow==-1)break;
+		
+		//해당 Dataset Row를 Array에 저장
+		arrScope[arrScope.length] = nFindRow;
+	}
+	
+	//현재 Expand하고자 하는 Row를 제외한 영역에 Expand된 Row가 있는 지 찾아서
+	//Collapse 시키기
+	obj.set_enableredraw(false);
+	for(var i=0;i<nCnt;i++)
+	{
+		//Dataset Row를 Tree Row로 바꾸기
+		nTreeRow = obj.getTreeRow(i);
+		
+		//Tree에 표현되지 않는 Row일 경우 continue
+		if(nTreeRow==-1)continue;
+			
+		//TreeState 가져오기
+		bStatus = obj.getTreeStatus(nTreeRow);
+		
+		if(arrScope.indexOf(i)>-1)
+		{
+			//TreeState를 Expand로 바꾸기
+			if(bStatus==0)obj.setTreeStatus(nTreeRow, true);
+		}else
+		{
+			//TreeState를 Collapse로 바꾸기
+			if(bStatus==1)obj.setTreeStatus(nTreeRow, false);
+		}
+	}
+	obj.set_enableredraw(true);
+	objDs.set_rowposition(nRow);
+}]]></Script>

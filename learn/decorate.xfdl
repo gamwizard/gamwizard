@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="decorate" width="1280" height="720" titletext="New Form" onload="decorate_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="Static00" taborder="0" text="&lt;i v='true'&gt;안녕하세요.&lt;/i&gt;&#13;&#10;저는 &lt;b v='true&gt;투비소프트에서 &lt;fs v='12'&gt;&lt;fc v='red'&gt;예쁨&lt;/fs&gt;&lt;/fc&gt;을 담당&lt;/b&gt;하는 &lt;fs v='12'&gt;&lt;fc v='yellow'&gt;투비나나&lt;/fc&gt;&lt;/fs&gt;입니다." left="40" top="44" width="350" height="70" usedecorate="false" background="#555555" color="#ffffff" padding="5px" wordSpacing="1px" wordWrap="english" visible="true"/>
+        <Static id="Static01" taborder="1" text="&lt;i v='true'&gt;안녕하세요.&lt;/i&gt;&#13;&#10;저는 &lt;b v='true&gt;투비소프트에서 &lt;fs v='12'&gt;&lt;fc v='red'&gt;예쁨&lt;/fs&gt;&lt;/fc&gt;을 담당&lt;/b&gt;하는 &lt;fs v='12'&gt;&lt;fc v='yellow'&gt;투비나나&lt;/fc&gt;&lt;/fs&gt;입니다." left="40" top="120" width="350" height="70" usedecorate="true" background="#555555" color="#ffffff" padding="5px" wordSpacing="1px" wordWrap="english"/>
+        <Static id="Static02" taborder="2" text="&lt;fs v='12'&gt;&lt;i v='true'&gt;&lt;b v='true'&gt;usedecorate&lt;/i&gt; &lt;fc v='blue'&gt;적용 &lt;/fc&gt;&lt;/fs&gt;결과&lt;/b&gt;입니다." left="38" top="215" width="250" height="50" usedecorate="true" border="1px solid #555555" padding="10px 10px 10px 10px" visible="false"/>
+        <Static id="Static03" taborder="3" text="text-decorate 적용 결과입니다." left="290" top="215" width="250" height="50" border="1px solid #555555" padding="10px 10px 10px 10px" textDecoration="overline underline line-through" visible="false"/>
+        <Static id="stDeco" taborder="4" left="38" top="370" width="240" height="180" border="1px solid #d5d5d5" text="색상테스트 입니다.&#10;yellow 는 노랑&#10;red 는 빨강 &#10;blue 는 파랑입니다." padding="9px" textAlign="left" verticalAlign="top"/>
+        <TextArea id="txtDeco" taborder="5" left="317" top="370" width="240" height="180" value="색상테스트 입니다.&#10;yellow 는 노랑&#10;red 는 빨강 &#10;blue 는 파랑입니다."/>
+        <Static id="stDescript" taborder="6" text="yellow 노랑/ red 빨강/ blue 파랑" left="38" top="320" width="373" height="32" font="normal 13pt/normal Gulim"/>
+        <Static id="stTitle" taborder="7" text="KFA &gt; 2019 &gt; 국가대표&lt;b v='true'&gt;&lt;fc v='blue'&gt; &gt; &lt;/fc&gt;&lt;fs v='14'&gt;선수 명단&lt;/fs&gt;&lt;/b&gt;" left="632" top="198" width="338" height="22" usedecorate="true" font="normal 12pt/normal &quot;nanumgothic&quot;"/>
+        <Static id="stTotal" taborder="8" text="총&lt;fc v='red'&gt;&lt;fs v='13'&gt; 23,857,412 &lt;/fs&gt;&lt;/fc&gt;건" left="1050" top="234" width="140" height="30" font="normal 12pt/normal &quot;nanumgothic&quot;" usedecorate="true"/>
+        <Grid id="Grid00" taborder="9" left="632" top="270" width="558" height="259" binddataset="Dataset00" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="&lt;fc v=&quot;green&quot;&gt;[포지션]&lt;/fc&gt; 성명" displaytype="decoratetext" textAlign="left" padding="0px 0px 0px 15px"/>
+                <Cell col="1" text="소속"/>
+                <Cell col="2" text="출생년도"/>
+                <Cell col="3" text="키/몸무게"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:&quot;&lt;fc v='green'&gt;&quot;+Column0+&quot;&lt;/fc&gt;   &quot;+ Column1" displaytype="decoratetext" textAlign="left" padding="0px 0px 0px 15px"/>
+                <Cell col="1" text="bind:Column2" padding="0px 0px 0px 15px"/>
+                <Cell col="2" text="bind:Column3" padding="0px 0px 0px 15px"/>
+                <Cell col="3" text="bind:Column4" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="10" text="Button00" left="622" top="89" width="95" height="31" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.yellow = /(노랑|yellow|Yellow|YELLOW)/gi;
+this.red = /(빨강|red|Red|RED)/gi;
+this.blue = /(파랑|blue|Blue|BLUE)/gi;
+
+this.search = "";
+
+
+this.decorate_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	var stText = "대메뉴>중메뉴>소메뉴<b v='true'><fc v='blue'>></fc><fs v='12'>메뉴명</fs></b>";
+	//<b v='true'>Text</b>
+	//<fs v='12'>Text</fs>
+	//<fc v='red'>Text</fc>
+
+};
+
+// SQL Highlight 기능 설정함수
+this.fn_setDecorate = function (strText)
+{
+	var i = 0;
+
+	// 문자열이 없을 경우 리턴
+	if (this.gfnIsNull(strText) == true) 
+	{
+		return "";
+	}
+
+	// Keyword 예약어 색상 설정
+	strText = strText.toString().replace(this.search, "<fc v='red'>" + "$&" + "</fc>");
+
+	return strText;
+};
+
+/*****************************************************************************
+ 함 수 명 칭 : gfnIsNull
+ 함 수 설 명 : 입력값 Null 체크 함수
+ 파 라 미 터 : pvVal – 입력값
+ 리 턴 내 용 : true/false 값이 Null일 경우 true
+ *****************************************************************************/
+this.gfnIsNull = function (pvVal)
+{
+	if (new String(pvVal).valueOf() == "undefined") 
+	{
+		return true;
+	}
+	if (pvVal == null) 
+	{
+		return true;
+	}
+	if (("x" + pvVal == "xNaN") && (new String(pvVal.length).valueOf() == "undefined")) 
+	{
+		return true;
+	}
+	if (pvVal.length == 0) 
+	{
+		return true;
+	}
+
+	return false;
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var regExp = new RegExp(/\s\*/g);
+var strTest = "test *string";
+var strRet = strTest.replace(regExp,'-');
+
+alert(strRet);
+
+};
+]]></Script>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">[GK]</Col>
+            <Col id="Column1">조현우</Col>
+            <Col id="Column2">대구FC</Col>
+            <Col id="Column3">1991.09.25</Col>
+            <Col id="Column4">189Cm / 75Kg</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">[DF]</Col>
+            <Col id="Column1">김민재</Col>
+            <Col id="Column3">1996.11.15</Col>
+            <Col id="Column2">전북미등록</Col>
+            <Col id="Column4">188Cm / 78Kg</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">[DF]</Col>
+            <Col id="Column1">김영권</Col>
+            <Col id="Column3">1990.02.27</Col>
+            <Col id="Column4">184Cm / 74Kg</Col>
+            <Col id="Column2">전북미등록</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">[DF]</Col>
+            <Col id="Column1">홍철</Col>
+            <Col id="Column2">수원삼성블루윙즈</Col>
+            <Col id="Column4">176Cm / 70Kg</Col>
+            <Col id="Column3">1990.09.17</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">[DF]</Col>
+            <Col id="Column1">이용</Col>
+            <Col id="Column3">1986.12.24</Col>
+            <Col id="Column4">180Cm / 74Kg</Col>
+            <Col id="Column2">전북현대모터스</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">[MF]</Col>
+            <Col id="Column1">이재성</Col>
+            <Col id="Column3">1992.08.10</Col>
+            <Col id="Column4">180Cm / 70Kg</Col>
+            <Col id="Column2">전북미등록</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">백승호</Col>
+            <Col id="Column0">[MF]</Col>
+            <Col id="Column3">1997.03.17</Col>
+            <Col id="Column2">경기미등록</Col>
+            <Col id="Column4">152Cm / 40Kg</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">나상호</Col>
+            <Col id="Column0">[MF]</Col>
+            <Col id="Column3">1996.08.12</Col>
+            <Col id="Column4">173Cm / 70Kg</Col>
+            <Col id="Column2">광주미등록</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">손흥민</Col>
+            <Col id="Column0">[MF]</Col>
+            <Col id="Column2">서울미등록</Col>
+            <Col id="Column4">179Cm / 65Kg</Col>
+            <Col id="Column3">1992.07.08</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">황인범</Col>
+            <Col id="Column0">[MF]</Col>
+            <Col id="Column4">177Cm / 70Kg</Col>
+            <Col id="Column3">1996.09.20</Col>
+            <Col id="Column2">대전미등록</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">황의조</Col>
+            <Col id="Column0">[FW]</Col>
+            <Col id="Column3">1992.08.28</Col>
+            <Col id="Column2">경기미등록</Col>
+            <Col id="Column4">183Cm / 70Kg</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

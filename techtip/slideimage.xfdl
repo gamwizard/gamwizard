@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="slideimage" width="400" height="430" onload="slideimage_onload" titletext="Slide Image (애니메이션을 이용한 이미지 슬라이드 기능)">
+    <Layouts>
+      <Layout height="430" mobileorientation="landscape" width="400">
+        <Div id="divBanner" taborder="0" left="40" top="10" width="320" height="300" text="" border="1px solid #808080"/>
+        <Button id="btnPrev" taborder="1" text="◀" left="10" top="135" width="30" height="50" onclick="btnPrev_onclick"/>
+        <Button id="btnNext" taborder="2" text="▶" left="360" top="135" width="30" height="50" onclick="btnNext_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsImageList">
+        <ColumnInfo>
+          <Column id="img" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="img">imagerc::slideimage/Chrysanthemum.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Lighthouse.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Desert.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Hydrangeas.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Koala.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Tulips.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Penguins.jpg</Col>
+          </Row>
+          <Row>
+            <Col id="img">imagerc::slideimage/Jellyfish.jpg</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > slideimage
+*  techtip 애니메이션을 이용한 이미지 슬라이드 기능
+*  @FileName	slideimage.xfdl 
+*******************************************************************************
+*  2019.06.21		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_slideimage.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ /**
+ * @description 화면 onload시 처리내역
+*/
+this.slideimage_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//슬라이드 이미지 초기화 함수 호출
+	this.gfnInitSlideImage(this.divBanner, this.dsImageList);
+};
+
+this.btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//슬라이드 이미지 갯수
+	var nCount = this.divBanner.form.components.length;
+	
+	//표시될 슬라이드 이미지의 Index가 이미지 갯수보다 작을경우
+	if(this.divBanner.stepIdx>0)
+	{
+		//다음 이미지 Index로 이동
+		this.gfnSetSlideImage(this.divBanner, this.divBanner.stepIdx-1);
+	}else
+	{
+		//마지막 이미지 Index로 이동
+		this.gfnSetSlideImage(this.divBanner, nCount-1);
+	}
+};
+
+this.btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//슬라이드 이미지 갯수
+	var nCount = this.divBanner.form.components.length;
+	
+	//표시될 슬라이드 이미지의 Index가 이미지 갯수보다 작을경우
+	if(this.divBanner.stepIdx+1<nCount)
+	{
+		//다음 이미지 Index로 이동
+		this.gfnSetSlideImage(this.divBanner, this.divBanner.stepIdx+1);
+	}else
+	{
+		//처음 이미지 Index로 이동
+		this.gfnSetSlideImage(this.divBanner, 0);
+	}
+};]]></Script>
+  </Form>
+</FDL>

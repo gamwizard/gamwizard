@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="accordionmenu" width="410" height="650" titletext="Accordion Menu (아코디언 메뉴)" onload="accordionmenu_onload">
+    <Layouts>
+      <Layout height="650" mobileorientation="landscape" width="410">
+        <Button id="btnMenu01" taborder="0" text="메뉴1" left="10" top="5" width="390" height="30" onclick="Button04_onclick"/>
+        <Div id="divMenu01" taborder="1" text="Div00" left="10" top="35" width="390" height="230" border="1px solid #c2c2c2">
+          <Layouts>
+            <Layout>
+              <Grid id="grdMenu00" taborder="0" left="0" top="0" autofittype="col" treeusecheckbox="false" treeinitstatus="expand,all" cssclass="grd_LF_treeMenu" useselcolor="false" scrollbarsize="10" binddataset="dsMenu00" oncellclick="grdMenu00_oncellclick" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="180"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="body">
+                      <Cell text="bind:MENU_NM" displaytype="normal" treelevel="bind:MENU_LVL" cssclass="expr:MENU_LVL==&quot;0&quot;?&quot;cellMenu01&quot;:&quot;cellSubMenu01&quot;"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="btnMenu02" taborder="2" text="메뉴2" left="10" top="264" width="390" height="30" onclick="Button05_onclick"/>
+        <Div id="divMenu02" taborder="3" text="Div00" left="10" top="293" width="390" height="230" border="1px solid #c2c2c2">
+          <Layouts>
+            <Layout>
+              <Grid id="grdMenu01" taborder="0" left="0" top="0" autofittype="col" treeusecheckbox="false" treeinitstatus="expand,all" cssclass="grd_LF_treeMenu" useselcolor="false" scrollbarsize="10" binddataset="dsMenu00" oncellclick="grdMenu01_oncellclick" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="180"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="body">
+                      <Cell text="bind:MENU_NM" displaytype="normal" treelevel="bind:MENU_LVL" cssclass="expr:MENU_LVL==&quot;0&quot;?&quot;cellMenu01&quot;:&quot;cellSubMenu01&quot;"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="btnMenu03" taborder="4" text="메뉴3" left="10" top="522" width="390" height="30" onclick="Button06_onclick"/>
+        <Div id="divMenu03" taborder="5" text="Div00" left="10" top="551" width="390" height="230" border="1px solid #c2c2c2">
+          <Layouts>
+            <Layout>
+              <Grid id="grdMenu02" taborder="0" left="0" top="0" autofittype="col" treeusecheckbox="false" treeinitstatus="expand,all" cssclass="grd_LF_treeMenu" useselcolor="false" scrollbarsize="10" binddataset="dsMenu00" oncellclick="grdMenu02_oncellclick" right="0" bottom="0">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="180"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="body">
+                      <Cell text="bind:MENU_NM" displaytype="normal" treelevel="bind:MENU_LVL" cssclass="expr:MENU_LVL==&quot;0&quot;?&quot;cellMenu01&quot;:&quot;cellSubMenu01&quot;"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > accordionmenu
+*  techtip 아코디언 메뉴 샘플
+*  @FileName	accordionmenu.xfdl 
+*******************************************************************************
+*  2019.06.19		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_accordionmenu.xjs";
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.accordionmenu_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//버튼 리스트
+	var arrBtnList = [this.btnMenu01, this.btnMenu02, this.btnMenu03];
+	
+	//리스트 리스트
+	var arrMenuList = [this.divMenu01, this.divMenu02, this.divMenu03];
+	
+	//리스트 최대사이즈
+	var arrMenuMaxSize = [230, 230, 230];
+	
+	//리스트 최소사이즈
+	var arrMenuMinSize = [0, 0, 0];
+	
+	var objConfig = {
+						btnlist			: arrBtnList,
+						menulist		: arrMenuList,
+						maxsizelist		: arrMenuMaxSize,
+						minsizelist		: arrMenuMinSize
+				    }
+	
+	//아코디언메뉴 초기화 함수
+	this.gfnInitAccordionmenu(objConfig);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+this.btnMenu_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//아코디언 실행 함수 호출
+	this.gfnRunDrillDown(obj);
+}
+
+]]></Script>
+    <Objects>
+      <Dataset id="dsMenu00">
+        <ColumnInfo>
+          <Column id="MENU_CD" type="STRING" size="256"/>
+          <Column id="MENU_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="MENU_CD">01</Col>
+            <Col id="MENU_NM">상세메뉴1</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">02</Col>
+            <Col id="MENU_NM">상세메뉴2</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">03</Col>
+            <Col id="MENU_NM">상세메뉴3</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">04</Col>
+            <Col id="MENU_NM">상세메뉴4</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">05</Col>
+            <Col id="MENU_NM">상세메뉴5</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">06</Col>
+            <Col id="MENU_NM">상세메뉴6</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">07</Col>
+            <Col id="MENU_NM">상세메뉴7</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_CD">08</Col>
+            <Col id="MENU_NM">상세메뉴8</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

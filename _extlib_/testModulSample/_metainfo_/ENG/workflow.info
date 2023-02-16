@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MetaInfo version="2.0">
+  <Object id="workflow">
+    <ObjectInfo inheritance="nexacro.CompositeComponent" classname="nexacro.workflow" shorttypename="workflow" csstypename="workflow" csscontrolname="workflowControl" group="Component" subgroup="Component ( default )" csspseudo="true" container="true" composit="" tabstop="true" cssstyle="true" contents="false" formats="false" contentseditor="" defaultwidth="320" defaultheight="480" registration="allow" edittype="" useinitvalue="true" popup="false" edittypecomponent="" dblclickevent="onclick" requirement="IE8,IE9,IE10,IE11,Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description=""/>
+    <PropertyInfo>
+      <Property name="buttonname" edittype="String" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Action"/>
+    </PropertyInfo>
+    <CSSInfo>
+      <PropertyInfo/>
+    </CSSInfo>
+    <StatusInfo/>
+    <MethodInfo>
+      <Method name="render" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="render()">
+          <Return/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+      <Method name="addLine" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="addLine()">
+          <Return/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+      <Method name="addItem" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="addItem()">
+          <Return/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+    </MethodInfo>
+    <EventHandlerInfo/>
+  </Object>
+</MetaInfo>

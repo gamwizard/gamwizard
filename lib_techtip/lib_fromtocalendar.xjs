@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   : FromToCalendar 드롭다운 버튼 onclick 이벤트
+*/
+this.gfnFromToCalendarDropButton_onclick = function(obj,e)
+{
+	//설정정보 가져오기
+	var objConfig = obj.config;
+
+	//드롭다운 리스트 호출 함수 실행
+	this.gfnShowDropFromToCalPop(objConfig);
+};
+
+/**
+* @description 	     : FromToCalendar 초기화 함수
+* @param objConfig   : 설정정보 오브젝트
+* @return            : 없음
+*/
+this.gfnFromToCalendar = function(objConfig)
+{
+	//시작일 Calendar 컴포넌트 가져오기
+	var objCalStart =  objConfig.calstart;
+	
+	//종료일 Calendar 컴포넌트 가져오기
+	var objCalEnd = objConfig.calend;
+
+	//드롭다운 버튼 컴포넌트 가져오기
+	var objBtnDropdown = objConfig.btndrop;
+	
+	//FromToCalendar 드롭다운 팝업 만들기 함수 호출
+	var objFromToCalPop = this.gfnCreateFromToCalPop(objConfig);
+	
+	//팝업 컴포넌트 Config정보에 담기
+	objConfig.popdrop = objFromToCalPop;
+	
+	//드롭다운 버튼 사용자 변수에 Config정보 설정
+	objBtnDropdown.config = objConfig;
+	
+	//기본 드롭다운 버튼 숨기기
+	objCalStart.set_buttonsize("0");
+	objCalEnd.set_buttonsize("0");
+	
+	//드롭다운 버튼 클릭 이벤트 생성
+	objBtnDropdown.addEventHandler("onclick", this.gfnFromToCalendarDropButton_onclick, this);
+}
+
+/**
+* @description 	     : FromToCalendar 드롭다운 팝업 만들기 함수
+* @param objConfig   : 설정정보 오브젝트
+* @return            : 드롭다운 팝업 오브젝트
+*/
+this.gfnCreateFromToCalPop = function(objConfig)
+{
+	var i;
+	var rtn;
+	var objFromToCalPop;
+	var objForm;
+	
+	//드롭다운 팝업 ID 만들기
+	var sFromToCalPopId = objConfig.btndrop.id+"_dropdownpop";
+
+	//기존에 생성된 팝업이 있을 경우 가져오기
+	if(this.gfnIsEmpty(this.components[sFromToCalPopId])==false)
+	{
+		//기존에 생성된 팝업을 리턴값으로 설정
+		rtn = this.components[sFromToCalPopId];
+	}
+	//기존에 생성된 팝업이 없을 경우 만들기
+	else
+	{
+		//드롭다운 팝업용 PopupDiv 생성
+		objFromToCalPop = new PopupDiv(sFromToCalPopId, 0, 0, 0, 0);
+		this.addChild(objFromToCalPop.name, objFromToCalPop);
+
+		//프로젝트 디자인에 맞게 설정 필요
+		objFromToCalPop.set_background("#ffffff");
+		objFromToCalPop.set_border("1px solid #000000");
+
+		objFromToCalPop.show();
+
+		//url연결 후 후속 처리를 위해 sync로 변경
+		objFromToCalPop.set_async(false);
+		objFromToCalPop.set_url("techtip::fromtocalendar_inner.xfdl");
+		
+		//드롭다운 팝업에 사용자 변수 Config정보 설정
+		objFromToCalPop.config = objConfig;
+		
+		//생성된 드롭다운 팝업을 리턴값으로 설정
+		rtn = objFromToCalPop;
+	}
+	
+	//드롭다운 팝업 리턴
+	return rtn;
+};
+
+/**
+* @description 	 	 : 드롭다운 팝업 호출 함수
+* @param objConfig   : 설정정보 오브젝트
+* @return        	 : 없음
+*/
+this.gfnShowDropFromToCalPop = function(objConfig)
+{
+	var nLeft;
+	var nTop;
+	
+	//시작일 Calendar 컴포넌트 가져오기
+	var objCalStart = objConfig.calstart;
+	
+	//드롭다운 버튼 컴포넌트 가져오기
+	var objDropButton = objConfig.btndrop;
+	
+	//드롭다운 팝업 컴포넌트 가져오기
+	var objFromToCalPop = objConfig.popdrop;
+	
+	//드롭다운 팝업 데이터 변경 함수 호출
+	this.gfnChangeFromToCalPopValue(objConfig);
+
+	//표현될 드롭다운리스트의 사이즈 계산
+	nLeft = 0;
+	nTop = objDropButton.getOffsetHeight();
+	nWidth = 790;
+	nHeight = 360;
+
+	//드롭다운리스트 호출
+	objFromToCalPop.trackPopupByComponent(objCalStart, nLeft, nTop, nWidth, nHeight);
+}
+
+/**
+* @description 	 			: 드롭다운 팝업 데이터 변경 함수
+* @param objConfig   		: 설정정보 오브젝트
+* @return        			: 없음
+*/
+this.gfnChangeFromToCalPopValue = function(objConfig)
+{
+	//시작일 Calendar 컴포넌트 가져오기
+	var objCalStart =  objConfig.calstart;
+	
+	//종료일 Calendar 컴포넌트 가져오기
+	var objCalEnd = objConfig.calend;
+	
+	//드롭다운 팝업 하위 폼 가져오기
+	var objTargetForm = objConfig.popdrop.form;
+	
+	//데이터 변경함수 호출
+	objTargetForm.fnSetFromToDate(objCalStart.value, objCalEnd.value);
+}
+]]></Script>

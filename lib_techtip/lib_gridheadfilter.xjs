@@ -1,0 +1,491 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+/**
+ * @description 필터 팝업 oncloseup 시 처리내역
+*/
+this.gfnCloseFilterPopup = function(obj:nexacro.PopupDiv,e:nexacro.EventInfo)
+{
+	//팝업을 호출한 Cell Index
+	var nCell = obj.cellidx;
+	
+	//팝업을 호출한 Grid 컴포넌트
+	var objGrid = obj.targetGrid;
+	
+	//필터 설정 정보
+	var objConfig = objGrid.config;
+	
+	//필터 문자열 만드는 함수 호출
+	var sFilterValue = this.gfnGetFilterValue(obj);
+	
+	//필터 Head Cell에 필터 문자열 설정
+	objGrid.setCellProperty("head", nCell, "text", sFilterValue);
+	
+	//해당 Cell 설정정보에 필터 문자열 저장
+	objConfig.cells[nCell].value = sFilterValue;
+	
+	//필터 실행 함수 호출
+	this.gfnApplyFilter(objGrid);
+}
+
+/**
+ * @description 그리드 onexpandup 시 처리내역
+*/
+this.gfnFilterGridOnExpandUp = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{
+	//Expand 버튼이 포함된 Cell 오브젝트 가져오기
+	var objParent = e.fromobject.parent;
+	
+	//필터 설정정보 가져오기
+	var objConfig = obj.config;
+	
+	//필터 팝업 컴포넌트 가져오기
+	var objPopup = objConfig.filterpop;
+	
+	//팝업 사이즈 설정
+	var objRect = obj.getCellRect(-1, e.cell);
+	var nWidth = objParent.getOffsetWidth()+24;
+	var nHeight = 200;
+	var nLeft = objRect.left;
+	var nTop = objRect.top + objRect.height;
+	
+	//oncloseup시 필요한 정보를 사용자 속성으로 등록
+	objPopup.targetGrid = obj;
+	objPopup.cellidx = e.cell;
+	
+	//Cells정보를 다시 만드는 함수 호출
+	this.gfnReMakeCells(obj);
+	
+	//필터 리스트 데이터셋 생성 함수 호출
+	objPopup.form.fnMakeFilterDataset(obj, e.cell, objConfig);
+	
+	//필터 팝업 오픈
+	objPopup.trackPopupByComponent(obj, nLeft, nTop, nWidth, nHeight);
+};
+
+/**
+ * @description 그리드 onhscroll 시 처리내역
+*/
+this.gfnFilterGridOnHScroll = function(obj:nexacro.Grid,e:nexacro.ScrollEventInfo)
+{
+	//필터용 Edit 숨기기
+	var objConfig = obj.config;
+	var objFilterEdit = objConfig.filteredit;
+	objFilterEdit.set_visible(false);
+}
+
+/**
+ * @description 그리드 onvscroll 시 처리내역
+*/
+this.gfnFilterGridOnVScroll = function(obj:nexacro.Grid,e:nexacro.ScrollEventInfo)
+{
+	//필터용 Edit 숨기기
+	var objConfig = obj.config;
+	var objFilterEdit = objConfig.filteredit;
+	objFilterEdit.set_visible(false);
+}
+
+/**
+ * @description 그리드 onheadclick 시 처리내역
+*/
+this.gfnShowFilterEdit = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objEdit;
+	var objRect;
+	var nLeft, nTop, nWidth, nHeight;
+	var objConfig = obj.config;
+	var objReferenceObject = e.fromreferenceobject;
+	var sFilterHeadRowIndex = objConfig.filterHeadRowIndex;
+	var sClickHeadRowIdx = obj.getCellProperty("head", e.cell, "row");
+	var sText;
+	
+	//click된 cell이 Filter Head Row이며 
+	//Edit가 표현되어 있는 경우(bind된 cell일 경우만 표현됨)
+	if(sFilterHeadRowIndex==sClickHeadRowIdx && objReferenceObject=="[object EditControl]")
+	{
+		//Cell 사이즈 구하기
+		objRect = obj.getCellRect(-1, e.cell);
+		nLeft = obj.getOffsetLeft() + objRect.left + objReferenceObject.getOffsetLeft() + 1;
+		nTop = obj.getOffsetTop() + objRect.top + objReferenceObject.getOffsetTop() + 2;
+		nWidth = objReferenceObject.getOffsetWidth();
+		nHeight = objReferenceObject.getOffsetHeight();
+		
+		//Cell의 Text 가져오기
+		sText = obj.getCellText(e.row, e.cell);
+		
+		//Filter용 Edit 가져오기
+		objEdit = objConfig.filteredit;
+		
+		//Filter Head Cell 위치랑 동일하게 Edit 배치
+		objEdit.move(nLeft, nTop, nWidth, nHeight);
+		objEdit.set_value(sText);
+		objEdit.targetCell = e.cell;
+		objEdit.set_visible(true);
+		objEdit.setFocus();
+	}
+}
+
+/**
+ * @description Filter Edit onkillfocus 시 처리내역
+*/
+this.gfnFilterEditOnKillFocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	var objGrid = obj.targetGrid;
+	var objConfig = objGrid.config;
+	var nCell = obj.targetCell;
+	
+	var sValue = obj.value;
+	
+	//Cells정보를 다시 만드는 함수 호출
+	this.gfnReMakeCells(objGrid);
+	
+	//현재 Edit Value를 Grid Cell Text에 저장
+	objGrid.setCellProperty("head", nCell, "text", sValue);
+	
+	//해당 Cell 설정정보에 필터 문자열 저장
+	objConfig.cells[nCell].value = sValue;
+	
+	//Edit 숨기기
+	obj.set_visible(false);
+}
+
+/**
+ * @description Filter Edit onkeydown 시 처리내역
+*/
+this.gfnFilterEditOnKeyDown = function(obj:nexacro.Edit,e:nexacro.KeyEventInfo)
+{
+	//엔터키 입력 시
+	if(e.keycode==13)
+	{
+		var objGrid = obj.targetGrid;
+		var objConfig = objGrid.config;
+		var nCell = obj.targetCell;
+		
+		var sValue = obj.value;
+		
+		//Cells정보를 다시 만드는 함수 호출
+		this.gfnReMakeCells(objGrid);
+	
+		//현재 Edit Value를 Grid Cell Text에 저장
+		objGrid.setCellProperty("head", nCell, "text", sValue);
+		
+		//해당 Cell 설정정보에 필터 문자열 저장
+		objConfig.cells[nCell].value = sValue;
+		
+		//필터 실행 함수 호출
+		this.gfnApplyFilter(objGrid);
+	}
+};
+
+/**
+* @description 	      : 필터 생성 함수
+* @param objGrid	  : 필터 적용할 그리드 컴포넌트
+* @param sFiltertype  : 필터 처리 방법(none : 일치, like : 문자열포함)
+* @return             : 없음
+*/
+this.gfnAddHeadFilter = function(objGrid, sFiltertype)
+{
+	var i;
+	var nRow;
+	var nHeight;
+	var nHeadRow;
+	var nHeadCol;
+	var sText;
+	var sBindColumn;
+	var sEditId = "edtFilterEdit";
+	var sPopupId = "popFilter";
+	var objEdit;
+	var objPopup;
+	var objParent = objGrid.parent;
+	
+	if(!sFiltertype)sFiltertype = "none";
+	
+	//필터 Head Row 추가
+	nRow = objGrid.appendContentsRow("head");
+	
+	//다른 Head Row의 사이즈와 동일하게 변경
+	nHeight = objGrid.getFormatRowProperty(nRow-1, "size");
+	objGrid.setFormatRowProperty(nRow, "size", nHeight);
+	
+	//필터 Edit가 존재하는 경우 가져오기
+	if(objParent[sEditId])
+	{
+		objEdit = objParent[sEditId];
+		objEdit.move(0, 0, 0, 0);
+	}
+	//필터 Edit가 없는 경우 만들기
+	else
+	{
+		objEdit = new Edit(sEditId, 0, 0, 0, 0, null, null);
+		objParent.addChild(sEditId, objEdit);
+		objEdit.targetGrid = objGrid;
+		objEdit.addEventHandler("onkillfocus", this.gfnFilterEditOnKillFocus, this);
+		objEdit.addEventHandler("onkeydown", this.gfnFilterEditOnKeyDown, this);
+		objEdit.show();
+	}
+	
+	//필터 PopupDiv가 존재하는 경우 가져오기
+	if(objParent[sPopupId])
+	{
+		objPopup = objParent[sPopupId];
+		objPopup.move(0, 0, 0, 0);
+	}
+	//필더 PopupDiv가 없는 경우 만들기
+	else
+	{
+		objPopup = new PopupDiv(sPopupId, 0, 0, 0, 0, null, null);
+		objPopup.set_url("techtip::gridheadfilter_popup.xfdl");
+		objParent.addChild(sPopupId, objPopup);
+		objPopup.addEventHandler("oncloseup", this.gfnCloseFilterPopup, this);
+		objPopup.show();
+	}
+	
+	//필터 설정 정보 만들기
+	objGrid.config = {
+						"filterHeadRowIndex" : nRow, 	//필터 Head의 Row Index
+						"cells" : [], 					//Cell별 필터 정보를 관리할 Array
+						"filteredit" : objEdit, 		//필터 입력용 Edit
+						"filterpop" : objPopup, 			//필터 선택용 PopupDiv
+						"filtertype" : sFiltertype      //필터 치리 방식 설정(none, like)
+					};
+	
+	//Head의 Cell 갯수 가져오기
+	var nHeadCellCnt = objGrid.getCellCount("head");
+	
+	for(i=0;i<nHeadCellCnt;i++)
+	{
+		nHeadRow = objGrid.getCellProperty("head", i, "row");
+		
+		//필터 Head Row에 있는 Cell일 경우
+		if (nHeadRow == nRow)
+		{
+			//Head의 Col Index로 Body의 Index 찾기
+			nHeadCol = objGrid.getCellProperty("head", i, "col");
+			sText = objGrid.getCellProperty("body", nHeadCol, "text");
+			
+			//Bind된 Cell일 경우 Cell별 필터 정보 입력
+			if(sText && sText.indexOf("bind:")>-1)
+			{
+				sBindColumn = sText.replace("bind:", "");
+				objGrid.config.cells[i] = {
+										"bind" : sBindColumn,	//바인드된 컬럼명
+										"value" : null          //Filter 문자열
+									};
+				
+				//Head Cell의 displaytype을 editcontrol로 설정
+				objGrid.setCellProperty("head", i, "displaytype", "editcontrol");
+				
+				//expand버튼이 보이도록 설정
+				objGrid.setCellProperty("head", i, "expandshow", "show");
+			}			
+		}
+	}
+	
+	//필터에 필요한 이벤트 추가
+	objGrid.addEventHandler("onheadclick", this.gfnShowFilterEdit, this);
+	objGrid.addEventHandler("onhscroll", this.gfnFilterGridOnHScroll, this);
+	objGrid.addEventHandler("onvscroll", this.gfnFilterGridOnVScroll, this);
+	objGrid.addEventHandler("onexpandup", this.gfnFilterGridOnExpandUp, this);
+}
+
+/**
+* @description 	      : Cells정보를 다시 만드는 함수
+* @param objGrid	  : 필터 적용된 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnReMakeCells = function(objGrid)
+{
+	var i, j;
+	var nHeadRow;
+	var nHeadCol;
+	var sText;
+	var sBindColumn;
+	var sValue;
+		
+	var objConfig = objGrid.config;
+	var objCellsOrg = objConfig.cells;
+	var objCells = [];
+	var nCellCnt = objCellsOrg.length;
+	
+	//필터 Head Row Index 가져오기
+	var nFilterHeadRowIndex = objConfig.filterHeadRowIndex;
+	
+	//Head의 Cell 갯수 가져오기
+	var nHeadCellCnt = objGrid.getCellCount("head");
+	
+	for(i=0;i<nHeadCellCnt;i++)
+	{
+		nHeadRow = objGrid.getCellProperty("head", i, "row");
+		
+		//필터 Head Row에 있는 Cell일 경우
+		if (nHeadRow == nFilterHeadRowIndex)
+		{
+			//Head의 Col Index로 Body의 Index 찾기
+			nHeadCol = objGrid.getCellProperty("head", i, "col");
+			sText = objGrid.getCellProperty("body", nHeadCol, "text");
+			
+			//Bind된 Cell일 경우
+			if(sText && sText.indexOf("bind:")>-1)
+			{
+				//bind정보 찾기
+				sBindColumn = sText.replace("bind:", "");
+				sValue = null;
+				
+				//기존 cells에 등록된 value정보 가져오기
+				for(j=0;j<nCellCnt;j++)
+				{
+					if(objCellsOrg[j] && sBindColumn==objCellsOrg[j].bind)
+					{
+						sValue = objCellsOrg[j].value;
+						break;
+					}
+				}
+				
+				//신규 cells정보에 저장
+				objCells[i] = {
+										"bind" : sBindColumn,	//바인드된 컬럼명
+										"value" : sValue        //Filter 문자열
+							  };
+			}			
+		}
+	}
+	
+	//config.cells 정보 교체
+	objConfig.cells = objCells;
+};
+
+/**
+* @description 	      : 필터 삭제 함수
+* @param objGrid	  : 필터 적용된 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnRemoveHeadFilter = function(objGrid)
+{
+	var sId = "edtFilterEdit";
+	var sPopupId = "popFilter";
+	var objEdit;
+	var objPopup;
+	var objDs = objGrid.getBindDataset();
+	var objParent = objGrid.parent;
+	var objConfig = objGrid.config;
+	var sFilterHeadRowIndex = objConfig.filterHeadRowIndex;
+	
+	//필터 Head Row 삭제
+	objGrid.deleteContentsRow("head", sFilterHeadRowIndex);
+	
+	//필터용 Edit 삭제
+	var objEdit = objParent.removeChild(sId);
+	if(objEdit != null){
+		objEdit.destroy();
+	}
+	
+	//필터용 PopupDiv 삭제
+	var objPopup = objParent.removeChild(sPopupId);
+	if(objPopup != null){
+		objPopup.destroy();
+	}
+	
+	//필터용 Grid 이벤트 삭제
+	objGrid.removeEventHandler("onheadclick", this.gfnShowFilterEdit, this);
+	objGrid.removeEventHandler("onhscroll", this.gfnFilterGridOnHScroll, this);
+	objGrid.removeEventHandler("onvscroll", this.gfnFilterGridOnVScroll, this);
+	objGrid.removeEventHandler("onexpandup", this.gfnFilterGridOnExpandUp, this);
+	
+	//필터 설정 정보 삭제
+	objGrid.config = null;
+	
+	objDs.filter("");
+}
+
+/**
+* @description 	      : 필터 실행 함수
+* @param objGrid	  : 필터 적용할 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnApplyFilter = function(objGrid)
+{
+	var i, j;
+	var objConfig = objGrid.config;
+	var objCells = objConfig.cells;
+	var objDs = objGrid.getBindDataset();
+	var sColumnId;
+	var sValue;
+	var arrValue;
+	var sFilterString = "";
+	var nCellCount;
+	var nValueCount;
+	var sFilterType = objConfig.filtertype;
+	
+	//Cell별 설정정보 갯수 가져오기
+	nCellCount = objCells.length;
+	
+	for(i=0;i<nCellCount;i++)
+	{
+		//Cell 설정정보가 존재하고 bind 정보가 있을 경우
+		if(objCells[i]&&objCells[i].bind)
+		{
+			sColumnId = objCells[i].bind;
+			sValue = objCells[i].value;
+			
+			//필터 문자열 정보가 있을 경우
+			if(sValue)
+			{
+				//필터 문자열을 분해하여 필터 쿼리 만들기
+				sFilterString += "("
+				arrValue = sValue.split(",");
+				nValueCount = arrValue.length;
+				
+				if(sFilterType=="like")
+				{
+					for(j=0;j<nValueCount;j++)
+					{
+						sFilterString += sColumnId + ".toString().indexOf('"+arrValue[j]+"')>-1||";
+					}
+				}else
+				{
+					for(j=0;j<nValueCount;j++)
+					{
+						sFilterString += sColumnId + "=='" + arrValue[j] + "'||";
+					}
+				}
+				
+				sFilterString = sFilterString.substr(0, sFilterString.length-2);
+				sFilterString += ")&&";
+			}
+		}
+	}
+	sFilterString = sFilterString.substr(0, sFilterString.length-2);
+	
+	//필터 실행
+	objDs.filter(sFilterString);
+}
+
+/**
+* @description 	      : 필터 문자열 만드는 함수
+* @param objGrid	  : 필터 팝업 컴포넌트
+* @return             : 없음
+*/
+this.gfnGetFilterValue = function(objPopDiv)
+{
+	var i;
+	var objDs = objPopDiv.form.dsFilter;
+	var nRowCount;
+	var sFilterValue = "";
+	
+	//체크된 리스트를 필터 문자열로 만들기
+	objDs.set_enableevent(false);
+	objDs.filter("chk==1");
+	nRowCount = objDs.rowcount;
+	
+	for(i=0;i<nRowCount;i++)
+	{
+		if(i==0)sFilterValue += objDs.getColumn(i, "code");
+		else sFilterValue += "," + objDs.getColumn(i, "code");
+	}
+	
+	objDs.filter("");
+	objDs.set_enableevent(true);
+	
+	//필터 문자열 리턴
+	return sFilterValue;
+}
+]]></Script>

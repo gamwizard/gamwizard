@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="getFormString" width="650" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="650">
+        <Button id="Button00" taborder="0" text="파일리스트가져오기" top="10" width="120" height="30" right="10" onclick="Button00_onclick"/>
+        <Grid id="Grid00" taborder="1" left="10" top="45" height="270" right="10" binddataset="ds_FileList" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="filename"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:filename"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <TextArea id="TextArea00" taborder="2" left="10" top="325" right="10" bottom="10"/>
+        <Div id="Div00" taborder="3" text="Div00" left="270" top="320" width="280" height="210">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_FileList" onrowposchanged="ds_FileList_onrowposchanged">
+        <ColumnInfo>
+          <Column id="filename" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <VirtualFile id="VirtualFile00" async="false" onsuccess="VirtualFile00_onsuccess"/>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[//파일을 찾을 경로
+this.fileUrl = "C:\\\\DEV\\project\\src\\content\\ui\\playSample\\sample";
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//해당폴더에 xfdl파일 리스트 가져오기
+	this.VirtualFile00.getFileList(this.fileUrl, "\\.xfdl$");
+};
+
+this.VirtualFile00_onsuccess = function(obj:nexacro.VirtualFile,e:nexacro.VirtualFileEventInfo)
+{
+	//파일리스트 가져오기 성공 시
+	if(e.reason==8)
+	{
+		//파일 리스트를 그리드에 표현
+		var nRow;
+		this.ds_FileList.set_enableevent(false);
+		this.ds_FileList.clearData();
+		for(var i=0;i<e.fileattributelist.length;i++)
+		{
+			nRow = this.ds_FileList.addRow();
+			this.ds_FileList.setColumn(nRow, "filename", e.fileattributelist[i].filename);
+		}
+		this.ds_FileList.set_enableevent(true);
+		this.ds_FileList.set_rowposition(0);
+	}
+	//파일 오픈 성공 시
+	else if(e.reason==1)
+	{
+		//파일 내용을 확인 하기 위해 read()
+		obj.read();
+	}
+	//파일 리드 성공 시
+	else if(e.reason==3)
+	{
+		//파일내용을 파일 분석 함수에 전달
+		this.fnGetFormString(e.textdata);
+	}
+};
+
+this.ds_FileList_onrowposchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSRowPosChangeEventInfo)
+{
+	//row position 변경 시 해당 파일 오픈
+	var sFileName = obj.getColumn(e.newrow, "filename");
+	var sFullPath = this.fileUrl + "\\" + sFileName;
+	this.VirtualFile00.open( sFullPath ,VirtualFile.openRead);
+	
+};
+
+this.fnGetFormString = function(sString)
+{
+	//파일 내용 중 [CDATA[스크립트 정보]] 부분을 추출
+	var nStartIdx = sString.indexOf("[CDATA[")+7;
+	var nEndIdx = sString.lastIndexOf("]]");
+	var sScriptString = sString.substring(nStartIdx, nEndIdx);
+	
+	//TextArea에 표현
+	this.TextArea00.set_value(sScriptString);
+}
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="movetext" width="400" height="400" titletext="New Form">
+    <Layouts>
+      <Layout height="400" width="400">
+        <Button id="btCreateStatic" taborder="0" text="텍스트만들기" top="10" width="90" height="30" onclick="btCreateStatic_onclick" right="105"/>
+        <Div id="divMoveText" taborder="1" left="10" top="45" height="40" right="10" formscrollbartype="none none" formscrolltype="none"/>
+        <Button id="btnMoveText" taborder="2" text="시작" top="10" width="90" height="30" onclick="btnMoveText_onclick" right="10"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > movetext
+*  techtip Move Text 흐르는 텍스트 만들기 
+*  @FileName	movetext.xfdl 
+*******************************************************************************
+*  2022.12.15		daewon			최초 생성
+*******************************************************************************
+*/
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_movetext.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+**************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+this.btCreateStatic_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.gfnCreateText(this.divMoveText, this.dsMoveText);
+};
+
+this.btnMoveText_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.setTimer("movetext", 10);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsMoveText">
+        <ColumnInfo>
+          <Column id="text" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="text">IT 환경의 뉴노멀 – 로우코드와 넥사크로 퀵코드 ③</Col>
+          </Row>
+          <Row>
+            <Col id="text">메타버스, 다가올 초현실세계 모습 – 3편</Col>
+          </Row>
+          <Row>
+            <Col id="text">UX·UI 디자인, 그게 뭔데?</Col>
+          </Row>
+          <Row>
+            <Col id="text">IT 환경의 뉴노멀 – 로우코드와 넥사크로 퀵코드 ②</Col>
+          </Row>
+          <Row>
+            <Col id="text">메타버스, 다가올 초현실세계 모습 – 2편</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

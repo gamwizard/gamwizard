@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   			: InnerDataset 생성 함수
+* @param sParentCode	   	: 공통 코드 ID
+* @param objTargetComp		: InnerDataet을 설정할 컴포넌트
+* @param bUseAll			: 전체 코드 추가 여부
+* @param sInnerDatasetType	: 데이터셋 신규 생성 여부(NEW : 신규생성, UPDATE : 기존 InnerDataset 업데이트)
+* @param nInitIndex			: 초기화 Index 정보
+* @return          			: 없음
+*/
+this.gfnMakeInnerDataset = function(sParentCode, objTargetComp, bUseAll, sInnerDatasetType, nInitIndex)
+{
+	//InnerDataset 오브젝트
+	var objTempInnerDataset;
+	
+	//설정할 공통코드 Filter로 찾기
+	this.gdsCommCd.filter("parent_cd=='"+sParentCode+"'");
+	
+	//신규 생성일 경우
+	if(sInnerDatasetType=="NEW")
+	{ 
+		//데이터셋 생성
+		 objTempInnerDataset = new nexacro.NormalDataset("Radio00_innerdataset", objTargetComp);
+		 
+		 //데이터 복사
+         objTempInnerDataset.copyData(this.gdsCommCd, true);
+		 
+		 //codecolumn 속성 설정
+		 objTargetComp.set_codecolumn("code");
+		 
+		 //datacolumn 속성 설정
+		 objTargetComp.set_datacolumn("value");
+		 
+		 //생성한 데이터셋을 innerdataset으로 설정
+         objTargetComp.set_innerdataset(objTempInnerDataset);
+		 
+	}
+	//업데이트일 경우
+	else if(sInnerDatasetType=="UPDATE")
+	{
+		//innerdataset으로 연결된 데이터셋 가져오기
+		objTempInnerDataset = objTargetComp.getInnerDataset();
+		
+		//데이터 복사
+		objTempInnerDataset.copyData(this.gdsCommCd, true);
+	}
+	
+	//전체 코드를 사용할 경우
+	if(bUseAll==true)
+	{
+		//첫번째 Index에 Row 추가
+		objTempInnerDataset.insertRow(0);
+		
+		//전체 코드를 위해 -1추가
+		objTempInnerDataset.setColumn(0, "code", "-1");
+		
+		//전체 데이터를 위해 전체 추가
+		objTempInnerDataset.setColumn(0, "value", "전체");
+	}
+	
+	//초기에 선택할 Index 설정
+	objTargetComp.set_index(nInitIndex);
+	
+	//공통코드 데이터셋 Filter 초기화
+	this.gdsCommCd.filter("");
+}
+
+/**
+* @description 	   			: 그리드 Cell용 InnerDataset 생성 함수
+* @param sParentCode	   	: 공통 코드 ID
+* @param objTargetGrid		: InnerDataet을 설정할 그리드
+* @param nTargetCell		: InnerDataset을 설정할 Cell Index
+* @param objTargetDs		: InnerDataet으로 사용할 Dataset
+* @param bUseAll			: 전체 코드 추가 여부
+* @return          			: 없음
+*/
+this.gfnMakeInnerDatasetForGrid = function(sParentCode, objTargetGrid, nTargetCell, objTargetDs, bUseAll)
+{
+	//설정할 공통코드 Filter로 찾기
+	this.gdsCommCd.filter("parent_cd=='"+sParentCode+"'");
+	
+	//데이터 복사
+	objTargetDs.copyData(this.gdsCommCd, true);
+	
+	//공통코드 데이터셋 Filter 초기화
+	this.gdsCommCd.filter("");
+	
+	//전체 코드를 사용할 경우
+	if(bUseAll==true)
+	{
+		//첫번째 Index에 Row 추가
+		objTargetDs.insertRow(0);
+		
+		//전체 코드를 위해 -1추가
+		objTargetDs.setColumn(0, "code", "-1");
+		
+		//전체 데이터를 위해 전체 추가
+		objTargetDs.setColumn(0, "value", "전체");
+	}
+	
+	 //combocodecol 속성 설정
+	this.grdList.setCellProperty("Body", nTargetCell, "combocodecol", "code");
+	
+	//combovaluecol 속성 설정
+	this.grdList.setCellProperty("Body", nTargetCell, "combodatacol", "value");
+	
+	//combodataset 속성 설정
+	this.grdList.setCellProperty("Body", nTargetCell, "combodataset", objTargetDs.id);
+}]]></Script>

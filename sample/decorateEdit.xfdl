@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="decorateEdit" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Edit id="Edit00" taborder="0" left="10" top="9" width="140" height="20" onkillfocus="Edit00_onkillfocus" value="가나다라" text="가나다라"/>
+        <Static id="Static01" taborder="1" left="20" top="11" width="122" height="18" usedecorate="true" onclick="Static01_onclick" text="가나다라"/>
+        <Edit id="Edit00_00" taborder="2" left="160" top="9" width="140" height="20"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.Static01_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	obj.set_visible(false);
+	this.Edit00.setFocus();
+};
+
+this.Edit00_onkillfocus = function(obj:nexacro.Edit,e:nexacro.KillFocusEventInfo)
+{
+	var sText = obj.value;
+	
+	if(this.gfnIsNull(sText)==true)
+	{
+		this.Static01.set_text("");
+	}else
+	{
+		var sDecorateText = nexacro.replaceAll(sText, "레드", "<fc v='red'>레드</fc>");
+		this.Static01.set_text(sDecorateText);
+	}
+	
+	this.Static01.set_visible(true);
+};
+
+
+this.gfnIsNull = function (pvVal)
+{
+	if (new String(pvVal).valueOf() == "undefined") 
+	{
+		return true;
+	}
+	if (pvVal == null) 
+	{
+		return true;
+	}
+	if (("x" + pvVal == "xNaN") && (new String(pvVal.length).valueOf() == "undefined")) 
+	{
+		return true;
+	}
+	if (pvVal.length == 0) 
+	{
+		return true;
+	}
+
+	return false;
+}
+]]></Script>
+  </Form>
+</FDL>

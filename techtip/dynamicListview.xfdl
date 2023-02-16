@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="dynamicListview" width="1140" height="390" titletext="New Form" onload="listview_onload">
+    <Layouts>
+      <Layout height="390" mobileorientation="landscape" width="1140">
+        <Button id="btnApply" taborder="1" text="적용 &gt;&gt;" left="350" top="150" width="80" height="49" onclick="btnApply_onclick"/>
+        <Div id="Div00" taborder="0" text="Div00" left="30" top="35" width="300" height="296" border="1px solid #cccccc" formscrolltype="none">
+          <Layouts>
+            <Layout>
+              <ImageViewer id="imgImage" taborder="0" text="ImageViewer00" left="0" top="0" width="298" height="145" stretch="fit"/>
+              <Static id="Static00" taborder="1" text="지역" left="0" top="145" width="65" height="24" cssclass="st_WF_linebox"/>
+              <Static id="stArea" taborder="2" test="" left="65" top="145" width="233" height="24" cssclass="st_WF_linebox"/>
+              <Static id="Static00_01" taborder="3" text="명칭" left="0" top="169" width="65" height="25" cssclass="st_WF_linebox"/>
+              <Static id="stTitle" taborder="4" text="Static00" left="65" top="169" width="233" height="25" cssclass="st_WF_linebox"/>
+              <Static id="Static00_01_00" taborder="5" text="종류" left="0" top="194" width="65" height="25" cssclass="st_WF_linebox"/>
+              <Static id="stKind" taborder="6" text="Static00" left="65" top="194" width="233" height="25" cssclass="st_WF_linebox"/>
+              <Static id="Static00_01_00_00" taborder="7" text="설명" left="0" top="219" width="65" height="75" cssclass="st_WF_linebox"/>
+              <Static id="stExplain" taborder="8" text="Static00" left="65" top="219" width="233" height="75" cssclass="st_WF_linebox" wordWrap="english" verticalAlign="middle"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <ListView id="ListView00" taborder="2" left="450" top="35" width="670" height="295">
+          <Formats>
+            <Format id="default/"/>
+          </Formats>
+        </ListView>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dslists">
+        <ColumnInfo>
+          <Column id="Image" type="STRING" size="256"/>
+          <Column id="Title" type="STRING" size="256"/>
+          <Column id="Area" type="STRING" size="256"/>
+          <Column id="Kind" type="STRING" size="256"/>
+          <Column id="Explain" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Title">남애어촌체험마을</Col>
+            <Col id="Area">양양군</Col>
+            <Col id="Kind">체험마을</Col>
+            <Col id="Explain">강원 3대 미항의 하나인 남애항을 둘러싸고 옹기종기 모여 사는 아담한 어촌마을이다. 7번 국도와 연접하여 수산물직거래 수송이 원활하다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img1.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">꿈자람 어린이공원</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">공원</Col>
+            <Col id="Explain">꿈자람 어린이공원은 1층과 2층으로 된 실내 키즈파크와 실외 키즈파크를 동시에 이용할 수 있는 키즈 어드벤처 공원이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img2.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">춘천지구 전적비</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">유적</Col>
+            <Col id="Explain">한국전쟁 때 국군 6사단이 치열한 방어전을 펼쳤던 춘천지구전투를 기념하기 위해 만든 전적비이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img3.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">춘천내평전투 호국경찰추모상</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">문화</Col>
+            <Col id="Explain">6.25전쟁 첫 대승을 거둔 춘천지구 전투의 초석을 다진 고 노종해 경감 등 호국영웅 11인을 추모하는 동상이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img4.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">레일바이크</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">레저스포츠</Col>
+            <Col id="Explain">멈춰버린 경춘선에 새로운 생명을 불어넣어 달리고 있는, 강촌레일파크는 국내 최대, 최장의 레일바이크 관광지이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img5.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">등명해변</Col>
+            <Col id="Area">강릉시</Col>
+            <Col id="Kind">해변</Col>
+            <Col id="Explain">강동면 정동진리 일원에 있는 등명해변은 길이 800m, 2만4천 제곱미터의 백사장이 있고 넓은 주차장과 소나무 숲이 우거져 있는 곳이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img6.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">강촌 하늘아래 글램핑</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">캠핑장</Col>
+            <Col id="Explain">강촌은 춘천의 초입이며 낭만과 젊음에 상징적인 관광지이다. 서울에서 한시간 거리에 위치하여 접근성이 용이하다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img7.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">애니메이션박물관</Col>
+            <Col id="Area">춘천시</Col>
+            <Col id="Kind">박물관</Col>
+            <Col id="Explain">강원도 춘천시 서면에 위치한 애니메이션 전문 박물관. 국내 최초의 애니메이션 박물관이며, 애니메이션을 전문적으로 다루는 곳이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img8.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">망상오토캠핑리조트</Col>
+            <Col id="Area">동해시</Col>
+            <Col id="Kind">캠핑장</Col>
+            <Col id="Explain">국내 최초로 조성된 자동차전용캠핑장으로 울창한 송림과 깨끗한 백사장, 맑은 비취빛 푸른 바다가 어우러진 자연친화적이다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img9.png</Col>
+          </Row>
+          <Row>
+            <Col id="Title">고적대</Col>
+            <Col id="Area">정선군</Col>
+            <Col id="Kind">산</Col>
+            <Col id="Explain">정선군 임계면에 위치한 고적대는 동해시, 삼척시, 정선군의 분수령을 이루는 산으로 기암절벽이 대를 이루어 신라 고승 의상대사가 수행하였다고 전해지고 있다.</Col>
+            <Col id="Image">imagerc::dynamicListview/img10.png</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip listView create format form sample
+*  @MenuPath   techtip > dynamicListview
+*  @FileName	dynamicListview.xfdl 
+*  @Desction	listView create format
+*******************************************************************************
+*  2019.10.31		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_dynamicListview.xjs";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역(필수)
+*/
+this.listview_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+//	onload -- comp bind set info.
+
+	//listView cssclass setting
+	this.ListView00.set_cssclass("lstvSample");
+
+	//component bind column info.
+	this.Div00.form.imgImage.bind =	"Image";
+	this.Div00.form.stArea.bind =	"Area";
+	this.Div00.form.stKind.bind =	"Kind";
+	this.Div00.form.stTitle.bind =	"Title";
+	this.Div00.form.stExplain.bind ="Explain";
+	
+	var objConfig  = {
+						objDiv		: this.Div00,
+						objListview	: this.ListView00,
+						objDs		: this.dslists,
+						cellclass	: "lv_WF_linebox"					
+				   }
+	this.fnInitDynamicListviewForm(obj, objConfig);
+};
+
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description apply button onclick event --> create listview format
+*/
+this.btnApply_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnCreateListviewFormat(obj);	
+};
+
+
+
+
+]]></Script>
+    <Bind>
+      <BindItem id="item0" compid="Div00.form.imgImage" propid="image" datasetid="dslists" columnid="Image"/>
+      <BindItem id="item1" compid="Div00.form.stArea" propid="text" datasetid="dslists" columnid="Area"/>
+      <BindItem id="item2" compid="Div00.form.stTitle" propid="text" datasetid="dslists" columnid="Title"/>
+      <BindItem id="item3" compid="Div00.form.stKind" propid="text" datasetid="dslists" columnid="Kind"/>
+      <BindItem id="item4" compid="Div00.form.stExplain" propid="text" datasetid="dslists" columnid="Explain"/>
+    </Bind>
+  </Form>
+</FDL>

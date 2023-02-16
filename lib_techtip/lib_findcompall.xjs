@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 			: 조건에 맞는 컴포넌트 찾기 함수
+* @param objContainer  	: 찾기를 시작할 컨테이너 컴포넌트
+* @param sFindType   	: 찾을 방식(id, comptype, text)
+                          id - 컴포넌트 ID로 찾기
+						  comptype - 컴포넌트 종류로 찾기
+						  text - 컴포넌트 text 값으로 찾기
+* @param sFindValue 	: 찾을 값
+* @param sPath 			: 현재 컴포넌트의 Scope
+* @return 				: 찾은 컴포넌트를 Array로 리턴
+*/
+this.gfnFindComp = function(objContainer, sFindType, sFindValue, sPath)
+{
+	var arrCompList = new Array;
+	var arrCompListChild = [];
+	var jsonComp = {obj:null, path:null};
+	var objCompList;
+	var objComp;
+	var nCnt;
+	var sTempPath = "";
+	
+	if(!sPath)sPath = "this";
+	
+	//컴포넌트 리스트 가져오기
+	//objContainer가 Form일 경우
+	if(objContainer instanceof nexacro.Form)
+	{
+		objCompList = objContainer.components;
+	}
+	//objContainer가 Form이 아닌 Div, TabPage 등일 경우 
+	else
+	{
+		objCompList = objContainer.form.components;
+	}
+	
+	nCnt = objCompList.length;
+	
+	//컴포넌트 갯수 만큼 Loop
+	for(var i=0;i<nCnt;i++)
+	{
+		//컴포넌트 가져오기
+		objComp = objCompList[i];
+		
+		//컴포넌트가 Div or PopupDiv일 경우 재귀호출
+		if(objComp instanceof nexacro.Div || objComp instanceof nexacro.PopupDiv)
+		{
+			//현재 Scope정보를 확인하기 위해 sTempPath 값 만들기
+			sTempPath = sPath + "." + objComp.id+".form";
+					
+			//조건에 맞는 컴포넌트 찾기 함수(재귀호출)
+			arrCompListChild = this.gfnFindComp(objComp, sFindType, sFindValue, sTempPath);
+			
+			//찾은 컴포넌트리스트에 추가
+			arrCompList = arrCompList.concat(arrCompListChild);
+						
+		}
+		//컴포넌트가 Tab일 경우 재귀호출
+		else if(objComp instanceof nexacro.Tab)
+		{
+			for(var j=0;j<objComp.tabpages.length;j++)
+			{
+				//현재 Scope정보를 확인하기 위해 sTempPath 값 만들기
+				sTempPath = sPath + "." + objComp.id+'.tabpage["'+j+'"].form';
+				
+				//조건에 맞는 컴포넌트 찾기 함수(재귀호출)
+				arrCompListChild = this.gfnFindComp(objComp.tabpages[j], sFindType, sFindValue, sTempPath);
+				
+				//찾은 컴포넌트리스트에 추가
+				arrCompList = arrCompList.concat(arrCompListChild);
+			}
+		}
+		//컴포넌트가 일반 컴포넌트일 경우 찾는 조건에 맞는지 확인
+		else
+		{
+		
+			//컴포넌트 ID로 찾기일 경우
+			if(sFindType=="id")
+			{
+				if(objComp[sFindType]==sFindValue)
+				{
+					jsonComp = {"obj":objComp, "path":sPath};
+					arrCompList[arrCompList.length] = jsonComp;
+				}
+				
+			}
+			//컴포넌트 타입으로 찾기일 경우
+			else if(sFindType=="comptype")
+			{
+				if(objComp.toString().toLowerCase() == "[object "+sFindValue+"]")
+				{
+					jsonComp = {"obj":objComp, "path":sPath};
+					arrCompList[arrCompList.length] = jsonComp;
+				}
+			}
+			//컴포넌트 text값으로 찾기 일 경우
+			else if(sFindType=="text")
+			{
+				if(objComp.text == sFindValue)
+				{
+					jsonComp = {"obj":objComp, "path":sPath};
+					arrCompList[arrCompList.length] = jsonComp;
+				}
+			}
+		}
+	}
+	
+	//찾은 컴포넌트 리턴
+	return arrCompList;
+}]]></Script>

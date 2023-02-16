@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="datasetrowtype" width="1280" height="720" titletext="Dataset RowType 을 활용한 Grid 데이터 상태표시" onload="datasetrowtype_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Grid id="Grid00" taborder="0" left="20" top="51" width="455" height="180" binddataset="dsList" autoenter="select">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="292"/>
+                <Column size="101"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="데이터"/>
+                <Cell col="1" text="RowType"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:title" edittype="text" displaytype="editcontrol"/>
+                <Cell col="1" expr="dataset.getRowType(currow)" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="1" text="추가" left="94" top="16" width="120" height="30" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="2" text="삭제" left="224" top="16" width="120" height="30" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="3" text="초기화" left="354" top="16" width="120" height="30" onclick="Button02_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > datasetrowtype
+*  techtip		RowType 을 활용한 Grid 데이터 상태 표시하기
+*  @FileName	datasetrowtype.xfdl 
+*******************************************************************************
+*  2019.06.21	customer			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 폼 onload 이벤트
+*/
+this.datasetrowtype_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.fnInitGridStatus( this.Grid00, this.dsList );
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+ 
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description 	       : 해당 Grid / Dataset 상태 컬럼 추가셋팅
+* @param objGrid       : 설정할 그리드
+*        objBindDs     : 그리드 Bind Dataset
+* @return              : 없음
+*/
+this.fnInitGridStatus = function( objGrid, objBindDs )
+{
+	var idx = -1;
+	var colInfo = objBindDs.getColumnInfo("_rowStatus");
+	
+	//처음 셋팅한 값
+	objBindDs._updatecontrol = objBindDs.updatecontrol;
+	
+	if(colInfo == undefined){
+		objBindDs.addColumn("_rowStatus","string",256);
+
+		idx = objGrid.insertContentsCol("body",0);		
+		
+		objGrid.setCellProperty("body",idx,"text","bind:_rowStatus");
+		objGrid.setCellProperty("body",idx,"textAlign","center");		
+	}else{
+		idx = objGrid.getBindCellIndex("body","_rowStatus");
+		
+		objGrid.setCellProperty("body",idx,"text","bind:_rowStatus");		
+		objGrid.setCellProperty("body",idx,"textAlign","center");
+	}
+	
+	//해당 데이터셋에 cancolumnchange 이벤트 생성
+	var evtIdx = objBindDs.findEventHandler("cancolumnchange",this.fnGridStatusCancolumnchange ,this);
+	
+	if(evtIdx > -1){
+		objBindDs.removeEventHandler("cancolumnchange",this.fnGridStatusCancolumnchange ,this);
+		objBindDs.addEventHandler("cancolumnchange",this.fnGridStatusCancolumnchange ,this);
+	}else{
+		objBindDs.addEventHandler("cancolumnchange",this.fnGridStatusCancolumnchange ,this);
+	}
+	
+	//해당 데이터셋에 oncolumnchanged 이벤트 생성
+	evtIdx = objBindDs.findEventHandler("oncolumnchanged",this.fnGridStatusOncolumnchanged ,this);
+	
+	if(evtIdx > -1){
+		objBindDs.removeEventHandler("oncolumnchanged",this.fnGridStatusOncolumnchanged ,this);
+		objBindDs.addEventHandler("oncolumnchanged",this.fnGridStatusOncolumnchanged ,this);
+	}else{
+		objBindDs.addEventHandler("oncolumnchanged",this.fnGridStatusOncolumnchanged ,this);
+	}
+};
+
+/**
+* @description 	       : 해당 Grid Bind Dataset 상태 변경시
+* @param obj           : NormalDataset
+*        e             : DSColChangeEventInfo
+* @return              : 없음
+*/
+this.dsList_cancolumnchange = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	var eRow = e.row;	
+	
+	if(e.columnid == "_rowStatus"){
+		obj.set_updatecontrol(false);
+		
+		if(e.newvalue == "I" || e.newvalue == "U" || e.newvalue == "D"){
+			obj.setRowType(eRow, e.newvalue);
+		}else{
+			obj.setRowType(eRow, "N");
+		}
+	}
+};
+
+/**
+* @description 	       : 해당 Grid Bind Dataset 데이터 변경시
+* @param obj           : NormalDataset
+*        e             : DSColChangeEventInfo
+* @return              : 없음
+*/
+this.dsList_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	var eRow = e.row;	
+	
+	//변경된 컬럼이 상태 컬럼이 아닐시 상태컬럼에 상태값(I|U|D)을 셋팅한다.
+	if(e.columnid != "_rowStatus"){	
+		var rowType = this.dsList.getRowType(eRow);		
+		var orgData = obj.getOrgColumn(eRow ,e.columnid);
+		var rtnRowType = "";
+		
+		if(rowType == Dataset.ROWTYPE_INSERT){
+			rtnRowType = "I";
+		}else if(rowType == Dataset.ROWTYPE_UPDATE){
+			if(orgData != e.newvalue){
+				rtnRowType = "U";
+			}else{
+				rtnRowType = "";
+			}			
+		}else if(rowType == Dataset.ROWTYPE_DELETE){
+			rtnRowType = "D";
+		}else if(rowType == Dataset.ROWTYPE_NORMAL){
+			rtnRowType = "";
+			
+		}
+		
+		obj.setColumn(eRow, "_rowStatus", rtnRowType);
+	}
+	
+	obj.set_updatecontrol( this.dsList._updatecontrol );
+};
+
+/**
+* @description 	       : 추가/삭제/초기화시 호출 함수
+* @param objGrid       : targetGrid
+*        sStatus       : 기능 (add|delete|reset)
+*        nRow          : 셋팅될 Row Index
+* @return              : 없음
+*/
+this.fnSetGridStatus = function( objGrid, sStatus, nRow){
+	/*
+		Dataset.ROWTYPE_NORMAL 1 초기 행의 상태 
+		Dataset.ROWTYPE_INSERT 2 추가된 행의 상태 
+		Dataset.ROWTYPE_UPDATE 4 수정된 행의 상태 
+		Dataset.ROWTYPE_DELETE 8 삭제된 행의 상태 
+	*/
+	
+	var objBindDs = objGrid.getBindDataset();
+	
+	if(sStatus == "add"){				//추가시
+		var aRow = objBindDs.addRow();
+		objBindDs.setColumn(aRow, "_rowStatus", "I");
+	}else if(sStatus == "delete"){		//삭제시
+		var nRowType = objBindDs.getRowType(nRow);
+		
+		if(nRowType == Dataset.ROWTYPE_INSERT){
+			objBindDs.deleteRow(nRow);
+		}else{
+			objBindDs.setColumn(nRow, "_rowStatus", "D");
+		}
+	}else if(sStatus == "reset"){		//초기화시
+		objBindDs.set_updatecontrol(false);
+		
+		objGrid.deleteContentsCol("body", 0);
+		objBindDs.deleteColumn("_rowStatus");
+		
+		objBindDs.set_updatecontrol(objBindDs._updatecontrol);
+		objBindDs.reset();
+		
+		this.fnInitGridStatus( objGrid, objBindDs );
+	}
+}
+
+
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+* @description 	       : "추가" 버튼클릭
+*/
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnSetGridStatus( this.Grid00, "add" );
+};
+
+/**
+* @description 	       : "삭제" 버튼클릭
+*/
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnSetGridStatus( this.Grid00, "delete", this.dsList.rowposition);
+};
+
+/**
+* @description 	       : "초기화" 버튼클릭
+*/
+this.Button02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnSetGridStatus( this.Grid00, "reset" );
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsList" cancolumnchange="dsList_cancolumnchange" oncolumnchanged="dsList_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="title" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="title">첫번째 데이터입니다.</Col>
+          </Row>
+          <Row>
+            <Col id="title">두번째 데이터 입니다.</Col>
+          </Row>
+          <Row>
+            <Col id="title">세번째 데이터 입니다.</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

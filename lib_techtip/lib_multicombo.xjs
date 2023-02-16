@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	      : 멀티 콤보 초기화 함수
+* @param arrComboList : 멀티 콤보로 구성할 콤보 리스트
+* @return             : 없음
+*/
+this.gfnInitMultiCombo = function(arrComboList)
+{
+	var i;
+	var nCount = arrComboList.length;
+	var objCombo;
+	var objChildCombo;
+
+	for(i=0;i<nCount;i++)
+	{
+		objCombo = arrComboList[i];
+
+		if(i!=nCount-1)
+		{
+			objChildCombo = arrComboList[i+1];
+			objCombo.childcombo = objChildCombo;
+			objCombo.addEventHandler("onitemchanged", this.cmbMultiCombo_onitemchanged, this);
+		}
+	}
+
+	this.gfnItemChangedMultiCombo(arrComboList[0], "-1");
+}
+
+ /**
+* @description 	   : 콤보 아이템 변경 처리 함수
+* @param objCombo  : 아이템 변경할 콤보 컴포넌트
+* @param sValue    : 변경할 콤보 값
+* @return          : 없음
+*/
+this.gfnItemChangedMultiCombo = function(objCombo, sValue)
+{
+	//하위 콤보 컴포넌트 가져오기
+	var objChildCombo = objCombo.childcombo;
+
+	//현재 컴포넌트 값 변경
+	objCombo.set_value(sValue);
+
+	//하위 콤보가 있을 경우
+	if(objChildCombo!=null)
+	{
+		//하위 콤보의 InnerDataset 가져오기
+		var objDs = objChildCombo.getInnerDataset();
+
+		//상위콤보 값을 기준으로 하위콤보 필터링
+		objDs.filter("Code.toString().indexOf('"+sValue+"')==0||Code=='-1'");
+
+		//콤보 아이템 변경 처리 함수 호출
+		this.gfnItemChangedMultiCombo(objChildCombo, "-1");
+	}
+}
+
+  /**
+* @description 	   : 콤보 아이템 변경 이벤트
+* @param obj       : 이벤트 발생한 콤보 컴포넌트
+* @param e         : 이벤트 오브젝트
+* @return          : 없음
+*/
+this.cmbMultiCombo_onitemchanged = function(obj, e)
+{
+	//콤보 아이템 변경 처리 함수 호출
+	this.gfnItemChangedMultiCombo(obj, e.postvalue);
+}
+]]></Script>

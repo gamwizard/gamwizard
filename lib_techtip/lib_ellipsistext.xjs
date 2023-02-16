@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	    	: Ellipsis 초기화 함수
+* @param objComp  		: Ellipsis를 적용할 Static 컴포넌트
+* @return           	: 없음
+*/
+this.fnInitEllipsisText = function(objComp)
+{
+	//컴포넌트에 입력된 Text 가져오기
+	var sText = objComp.text;
+	var sConvertText;
+	
+	//원본 문자열 관리를 위해 UserProperty 설정
+	objComp.orgtext = sText;
+	
+	//정확한 문자열 길이를 설정하기 위해 현재 적용된 Font정보 설정
+	objComp.ellipsisfont = 'normal 12px/normal "Gulim"';
+	
+	//Ellipsis 설정함수 호출
+	sConvertText = this.fnSetEllipsisText(objComp);
+	
+	//Ellipsis 설정된 Text으로 변경
+	objComp.set_text(sConvertText);
+}
+
+/**
+* @description 	    	: Ellipsis 설정 함수
+* @param objComp  		: Ellipsis를 적용할 컴포넌트
+* @return           	: Ellipsis 적용된 Text
+*/
+this.fnSetEllipsisText = function(objComp)
+{
+	//원본 문자열 가져오기
+	var sValue = objComp.orgtext;
+	
+	//적용된 폰트 정보 가져오기
+	var sFont = objComp.ellipsisfont;
+	
+	//문자열의 갯수 가져오기
+	var nLength = sValue.length;
+	
+	//문자열이 표현될 Width 정보 가져오기
+	var nLimitWidth = objComp.getOffsetWidth();
+	
+	//...의 Width 값 가져오기
+	var nDotWidth = nexacro.getTextSize("...", sFont).nx;
+	
+	//...을 제외한 문자열 표현 Width 설정하기
+	nLimitWidth = nLimitWidth - nDotWidth;
+	
+	//문자열의 Width가 문자열 표현할 Width보다 작다면
+	//원본 문자열 리턴(불필요한 Loop 방지를 위함)
+	if(nexacro.getTextSize(sValue, sFont).nx<=nLimitWidth)
+	{
+		return sValue;
+	}else
+	{
+		//문자열의 갯수만큼 Loop
+		for(var i=0;i<nLength;i++)
+		{
+			//현재까지의 문자열이 문자열 표현할 Width보다 크면
+			//현재 문자열 -1 + ...으로 문자열 리턴
+			if(nexacro.getTextSize(sValue.substr(0, i), sFont).nx>nLimitWidth)
+			{
+				return sValue.substr(0, i-1)+"...";
+			}
+		}
+	}
+	
+	//원본 문자열 리턴
+	return sValue;
+}
+]]></Script>

@@ -1,0 +1,617 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="aniaccordionmenu" width="1120" height="790" titletext="New Form" onload="aniaccordionmenu_onload" scrollbartype="none none" scrolltype="none">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Static id="stHeader" taborder="0" text="Accordion Menu" left="340" top="30" width="240" height="38" cssclass="static_WF_header"/>
+        <Div id="divMenu01" taborder="1" text="Div00" left="340" top="68" width="240" height="280" cssclass="div_WF_wrapper">
+          <Layouts>
+            <Layout>
+              <Static id="stTitle" taborder="0" text="동영상 화질" left="0" top="0" width="240" height="40" cssclass="static_WF_menuTitle" onclick="divMenu01_stTitle_onclick"/>
+              <CheckBox id="chkMenuItem0101" taborder="1" text="1080p" left="0" top="40" width="240" height="40" cssclass="chk_WF_menuItem1" value="true"/>
+              <CheckBox id="chkMenuItem0103" taborder="2" text="480p" left="0" top="120" width="240" height="40" cssclass="chk_WF_menuItem3"/>
+              <CheckBox id="chkMenuItem0105" taborder="3" text="240p" left="0" top="200" width="240" height="40" cssclass="chk_WF_menuItem5"/>
+              <CheckBox id="chkMenuItem0106" taborder="4" text="144p" left="0" top="240" width="240" height="40" cssclass="chk_WF_menuItem6"/>
+              <CheckBox id="chkMenuItem0102" taborder="5" text="720p" left="0" top="80" width="240" height="40" cssclass="chk_WF_menuItem2"/>
+              <CheckBox id="chkMenuItem0104" taborder="6" text="360p" left="0" top="160" width="240" height="40" cssclass="chk_WF_menuItem4"/>
+              <Static id="stHLine" taborder="7" top="18" width="17" height="5" cssclass="static_WF_button1" right="10"/>
+              <Static id="stVLine" taborder="8" top="12" width="5" height="17" cssclass="static_WF_button2" right="16" opacity="0.0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divMenu02" taborder="2" text="Div00" left="340" top="347" width="240" height="360" cssclass="div_WF_wrapper">
+          <Layouts>
+            <Layout>
+              <Static id="stTitle" taborder="0" text="재생 속도" left="0" top="0" width="240" height="40" cssclass="static_WF_menuTitle" enable="false"/>
+              <CheckBox id="chkMenuItem0201" taborder="1" text="0.25배" left="0" top="40" width="240" height="40" cssclass="chk_WF_menuItem1" value="true"/>
+              <CheckBox id="chkMenuItem0203" taborder="2" text="0.75배" left="0" top="120" width="240" height="40" cssclass="chk_WF_menuItem3"/>
+              <CheckBox id="chkMenuItem0205" taborder="3" text="1.25배" left="0" top="200" width="240" height="40" cssclass="chk_WF_menuItem5"/>
+              <CheckBox id="chkMenuItem0206" taborder="4" text="1.5배" left="0" top="240" width="240" height="40" cssclass="chk_WF_menuItem6"/>
+              <CheckBox id="chkMenuItem0202" taborder="5" text="0.5배" left="0" top="80" width="240" height="40" cssclass="chk_WF_menuItem2"/>
+              <CheckBox id="chkMenuItem0204" taborder="6" text="일반" left="0" top="160" width="240" height="40" cssclass="chk_WF_menuItem4"/>
+              <Static id="stHLine" taborder="7" left="213" top="18" width="17" height="5" cssclass="static_WF_button1"/>
+              <Static id="stVLine" taborder="8" left="219" top="18" width="5" height="5" cssclass="static_WF_button2"/>
+              <CheckBox id="chkMenuItem0208" taborder="9" text="2배" left="0" top="320" width="240" height="40" cssclass="chk_WF_menuItem8"/>
+              <CheckBox id="chkMenuItem0207" taborder="10" text="1.75배" left="0" top="280" width="240" height="40" cssclass="chk_WF_menuItem7"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="Static01" taborder="3" text="menu가 접혀있을 때 = +" left="595" top="73" width="238" height="35" visible="false" color="coral"/>
+        <Static id="Static01_00" taborder="4" text="안보이는 영역" left="595" top="108" width="238" height="238" visible="false" color="coral" background="antiquewhite"/>
+        <Static id="Static01_01" taborder="5" text="menu가 펼쳐졌을 때 = -" left="595" top="348" width="238" height="35" visible="false" color="coral"/>
+        <Div id="divMenu" taborder="6" text="Div00" left="20" top="33" width="240" height="150" formscrollbartype="none none" formscrolltype="none"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > aniaccordionmenu
+*  techtip [디자인] Animated Accordion Menu (애니메이션 적용한 아코디언 메뉴)
+
+*  @FileName	aniaccordionmenu.xfdl 
+*******************************************************************************
+*  2021.04.27		투비대원&투비미뇽		최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.aniaccordionmenu_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//아코디언 생성 함수 호출
+	this.gfnInitAniAccordionmenu(this.dsMenu, this.divMenu, "01");
+};
+
+
+//메뉴 클릭 이벤트
+this.stTitleClick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	//클릭된 컴포넌트의 부모 Div 가져오기
+	var objMenuDiv = obj.parent.parent;
+	
+	//펼치기 상태일 경우
+	if(objMenuDiv.getOffsetHeight()==objMenuDiv.menuheight)
+	{
+		//펼치기 애니메이션 정지
+		objMenuDiv.menuopenani.stop();
+		
+		//접기 애니메이션 실행
+		objMenuDiv.menucloseani.play();
+	}
+	//접기 상태일 경우
+	else
+	{
+		//접기 애니메이션 정지
+		objMenuDiv.menucloseani.stop();
+		
+		//펼치기 애니메이션 실행
+		objMenuDiv.menuopenani.play();
+	}
+};
+
+//체크박스 canchange 이벤트
+this.chkMenuItem_canchange = function(obj:nexacro.CheckBox,e:nexacro.ChangeEventInfo)
+{
+	//라디오 처럼 동작하기 위해
+	//선택 취소 차단
+	if(e.postvalue==false)return false;
+};
+
+//체크박스 onchanged 이벤트
+this.chkMenuItem_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
+{
+	//선택된 체크박스의 상위 Div 가져오기
+	var objDivMenu = obj.parent.parent;
+	
+	//체크박스 리스트 가져오기
+	var arrMenuList = objDivMenu.menulist;
+	
+	//체크박스 갯수 가져오기
+	var nMenuCnt = arrMenuList.length;
+	
+	var objMenu;
+	
+	//선택된 체크박스를 제외한 나머지 체크 해제
+	for(var i=0;i<nMenuCnt;i++)
+	{
+		objMenu = arrMenuList[i];
+		if(objMenu.id!=obj.id)objMenu.set_value(false);
+	}
+};
+
+//애니메이션 실행중 이벤트
+this.Animation_onrun = function(obj:nexacro.Animation,e:nexacro.AnimationEventInfo)
+{
+	//메뉴 펼치기 에니메이션 실행 시
+	if(obj.id.indexOf("aniMenuOpen")>-1)
+	{
+		//애니메이션 진행 함수 호출
+		this.fnRunAnimation(obj, "menuopen");
+	}
+	//메뉴 접기 에니메이션 실행 시
+	else if(obj.id.indexOf("aniMenuClose")>-1)
+	{
+		//애니메이션 진행 함수 호출
+		this.fnRunAnimation(obj, "menuclose");
+	}
+}
+
+//애니메이션 실행 완료 이벤트
+this.Animation_oncomplete = function(obj:nexacro.Animation,e:nexacro.AnimationEventInfo)
+{
+	//메뉴 펼치기 에니메이션 실행 시
+	if(obj.id.indexOf("aniMenuOpen")>-1)
+	{
+		//애니메이션 진행 함수 호출
+		this.fnRunAnimation(obj, "menuopen", "oncomplete");
+	}
+	//메뉴 접기 에니메이션 실행 시
+	else if(obj.id.indexOf("aniMenuClose")>-1)
+	{
+		//애니메이션 진행 함수 호출
+		this.fnRunAnimation(obj, "menuclose", "oncomplete");
+	}
+}
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+/**
+* @description 		: 아코디언 메뉴 생성 함수
+* @param objDs	    : 메뉴 리스트 데이터셋
+* @param objDiv     : 아코디언 메뉴를 표현할 Div
+* @param sMenuId    : 아코디언 메뉴를 생성할 메뉴 ID
+* @return 			: 없음
+*/
+this.gfnInitAniAccordionmenu = function(objDs, objDiv, sMenuId)
+{
+	//컴포넌트 Left 좌표값
+	var nLeft = 0;
+	
+	//컴포넌트 Top 좌표값
+	var nTop = 0;
+	
+	//컴포넌트 Height 값
+	var nHeight = 40;
+	
+	//메뉴영역 Height 값
+	var nMenuHeight = 0;
+	
+	var sId;
+	var sTitle;
+	var sCssClass;
+	var nLvl;
+	
+	var objStatic;
+	var objCheckbox;
+	var objDivMenu;
+	var nCnt;
+	
+	//아코디언 메뉴로 표현할 리스트 Filter
+	objDs.filter("id.indexOf('"+sMenuId+"')==0");
+	
+	//메뉴 갯수 가져오기
+	nCnt = objDs.rowcount;
+	
+	for(var i=0;i<nCnt;i++)
+	{
+		//메뉴 정보 가져오기
+		sId = objDs.getColumn(i, "id");
+		sTitle = objDs.getColumn(i, "title");
+		sCssClass = objDs.getColumn(i, "cssclass");
+		nLvl = nexacro.toNumber(objDs.getColumn(i, "lvl"));
+		
+		//최상위 메뉴일 경우
+		if(nLvl==0)
+		{
+			//상단 헤더 컴포넌트 생성
+			objStatic = new Static("stHeader", nLeft, nTop, null, nHeight, 0, null);
+			objDiv.addChild(objStatic.name, objStatic);
+			objStatic.set_cssclass(sCssClass);
+			objStatic.set_text(sTitle);
+			objStatic.show();
+		}
+		//상위 메뉴일 경우
+		else if(nLvl==1)
+		{
+			//최초 메뉴의 경우 
+			if(!objDivMenu)
+			{
+				nTop = "stHeader:-1px";
+			}
+			//두번째 메뉴 부터
+			else
+			{
+				nTop = objDivMenu.id+":-1px";
+			}
+			
+			//메뉴를 포함할 Div 생성
+			objDivMenu = new Div("divMenu_"+sId, nLeft, nTop, null, nHeight, 0, null);
+			objDivMenu.set_formscrollbartype("none none");
+			objDivMenu.set_formscrolltype("none");
+			objDivMenu.menulist = [];
+			objDiv.addChild(objDivMenu.name, objDivMenu);
+			objDivMenu.show();
+			
+			//메뉴 타이틀 생성
+			nTop = 0;
+			objStatic = new Static("stTitle", nLeft, nTop, null, nHeight, 0, null);
+			objDivMenu.addChild(objStatic.name, objStatic);
+			objStatic.set_cssclass(sCssClass);
+			objStatic.set_text(sTitle);
+			objStatic.show();
+			objStatic.addEventHandler("onclick", this.stTitleClick, this);
+			
+			//접기펼치기 표시(+) 중 - 라인 생성
+			objStatic = new Static("stHLine", null, nTop+(nHeight/2)-2, 17, 5, 10, null);
+			objDivMenu.addChild(objStatic.name, objStatic);
+			objStatic.set_cssclass("static_WF_button1");
+			objStatic.show();
+			objStatic.addEventHandler("onclick", this.stTitleClick, this);
+			
+			//접기펼치기 표시(+) 중 | 라인 생성
+			objStatic = new Static("stVLine", null, nTop+(nHeight/2)-8, 5, 17, 16, null);
+			objDivMenu.addChild(objStatic.name, objStatic);
+			objStatic.set_cssclass("static_WF_button2");
+			objStatic.show();
+			objStatic.addEventHandler("onclick", this.stTitleClick, this);
+			
+			//다음 컴포넌트의 Top 좌표 계산
+			nTop += nHeight;
+			
+			//메뉴 영역의 높이 계산
+			objDivMenu.menuheight = nTop;
+			
+			//메뉴 접기/펼치기 애니메이션 초기화 함수 호출
+			this.fnInitAnimation(objDivMenu);
+			
+		}
+		//메뉴일 경우
+		else if(nLvl==2)
+		{
+			//메뉴용 Checkbox 생성
+			objCheckbox = new CheckBox("chkMenuItem_"+sId, "0%", nTop, "100%", nHeight, null, null);
+			objDivMenu.addChild(objCheckbox.name, objCheckbox);
+			objCheckbox.set_cssclass(sCssClass);
+			objCheckbox.set_text(sTitle);
+			objCheckbox.show();
+			
+			//라디오처럼 사용하기 위해 이벤트 추가
+			objCheckbox.addEventHandler("canchange", this.chkMenuItem_canchange, this);
+			objCheckbox.addEventHandler("onchanged", this.chkMenuItem_onchanged, this);
+			
+			//메뉴리스트에 Checkbox 컴포넌트 추가
+			objDivMenu.menulist.push(objCheckbox);
+			
+			//다음 컴포넌트의 Top 좌표 계산
+			nTop += nHeight;
+			
+			//메뉴 영역의 높이 계산
+			objDivMenu.menuheight = nTop;
+		}
+	}
+	//필터 초기화
+	objDs.filter("");
+}
+
+/**
+* @description 		: Div 자동 높이 조절 함수
+* @param objDiv	    : 높이 조절할 Div 컴포넌트
+* @return 			: 없음
+*/
+this.fnResizeScroll = function(objDiv)
+{
+	//Div 높이 초기값
+	var nHeight = 0;
+	
+	//Div에 포함된 컴포넌트 리스트 가져오기
+	var objComps = objDiv.form.components;
+	
+	//컴포넌트 갯수 가져오기
+	var nCompCnt = objComps.length;
+	
+	//컴포넌트 위치 조절을 위한 resetScroll 호출
+	objDiv.form.resetScroll();
+	
+	//가장 하단에 위치한 컴포넌트의 Bottom 좌표 값 구하기
+	for(var i=0;i<nCompCnt;i++)
+	{
+		if(nHeight < objComps[i].getOffsetBottom())nHeight = objComps[i].getOffsetBottom();
+	}
+	
+	//Div 높이 변경
+	objDiv.setOffsetHeight(nHeight);
+}
+
+
+/**
+* @description 		: 메뉴 접기/펼치기 애니메이션 초기화 함수
+* @param objDiv	    : 애니메이션을 적용할 Div 컴포넌트
+* @return 			: 없음
+*/
+this.fnInitAnimation = function(objDiv)
+{
+	//펼치기 애니메이션
+	var objAniMenuOpen;
+	
+	//접기 애니메이션
+	var objAniMenuClose;
+	
+	//펼치기 애니메이션 오브젝트 만들기
+	objAniMenuOpen = new nexacro.Animation("aniMenuOpenBy"+objDiv.id, this);
+	this.addChild(objAniMenuOpen.id, objAniMenuOpen);
+	objDiv.menuopenframeidx = 0;
+	objAniMenuOpen.targetDiv = objDiv;
+	objAniMenuOpen.set_duration(400);
+	objAniMenuOpen.set_easing("easeoutsine");
+	objAniMenuOpen.setEventHandler( "onrun", this.Animation_onrun, this);
+	objAniMenuOpen.setEventHandler( "oncomplete", this.Animation_oncomplete, this);
+	objAniMenuOpen.addTarget("item1", objDiv, "menuopenframeidx:100");
+	objDiv.menuopenani = objAniMenuOpen;
+	
+	//접기 애니메이션 오브젝트 만들기
+	objAniMenuClose = new nexacro.Animation("aniMenuCloseBy"+objDiv.id, this);
+	this.addChild(objAniMenuClose.id, objAniMenuClose);
+	objDiv.menucloseframeidx = 0;
+	objAniMenuClose.targetDiv = objDiv;
+	objAniMenuClose.set_duration(400);
+	objAniMenuClose.set_easing("easeoutsine");
+	objAniMenuClose.setEventHandler( "onrun", this.Animation_onrun, this);
+	objAniMenuClose.setEventHandler( "oncomplete", this.Animation_oncomplete, this);
+	objAniMenuClose.addTarget("item1", objDiv, "menucloseframeidx:100");
+	objDiv.menucloseani = objAniMenuClose;
+}
+
+/**
+* @description 		: 애니메이션 진행 함수
+* @param objAni	    : 애니메이션 오브젝트
+* @param sType      : 애니메이션 종류(menuopen, menuclose)
+* @param sEvent     : 애니메이션 완료이벤트 여부
+* @return 			: 없음
+*/
+this.fnRunAnimation = function(objAni, sType, sEvent)
+{
+	//애니메이션 실행할 Div 가져오기
+	var objTargetDiv = objAni.targetDiv;
+	
+	//애니메이션 실행할 Div의 innerForm 가져오기
+	var objTargetForm = objAni.targetDiv.form;
+	
+	//애니메이션 실행할 VLine 컴포넌트 가져오기
+	var objVLine = objTargetForm.stVLine;
+	
+	//애니메이션을 실행할 메뉴 리스트 가져오기
+	var arrMenuList = objTargetDiv.menulist;
+	
+	//메뉴 갯수
+	var nMenuCnt = arrMenuList.length;
+	
+	//접기 상태 Height 값
+	var nMinSize = 40;
+	
+	//펼치기 상태 Height 값
+	var nMaxSize = objTargetDiv.menuheight;
+	
+	//변경될 Height 값
+	var nDiffSize = nMaxSize - nMinSize;
+	
+	//애니메이션 진행율
+	var nPerIdx;
+	
+	//펼치기 애니메이션 시
+	if(sType=="menuopen")
+	{
+		//현재 애니메이션 진행율
+		nPerIdx = objTargetDiv.menuopenframeidx/100;;
+		
+		//현재 구분 컴포넌트의 Top 좌표 구하기
+		nNextSize = nMinSize + (nDiffSize * nPerIdx);
+		
+		//메뉴영역 Height 변경
+		objTargetDiv.setOffsetHeight(nNextSize);
+		
+		//VLine Opacity 100% -> 10%로 변경
+		objVLine.set_opacity(nexacro.round(1-(0.9*nPerIdx), 1));
+		
+		
+		for(var i=0;i<nMenuCnt;i++)
+		{
+			//짝수 행은 오른쪽->왼쪽으로 나타남
+			//홀수 행은 왼쪽->오른쪽으로 나타남
+			if(i%2==0)
+			{
+				arrMenuList[i].set_left(100-(100*nPerIdx)+"%");
+			}else
+			{
+				arrMenuList[i].set_left((-100+(100*nPerIdx))+"%");
+			}
+			
+			//Height 값 0->40으로 변경
+			arrMenuList[i].set_height(0+(40*nPerIdx));
+			
+			//Opacity 10% -> 100%로 변경
+			arrMenuList[i].set_opacity(nexacro.round(0.1+(0.9*nPerIdx), 1));
+		}
+		
+		//애니메이션 종료 시
+		if(sEvent=="oncomplete")
+		{
+			//frameidx 초기화
+			objTargetDiv.menuopenframeidx = 0;
+		}
+	}
+	//접기 애니메이션 시
+	else
+	{
+		//현재 애니메이션 진행율
+		nPerIdx = objTargetDiv.menucloseframeidx/100;
+		
+		//현재 구분 컴포넌트의 Top 좌표 구하기
+		nNextSize = nMaxSize - (nDiffSize * nPerIdx);
+		
+		//메뉴영역 Height 변경
+		objTargetDiv.setOffsetHeight(nNextSize);
+		
+		//VLine Opacity 10% -> 100%로 변경
+		objVLine.set_opacity(nexacro.round(0.1+(0.9*nPerIdx), 1));
+		
+		for(var i=0;i<objTargetDiv.menulist.length;i++)
+		{
+			//짝수 행은 왼쪽->오른쪽으로 사라짐
+			//홀수 행은 오른쪽->왼쪽으로 사라짐
+			if(i%2==0)
+			{
+				objTargetDiv.menulist[i].set_left((100*nPerIdx)+"%");
+			}else
+			{
+				objTargetDiv.menulist[i].set_left((0-(100*nPerIdx))+"%");
+			}
+			
+			//Height 값 40->0으로 변경
+			objTargetDiv.menulist[i].set_height(40-(40*nPerIdx));
+			
+			//Opacity 100% -> 10%로 변경
+			objTargetDiv.menulist[i].set_opacity(nexacro.round(1-(0.9*nPerIdx), 1));
+		}
+			
+		//애니메이션 종료 시
+		if(sEvent=="oncomplete")
+		{
+			//frameidx 초기화
+			objTargetDiv.menucloseframeidx = 0;
+			
+		}
+	}
+	
+	//Div 자동 높이 조절 함수 호출
+	this.fnResizeScroll(objTargetDiv.parent.parent);
+}
+]]></Script>
+    <Objects>
+      <Dataset id="dsMenu">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="cssclass" type="STRING" size="256"/>
+          <Column id="lvl" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="id">01</Col>
+            <Col id="lvl">0</Col>
+            <Col id="title">Accordion Menu</Col>
+            <Col id="cssclass">static_WF_header</Col>
+          </Row>
+          <Row>
+            <Col id="id">0101</Col>
+            <Col id="lvl">1</Col>
+            <Col id="title">동영상 화질</Col>
+            <Col id="cssclass">static_WF_menuTitle</Col>
+          </Row>
+          <Row>
+            <Col id="id">010101</Col>
+            <Col id="lvl">2</Col>
+            <Col id="title">1080p</Col>
+            <Col id="cssclass">chk_WF_menuItem1</Col>
+          </Row>
+          <Row>
+            <Col id="lvl">2</Col>
+            <Col id="id">010102</Col>
+            <Col id="title">720p</Col>
+            <Col id="cssclass">chk_WF_menuItem2</Col>
+          </Row>
+          <Row>
+            <Col id="lvl">2</Col>
+            <Col id="id">010103</Col>
+            <Col id="title">480p</Col>
+            <Col id="cssclass">chk_WF_menuItem3</Col>
+          </Row>
+          <Row>
+            <Col id="lvl">2</Col>
+            <Col id="id">010104</Col>
+            <Col id="title">360p</Col>
+            <Col id="cssclass">chk_WF_menuItem4</Col>
+          </Row>
+          <Row>
+            <Col id="lvl">2</Col>
+            <Col id="id">010105</Col>
+            <Col id="title">240p</Col>
+            <Col id="cssclass">chk_WF_menuItem5</Col>
+          </Row>
+          <Row>
+            <Col id="lvl">2</Col>
+            <Col id="id">010106</Col>
+            <Col id="title">144p</Col>
+            <Col id="cssclass">chk_WF_menuItem6</Col>
+          </Row>
+          <Row>
+            <Col id="id">0102</Col>
+            <Col id="title">재생 속도</Col>
+            <Col id="lvl">1</Col>
+            <Col id="cssclass">static_WF_menuTitle</Col>
+          </Row>
+          <Row>
+            <Col id="id">010201</Col>
+            <Col id="title">0.25배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem1</Col>
+          </Row>
+          <Row>
+            <Col id="id">010202</Col>
+            <Col id="title">0.5배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem2</Col>
+          </Row>
+          <Row>
+            <Col id="id">010203</Col>
+            <Col id="title">0.75배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem3</Col>
+          </Row>
+          <Row>
+            <Col id="id">010204</Col>
+            <Col id="title">일반</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem4</Col>
+          </Row>
+          <Row>
+            <Col id="id">010205</Col>
+            <Col id="title">1.25배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem5</Col>
+          </Row>
+          <Row>
+            <Col id="id">010206</Col>
+            <Col id="title">1.5배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem6</Col>
+          </Row>
+          <Row>
+            <Col id="id">010207</Col>
+            <Col id="title">1.75배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem7</Col>
+          </Row>
+          <Row>
+            <Col id="id">010208</Col>
+            <Col id="title">2배</Col>
+            <Col id="lvl">2</Col>
+            <Col id="cssclass">chk_WF_menuItem8</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

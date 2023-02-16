@@ -1,0 +1,21 @@
+﻿{
+	"name": "checkcombo",
+	"version": "32",
+	"description": "",
+	"license": "",
+	"objInfo": [	
+    "checkcombo/_metainfo_/checkcombo.info"
+	],
+	"scripts": [
+    "checkcombo/checkcombo.xcdl.js"
+	],
+	"designscripts": [
+    "checkcombo/Designcheckcombo.js"
+	],
+	"help": "",	
+	"xcss": "checkcombo/_xcss_/checkcombo.xcss",
+	"images": "",
+	"contentseditor": [
+
+	]
+}

@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="sortPopup" width="250" height="230" titletext="New Form">
+    <Layouts>
+      <Layout height="230" mobileorientation="landscape" width="250">
+        <Button id="btnAdd" taborder="0" text="기준추가" left="98" top="10" width="71" height="28" onclick="fnComButton"/>
+        <Button id="btnDel" taborder="1" text="기준삭제" left="172" top="10" width="71" height="28" onclick="fnComButton"/>
+        <Grid id="Grid00" taborder="2" left="9" top="44" width="234" height="152" binddataset="dsItem" autofittype="col" autoenter="select">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="132"/>
+                <Column size="103"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="25"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="열"/>
+                <Cell col="1" text="정렬"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:column" displaytype="combocontrol" edittype="combo" combodataset="dsColumn" combodatacol="name" combocodecol="code" comboautoselect="true"/>
+                <Cell col="1" text="bind:status" displaytype="combocontrol" edittype="combo" combodataset="dsStatus" combocodecol="code" combodatacol="name" comboautoselect="true"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnApply" taborder="3" text="확인" left="166" top="200" width="37" height="20" onclick="fnComButton"/>
+        <Button id="btnCancle" taborder="4" text="취소" left="206" top="200" width="37" height="20" onclick="fnComButton"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsItem" oncolumnchanged="dsItem_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="column" type="STRING" size="256"/>
+          <Column id="status" type="STRING" size="256"/>
+          <Column id="index" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsStatus">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">1</Col>
+            <Col id="name">오름차순</Col>
+          </Row>
+          <Row>
+            <Col id="code">2</Col>
+            <Col id="name">내림차순</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsColumn">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="index" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip grid single & multi sort sample 
+*  @MenuPath    techtip > gridsortpop
+*  @FileName	gridsortpop.xfdl 
+*  @Desction	grid multi sort popup form 
+*******************************************************************************
+*  2019.08.26		nana			최초 생성
+*  2020.03.02		nana			수정
+*******************************************************************************
+*/
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description setSortInfo --> 소팅 정보를 화면에 표시
+* @param Grid  : grid 소트 대상 Grid,
+*		 array : cells Cell 별 소트 정보
+* @return
+*/
+this.setSortInfo = function(grid,cells)
+{
+	var cellInfos = grid.cellInfos;
+	var sortItems = grid.sortItems;
+	var columnName, cellInfo, index, status, text, row, cell;
+
+	// 컬럼 정보 구성
+	this.dsColumn.deleteAll();
+	for (var i = 0; i < cells.length; i++)
+	{
+		cell = cells[i];
+		row = this.dsColumn.addRow();
+		this.dsColumn.setColumn(row, "code", cell.column);
+		this.dsColumn.setColumn(row, "name", cell.text);
+		this.dsColumn.setColumn(row, "index", cell.index);
+	}
+
+	// 현재 소팅 정보 표시
+	this.dsItem.deleteAll();
+
+	if (!this.gfnIsNull(sortItems))
+	{
+		for (var i = 0, len = sortItems.length; i < len; i++)
+		{
+			columnName = sortItems[i];
+			cellInfo = cellInfos[columnName];
+			index = cellInfo.index;
+			status = cellInfo.status;
+			text = cellInfo.text;
+
+			if (status > 0)
+			{
+				row = this.dsItem.addRow();
+				this.dsItem.setColumn(row, "column", columnName);
+				this.dsItem.setColumn(row, "status", status);
+				this.dsItem.setColumn(row, "index", index);
+			}
+		}
+	}
+	else
+	{
+		var row = this.dsItem.addRow();
+		
+		//this.dsItem.setColumn(row, "index", grid.rClickPopupMenu.headCellIndex);
+		this.dsItem.setColumn(row, "status", 1);
+		this.dsItem.setColumn(row, "column", this.dsColumn.lookup("index",grid.rClickPopupMenu.headCellIndex,"code"));
+	}
+}
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description Button onclick event --> add, del, apply, cancle
+*/
+this.fnComButton = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	switch (obj.name)
+	{
+		case "btnAdd": // 항목 추가
+			var row = this.dsItem.addRow();
+			this.dsItem.setColumn(row, "status", 1);
+			break;
+
+		case "btnDel": // 항목 삭제
+			this.dsItem.deleteRow(this.dsItem.rowposition);
+			break;
+
+		case "btnApply": // 정렬 적용
+			var items = [], index, status;
+
+			for (var i = 0, len = this.dsItem.rowcount; i < len; i++)
+			{
+				index = this.dsItem.getColumn(i, "index");
+				status = this.dsItem.getColumn(i, "status");
+
+				if (this.gfnIsNull(index) || this.gfnIsNull(status)) continue;
+
+				items.push
+				(
+					{
+						index	: index,
+						status	: parseInt(status)
+					}
+				);
+			}
+
+			this.parent.closePopup(items);
+			break;
+			
+		case "btnCancle": // 취소
+			this.parent.closePopup(items);
+			break;
+	}
+};
+
+/**
+ * @description Dataset oncolumnchanged event --> 'column' changed : dsitem index column change
+*/
+this.dsItem_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if (e.columnid == "column")
+	{
+		this.dsItem.setColumn(e.row, "index", this.dsColumn.lookup("code", e.newvalue, "index"));		
+	}
+};
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param  All : val – 체크할 문자열
+* @return boolean : Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}
+
+]]></Script>
+  </Form>
+</FDL>

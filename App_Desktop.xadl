@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ADL version="2.0">
+  <Application id="App_Desktop" screenid="Desktop_screen">
+    <Layout>
+      <MainFrame id="mainframe" showtitlebar="true" showstatusbar="true" width="1280" height="720">
+        <ChildFrame id="ChildFrame00" formurl="techtip::richtexteditor.xfdl"/>
+      </MainFrame>
+    </Layout>
+    <Style url="xcssrc::test.xcss"/>
+    <Style url="xcssrc::gridhtmlprint.xcss"/>
+    <Style url="xcssrc::dynamicListview.xcss"/>
+    <Style url="xcssrc::richtexteditor.xcss"/>
+    <Style url="xcssrc::gridMobileView.xcss"/>
+    <Style url="xcssrc::Chart.xcss"/>
+    <Style url="xcssrc::changelanguage.xcss"/>
+    <Style url="xcssrc::colorchangebutton.xcss"/>
+    <Style url="xcssrc::aniaccordionmenu.xcss"/>
+    <Style url="xcssrc::windowcalendar.xcss"/>
+    <Style url="xcssrc::cardhovereffect.xcss"/>
+    <Style url="xcssrc::pagenavigationdesign.xcss"/>
+    <Style url="xcssrc::gridcaseallcheck.xcss"/>
+    <Style url="xcssrc::schedulerv3.xcss"/>
+  </Application>
+</ADL>

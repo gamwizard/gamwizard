@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="align" width="800" height="500" titletext="New Form">
+    <Layouts>
+      <Layout height="500" mobileorientation="landscape" width="800">
+        <Static id="Static00" taborder="0" text="이것은 static 컴포넌트 입니다." left="530" top="434" width="150" height="52"/>
+        <Edit id="Edit00" taborder="1" left="449" top="217" width="240" height="56" value="안녕하세요. 저는 투비나나 입니다." text="안녕하세요. 저는 투비나나 입니다."/>
+        <ImageViewer id="ImageViewer00" taborder="7" left="290" top="80" width="199" height="161" image="url('learn::ocean-2203720_960_720.jpg')"/>
+        <Calendar id="Calendar00" taborder="3" left="190" top="108" width="235" height="218" type="monthonly"/>
+        <ProgressBar id="ProgressBar00" taborder="4" max="100" min="0" text="ProgressBar00" left="699" top="92" width="90" height="41" onclick="ProgressBar00_onclick" pos="60"/>
+        <Spin id="Spin00" taborder="5" left="630" top="410" width="136" height="20" value="21"/>
+        <Tab id="Tab00" taborder="6" tabindex="0" left="516" top="280" width="228" height="93">
+          <Tabpages>
+            <Tabpage id="Tabpage1" text="Tabpage1" border="1px solid #f3f3f3"/>
+            <Tabpage id="Tabpage2" text="Tabpage2"/>
+          </Tabpages>
+        </Tab>
+        <Grid id="Grid00" taborder="8" left="30" top="340" width="462" height="150" binddataset="Dataset00">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row band="head" size="24"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="Column0"/>
+                <Cell col="1" text="Column1"/>
+                <Cell col="2" text="Column2"/>
+                <Cell col="3" text="Column3"/>
+                <Cell col="4" text="Column4"/>
+                <Cell col="5" text="Column5"/>
+                <Cell col="6" text="Column6"/>
+                <Cell col="7" text="Column7"/>
+                <Cell col="8" text="Column8"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+                <Cell col="7" text="bind:Column7"/>
+                <Cell col="8" text="bind:Column8"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="9" text="Button00" left="727" top="232" width="53" height="56"/>
+        <TextArea id="TextArea00" taborder="2" left="20" top="200" width="261" height="121" value="컴포넌트의 높이, 너비의 최대, 최솟값을 지정할 수 있는 minwidth, minheight, maxwidth, maxheight 속성값을 지정할 수 있습니다. 해당 속성값을 설정한 경우에 width, height 속성값이 지정된 범위를 벗어나는 경우에는 width, height 속성값을 무시하고 min, max 속성값으로 지정한 값이 설정됩니다." wordWrap="char" scrolltype="none"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="Dataset00">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="STRING" size="256"/>
+          <Column id="Column6" type="STRING" size="256"/>
+          <Column id="Column7" type="STRING" size="256"/>
+          <Column id="Column8" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+          <Row/>
+          <Row/>
+          <Row/>
+          <Row/>
+          <Row/>
+          <Row/>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[]]></Script>
+  </Form>
+</FDL>

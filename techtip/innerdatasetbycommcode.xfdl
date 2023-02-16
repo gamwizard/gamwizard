@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="innerdatasetbycommoncode" width="1120" height="790" titletext="New Form">
+    <Layouts>
+      <Layout height="790" mobileorientation="landscape" width="1120">
+        <Combo id="Combo00" taborder="0" text="Combo00" left="10" top="70" width="150" height="20"/>
+        <Radio id="Radio00" taborder="1" left="10" top="120" width="220" height="20" innerdataset="dsCombo" codecolumn="code" datacolumn="value" direction="vertical"/>
+        <Grid id="grdList" taborder="2" left="10" top="175" width="225" height="200" binddataset="dsList" autoenter="select">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="코드"/>
+                <Cell col="1" text="Combo"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0"/>
+                <Cell col="1" displaytype="combocontrol" edittype="combo" text="bind:Column0" combodataset="dsCombo2" combocodecol="code" combodatacol="value"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="3" text="InnerDataset 설정" left="100" top="10" width="130" height="30" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">01</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">02</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">03</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">04</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">05</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="gdsCommCd">
+        <ColumnInfo>
+          <Column id="parent_cd" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="parent_cd">01</Col>
+            <Col id="code">01</Col>
+            <Col id="value">사과</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">01</Col>
+            <Col id="code">02</Col>
+            <Col id="value">배</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">01</Col>
+            <Col id="code">03</Col>
+            <Col id="value">바나나</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">01</Col>
+            <Col id="code">04</Col>
+            <Col id="value">수박</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">02</Col>
+            <Col id="code">01</Col>
+            <Col id="value">남자</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">02</Col>
+            <Col id="code">02</Col>
+            <Col id="value">여자</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">01</Col>
+            <Col id="value">패션</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">02</Col>
+            <Col id="value">식품</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">03</Col>
+            <Col id="value">자동차</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">04</Col>
+            <Col id="value">출산/육아</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">05</Col>
+            <Col id="value">가구</Col>
+          </Row>
+          <Row>
+            <Col id="parent_cd">03</Col>
+            <Col id="code">06</Col>
+            <Col id="value">전지기기</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCombo">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">0</Col>
+            <Col id="value">남자</Col>
+          </Row>
+          <Row>
+            <Col id="code">1</Col>
+            <Col id="value">여자</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCombo2">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > innerdatasetbycommcode
+*  techtip Make InnerDataset By CommonCode (공통코드 데이터셋을 통한 Innerdataset 만들기)
+*  @FileName	innerdatasetbycommcode.xfdl 
+*******************************************************************************
+*  2021.07.26		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_innerdatasetbycommcode.xjs"; 
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//공통 코드 
+	var sParentCode = "01";
+	
+	//InnerDataset을 추가할 컴포넌트
+	var objTargetComp = this.Combo00;
+	
+	//전체코드 추가 여부
+	var bUseAll = true;
+	
+	//초기화 Index 정보
+	var nInitIndex = 0;
+	
+	//데이터셋 신규 생성 여부
+	//NEW : 데이터셋 신규 생성 후 InnerDataset으로 설정
+	//UPDATE : 연결된 InnerDataset에 CopyData
+	var sInnerDatasetType = "NEW";
+	
+	//InnerDataset 생성 함수 호출
+	this.gfnMakeInnerDataset(sParentCode, objTargetComp, bUseAll, sInnerDatasetType, nInitIndex);
+	
+	
+	//공통 코드 
+	var sParentCode = "02";
+	
+	//InnerDataset을 추가할 컴포넌트
+	var objTargetComp = this.Radio00;
+	
+	//전체코드 추가 여부
+	var bUseAll = true;
+	
+	//초기화 Index 정보
+	var nInitIndex = 1;
+	
+	//데이터셋 신규 생성 여부
+	//NEW : 데이터셋 신규 생성 후 InnerDataset으로 설정
+	//UPDATE : 연결된 InnerDataset에 CopyData
+	var sInnerDatasetType = "NEW";
+	var sInnerDatasetType = "UPDATE";
+	
+	//InnerDataset 생성 함수 호출
+	this.gfnMakeInnerDataset(sParentCode, objTargetComp, bUseAll, sInnerDatasetType, nInitIndex);
+	
+	
+	//공통 코드 
+	var sParentCode = "03";
+	
+	//InnerDataset을 추가할 그리드
+	var objTargetGrid = this.grdList;
+	
+	//InnerDataset을 추가할 Cell Index
+	var nTargetCell = 1;
+	
+	//InnerDataset으로 사용할 데이터셋
+	var objTargetDs = this.dsCombo2
+	
+	//전체코드 추가 여부
+	var bUseAll = true;
+	
+	//Grid Cell용 InnerDataset 생성 함수 호출
+	this.gfnMakeInnerDatasetForGrid(sParentCode, objTargetGrid, nTargetCell, objTargetDs, bUseAll);
+};
+]]></Script>
+  </Form>
+</FDL>

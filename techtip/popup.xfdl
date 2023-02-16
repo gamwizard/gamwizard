@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popupsample" width="1280" height="720" titletext="popup sample form ( popup 화면 )" onload="form_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <TextArea id="TextArea00" taborder="0" left="40" top="70" width="404" height="218" value="popup open&#10;&#10;현재 보여지는 텍스트를 전달합니다."/>
+        <Button id="Button00" taborder="1" text="Modeless Window send message" left="230" top="309" width="214" height="49" onclick="openMessage_onclick"/>
+        <Button id="Button01" taborder="2" text="Show Modal Call" left="480" top="74" width="138" height="46" onclick="modal_onclick"/>
+        <Button id="Button02" taborder="3" text="Open Call" left="480" top="133" width="138" height="46" onclick="open_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip popup sample 
+*  @MenuPath    techtip > popup
+*  @FileName	popup.xfdl 
+*  @Desction	modal and modeless popup sample
+*******************************************************************************
+*  2019.07.18		nana			최초 생성
+*  2020.03.02		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_popup.xjs";
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.form_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	/*
+	 1. popupWidth	: popup width (default)
+	 2. popupHeight	: popup height (default)
+	 3. objTextArea	: text component
+	 4. objFunction	: parent function
+	*/
+	
+	var objForm = obj;
+	var objConfig = {
+						popupWidth		: 400,
+						popupHeight		: 250,
+						objTextArea		: this.TextArea00,
+						objFunction		: this.getMethod_parent
+				    }
+	this.gfnInitPopupForm(objForm,objConfig);
+};
+
+/**
+ * @description popup화면 부모창 함수 호출 확인용
+*/
+this.getMethod_parent = function()
+{
+	alert("parent function call");
+}
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(showmodal)
+ **************************************************************************/
+/**
+ * @description modal popup CallBack 함수
+*/
+this.popupCallBack = function(sFormId, sArg)
+{
+	if(sFormId == 'popupModal')
+	{
+		if(sArg == 'OK')
+		{
+			alert('modal call back');
+		}
+	}
+}
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description showModal
+*/
+this.modal_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//description Modal
+	var oArg = {
+				objArguments : this.TextArea00
+				};
+				
+	this.gfnShowModal("popupModal", oArg, "techtip::popup_modal.xfdl", "popupCallBack", this, 400, 250, true, true, null);
+};
+
+/**
+ * @description Modeless window
+*/
+this.open_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//openPopup
+	var oArg = {
+				objArguments : this.TextArea00
+				};
+				
+	this.gfnOpenPopup("popupOpen", oArg, "techtip::popup_open.xfdl", this, 400, 250, true, true, null);
+};
+
+/**
+ * @description send message to Modeless window
+*/
+this.openMessage_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	if(!this.gfn_isNull(nexacro.getPopupFrames()["popupOpen"])){
+		nexacro.getPopupFrames()["popupOpen"].form.sendMethod_child(this.config.objTextArea.text);
+	}
+};
+
+
+
+
+
+
+]]></Script>
+  </Form>
+</FDL>

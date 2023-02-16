@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="paging_comm" width="632" height="30" titletext="New Form" scrollbartype="none none" onload="paging_comm_onload" onsize="paging_comm_onsize">
+    <Layouts>
+      <Layout height="30" mobileorientation="landscape" width="632">
+        <Static id="Static11" taborder="0" left="0" top="0" cssclass="sta_WF_box04L" right="0" bottom="0" text=""/>
+        <Div id="divCount" taborder="1" top="0" right="5" width="122" height="30">
+          <Layouts>
+            <Layout>
+              <Edit id="edtNow" taborder="0" top="16.67%" width="34" right="88" autoselect="true" padding="0px 0px 0px 2px" height="21"/>
+              <Static id="stTotal" taborder="1" text="/ " top="16.67%" width="40" right="44" height="21"/>
+              <Button id="btnGo" taborder="2" text="이동" width="37" cssclass="btn_WF_basic03" top="16.67%" right="0" height="21" onclick="divCount_btnGo_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divPaging" taborder="2" left="0" top="0" width="484" height="30" text="">
+          <Layouts>
+            <Layout>
+              <Button id="btnFirst" taborder="0" left="0" top="5" width="37" height="21" cssclass="btn_WF_pagingFirst" onclick="divPagingButton_onclick" enable="false"/>
+              <Button id="btnPrev" taborder="1" left="btnFirst:3" top="5" width="37" height="21" cssclass="btn_WF_pagingPrev" onclick="divPagingButton_onclick" enable="false"/>
+              <Button id="btnLast" taborder="3" top="5" height="21" cssclass="btn_WF_pagingLast" width="37" right="0" onclick="divPagingButton_onclick" text="" enable="false"/>
+              <Button id="btnNext" taborder="2" top="5" height="21" cssclass="btn_WF_pagingNext" right="btnLast:3" width="37" onclick="divPagingButton_onclick" enable="false"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[//페이징 처리 관련 변수
+this.iStartPageNo	= 1;
+this.iEndPageNo		= 10;
+this.iMaxPageNo		=10;
+this.iNowPageNo	= 1;
+this.iUnitSelRowNo   = 10; // 한번 Server호출시 가져올 row갯수
+
+this.iPageBlock		= 0;
+this.iTotalCount	= 0;
+this.btnCssName	= "";
+this.paging_comm_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	
+};
+
+//페이징처리 개수 및 사이즈 지정 (상위 페이지에서 호출)
+this.fn_initPageSet = function (rtMax,rtTotBool,rtRowCnt)
+{
+	this.iEndPageNo		= rtMax;
+	this.iMaxPageNo		= rtMax;
+	this.iUnitSelRowNo	= rtRowCnt;
+	
+	//합계 div 활성화 여부 및 현재 width 값 가져오기
+	var sThisWidth = this.width;
+	if(rtTotBool){
+		sThisWidth = sThisWidth - this.divCount.getOffsetWidth();
+		this.divCount.set_visible(true);
+	}else{
+		this.divCount.set_visible(false);
+	}
+	
+	//(button width = 37, button space = 3, page button start = 20, page button space = 10)
+	var sDivPagingWidth = (37*4+3+3)+(20+20)+(rtMax*20)+((rtMax-1)*10);
+	this.divPaging.setOffsetWidth(sDivPagingWidth);
+	this.divPaging.setOffsetLeft(parseInt((sThisWidth-sDivPagingWidth)/2));
+	
+	//페이징처리 버튼 생성
+	var btnLeft = 37+3+37+20;
+	var btnTop = 5;
+	var btnWidth = 25;
+	var btnHeight = 21;
+	
+	for(var i=0; i<rtMax; i++)
+	{
+		var objButton = new Button();
+		var objBtnId	= "btn"+i;
+		objButton.init(objBtnId,btnLeft,btnTop,btnWidth,btnHeight,null,null);		
+		objButton.set_text(i+1);
+		objButton.set_cssclass(this.btnCssName);
+		objButton.set_enable(false);
+		objButton.addEventHandler("onclick",this.divPagingNumber_onclick, this);
+		
+		this.divPaging.addChild(objBtnId,objButton);
+		objButton.show();
+		
+		btnLeft = btnLeft + 30;
+	}
+};
+
+this.divPagingButton_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objName = obj.name.split('btn');
+	this.fn_page (objName[1]);
+	
+};
+
+this.divPagingNumber_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_page (obj.text);
+};
+
+this.fn_page = function (btnText)
+{
+	var objNum = this.iNowPageNo;
+	if(btnText=='First'){
+		this.iStartPageNo = 1;
+		this.iEndPageNo   = 1 + (this.iMaxPageNo-1);
+		
+		objNum = this.iStartPageNo;
+	}else if(btnText=='Prev'){
+		this.iStartPageNo = this.iStartPageNo - this.iMaxPageNo;
+		this.iEndPageNo   = this.iStartPageNo + (this.iMaxPageNo-1);
+		
+		objNum = this.iStartPageNo;
+	}else if(btnText=='Last'){
+		this.iEndPageNo   = this.iPageBlock;
+		this.iStartPageNo = parseInt(this.iPageBlock/this.iMaxPageNo)*this.iMaxPageNo+ 1;
+		objNum = this.iEndPageNo;
+	}else if(btnText=='Next'){
+		this.iStartPageNo = this.iStartPageNo + this.iMaxPageNo;
+		this.iEndPageNo   = this.iStartPageNo + (this.iMaxPageNo-1);
+		
+		if(this.iEndPageNo > this.nPageBlock)
+		{
+			this.iEndPageNo = this.nPageBlock;
+		}
+		
+		objNum = this.iStartPageNo;
+	}else{
+		objNum = Number(btnText);		
+		if (objNum%this.iMaxPageNo == 0)
+		{
+			this.iEndPageNo   = objNum;
+			this.iStartPageNo = this.iEndPageNo - (this.iMaxPageNo-1);
+		}
+		else
+		{
+			this.iStartPageNo = parseInt(objNum/this.iMaxPageNo)*this.iMaxPageNo+1;
+			this.iEndPageNo  = this.iStartPageNo + (this.iMaxPageNo-1);
+		}
+		
+		if (this.iEndPageNo > this.iPageBlock)
+		{
+			this.iEndPageNo = this.nPageBlock;
+		}	
+	}
+
+	this.iNowPageNo = objNum;
+ 	this.parent.parent.fn_searchPaging(objNum,this.iUnitSelRowNo);
+};
+
+this.fn_callAfter = function (arrRt)
+{
+	this.iPageBlock		= arrRt[0];
+	this.iTotalCount		= arrRt[1];
+	
+	//이동의 경우로 인하여 위에서 선언됨
+	this.divCount.form.edtNow.set_value(this.iNowPageNo);
+	this.divCount.form.stTotal.set_text("/ " + this.iPageBlock);
+	this.fn_setPageNo(this.iStartPageNo);
+};
+
+/*****************************************************************************
+* 함 수 명 칭 : fn_SetPageNo
+* 함 수 설 명 : Page번호 Setting
+* 파 라 미 터 : nVStartPageNo - 시작 페이지번호
+* 리 턴 내 용 : 
+*****************************************************************************/
+this.fn_setPageNo = function(nVStartPageNo)
+{	
+	var sPage   = nVStartPageNo;
+	nVStartPageNo--;
+	var nPageNo = 0; // 페이지번호
+
+	// 이전버튼 처리
+	if (nVStartPageNo < 1) {
+		this.divPaging.form.btnPrev.set_enable(false);
+		this.divPaging.form.btnFirst.set_enable(false);
+	} else {
+		this.divPaging.form.btnPrev.set_enable(true);
+		this.divPaging.form.btnFirst.set_enable(true);
+	}
+
+	// 마지막 버튼 처리
+	if (this.iTotalCount <= ((sPage + this.iMaxPageNo) * this.iUnitSelRowNo)) {
+		this.divPaging.form.btnNext.set_enable(false);
+		this.divPaging.form.btnLast.set_enable(false);
+	} else {
+		this.divPaging.form.btnNext.set_enable(true);
+		this.divPaging.form.btnLast.set_enable(true);
+	}
+
+	nPageNo = this.iStartPageNo;
+	// 인덱스 번호 처리
+	for (var i = 0; i < this.iMaxPageNo; i++)
+	{
+		if(sPage==nPageNo)
+		{
+			this.divPaging.form.all["btn" + i].set_enable(false);
+		}else
+		{
+			this.divPaging.form.all["btn" + i].set_enable(true);
+		}
+		
+		this.divPaging.form.all["btn" + i].set_text(nPageNo);		
+		
+		if (this.iTotalCount > ((nPageNo - 1) * this.iUnitSelRowNo)) {
+			this.divPaging.form.all["btn" + i].set_visible(true);
+			nCnt = i;			
+		} else {
+			this.divPaging.form.all["btn" + i].set_visible(false);
+		}
+		
+		nPageNo++;
+	}
+};
+
+this.fn_setPageBlock = function (nRowCount)
+{
+	//transaction 처리 로직 로컬에서 처리
+	var nTotlaRowCount = 1985;
+	
+	//올림처리
+	var nPageBlockEx = Math.ceil(nTotlaRowCount/nRowCount);
+	
+	var rtn = new Array(nPageBlockEx,nTotlaRowCount);
+	return rtn;
+};
+
+this.divCount_btnGo_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var nBtnNum = this.divCount.form.edtNow.value;
+	this.fn_page (nBtnNum);
+};
+
+this.divPagingComm_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	var nWidth = obj.width;
+	var nHeight = obj.height;
+	
+	if(this.divCount.visible)
+	{
+		nWidth = nWidth - this.divCount.getOffsetWidth();
+	}
+	
+	this.divPaging.setOffsetLeft(parseInt((nWidth-this.divPaging.getOffsetWidth())/2));
+};
+]]></Script>
+  </Form>
+</FDL>

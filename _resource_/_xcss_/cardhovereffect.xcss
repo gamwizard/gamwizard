@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[/* 삭제될 코드 */
+.ImageViewer.img_WF_titleImgHover
+{
+	-nexa-border : 0px none;
+}
+.Div.div_WF_wrapper
+{
+	-nexa-border : 1px solid #dddddd;
+	background : #ffffff;
+}
+.Div.div_WF_contentsArea
+{
+	background : #ffffff;
+	-nexa-border : 0px none;
+}
+.ImageViewer.img_WF_titleImg
+{
+	-nexa-border : 0px none;
+}
+.ImageViewer.img_WF_titleImg[status=mouseover]
+{
+	-nexa-border : 0px none;
+}
+.Static.static_WF_title
+{
+	-nexa-word-wrap : char;
+	-nexa-text-align : left;
+	-nexa-vertical-align : top;
+	color : #222222;
+	font : bold 19px/25px "NanumGothic","Arial";
+}
+.Static.static_WF_icon1, .Static.static_WF_icon1[status=mouseover]
+{
+	background : url('imagerc::cardhovereffect/list-read.png') no-repeat center center /77%;
+	color	: #999999;
+	font : 12px "NanumGothic","Arial";
+}
+.Static.static_WF_icon2, .Static.static_WF_icon2[status=mouseover]
+{
+	background : url('imagerc::cardhovereffect/list-comment.png') no-repeat 6px center /62%;
+	color	: #999999;
+	font : 12px "NanumGothic","Arial";
+}
+.Static.static_WF_icon3, .Static.static_WF_icon3[status=mouseover]
+{
+	background : url('imagerc::cardhovereffect/list-like.png') no-repeat 5px center /67%;
+	color	: #999999;
+	font : 12px "NanumGothic","Arial";
+}
+.Static.static_WF_name, .Static.static_WF_name[status=mouseover]
+{
+	-nexa-text-align : left;
+	color	: #999999;
+	font : 12px "NanumGothic","Arial";
+}
+.Static.static_WF_count1, .Static.static_WF_count1[status=mouseover],
+.Static.static_WF_count2, .Static.static_WF_count2[status=mouseover],
+.Static.static_WF_count3, .Static.static_WF_count3[status=mouseover]
+{
+	-nexa-text-align : left;
+	color	: #999999;
+	font : 11px "NanumGothic","Arial";
+}
+.Static.static_WF_content
+{
+	-nexa-border : 0px none;
+	-nexa-text-align : left;
+	-nexa-vertical-align : top;
+	-nexa-word-wrap : char;
+	font : 13px/21px "NanumGothic", "Arial";
+	color : #222222;
+}
+.Static.static_WF_grade
+{
+	-nexa-border : 3px solid #39ebff;
+	border-radius : 25px;
+}
+.Button.btn_WF_more
+{
+	-nexa-border : 1px solid #3A79E3;
+	background : #ffffff;
+	font : 12px "NanumGothic", "Arial";
+	color : #3a79e3;
+	cursor : pointer;
+	border-radius : 25px;
+}
+.Button.btn_WF_more[status=mouseover], .Button.btn_WF_more[userstatus=pushed],
+.Button.btn_WF_more[status=focused], .Button.btn_WF_more[userstatus=selected]
+{
+	-nexa-border : 1px solid #3A79E3;
+	background : #f8fbff;
+	font : 12px "NanumGothic", "Arial";
+	color : #3a79e3;
+	cursor : pointer;
+	border-radius : 25px;
+}
+.Button.btn_WF_more[status=disabled]
+{
+	-nexa-border : 1px solid #cccccc;
+	background : #ffffff;
+	font : 12px "NanumGothic", "Arial";
+	color : #cccccc;
+	cursor : default;
+	border-radius : 25px;
+}.Static.static_WF_label
+{
+	background : #3f51b5;
+	color : #ffffff;
+	font : bold 11px/normal "NanumGothic","Arial";
+	-nexa-text-align : center;
+}]]></XCSS>

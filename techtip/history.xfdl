@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="history" width="450" height="400" titletext="History (뒤로가기 &amp; 새로고침)" onload="history_onload">
+    <Layouts>
+      <Layout height="400" mobileorientation="landscape" width="450">
+        <Button id="btnMenu01" taborder="0" text="메뉴1" left="10" top="10" width="120" height="20" onclick="btnMenu01_onclick"/>
+        <Button id="btnMenu02" taborder="1" text="메뉴2" left="10" top="40" width="120" height="20" onclick="btnMenu02_onclick"/>
+        <Button id="btnMenu03" taborder="2" text="메뉴3" left="10" top="70" width="120" height="20" onclick="btnMenu03_onclick"/>
+        <Div id="divWork" taborder="3" text="Div00" left="140" top="10" width="300" height="380" async="false" border="1px solid #000000"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.history_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	if(system.navigatorname.indexOf("nexacro")==-1)
+	{
+		//if(system.navigatorname)
+		// History 기능 사용을 위해 초기화 (application 실행 시 한번만 호출)
+		// 첫번째 인자는 뒤로가기, 앞으로가기가 실행됬을때 호출될 함수
+		// 두번째 인자는 함수내에서 this 로 사용할 scope
+		MyHistory.init(this.onChangeHistory, this);
+		
+		// 새로고침을 위한 처리 ( application 실행 시 한번만 체크)
+		// 새로고침되더라도 hash 값을 그대로 남아있기에
+		// hash id 에 해당하는 처리를 하도록 한다.
+		var hash = MyHistory.getLocationHash();		
+		if ( hash )
+		{
+			// 데이터가 필수가 아니면 체크할 일이 없겠네요
+			var data = MyHistory.getData(hash);
+			if ( data )
+			{
+				this.onChangeHistory(hash, data);
+			}
+		}
+	}
+};
+
+// 브라우저의 뒤로가기, 앞으로가기 실행시 호출됨
+this.onChangeHistory = function(hash, data)
+{
+	if ( hash == "" )
+	{
+		// 초기화면
+		this.divWork.set_url("");
+	}	
+	else
+	{
+		// hash id 를 확인하여 필요한 처리를 진행한다.
+		var temp = hash.split(":");
+		var type = temp[0];
+		
+		if ( type == "menu" )
+		{
+			var menuId = temp[1];
+			
+			this.goMenu(menuId, data);
+		}		
+	}
+}
+
+this.btnMenu01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var id = "A";
+	var data = {"desc": "1st Menu !!"};
+	
+	this.goMenu(id, data);
+};
+
+this.btnMenu02_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var id = "B";
+	var data = {"desc": "2nd Menu !!"};
+	
+	this.goMenu(id, data);
+};
+
+this.btnMenu03_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var id = "C";
+	var data = {"desc": "3th Menu !!"};
+	
+	this.goMenu(id, data);
+};
+
+this.goMenu = function(menuId, data)
+{
+	if(system.navigatorname.indexOf("nexacro")==-1)
+	{
+		// hash를 변경하여 History 에 등록 (현재 hash 와 같을 경우 History 가 생기지 않는다.)
+		var hash = "menu:"+menuId;
+		
+		MyHistory.setLocationHash(hash, data);
+	}
+
+	var url = "techtip::history_work.xfdl";
+	if ( this.divWork.url == url )
+	{
+		// 이미 해당 화면이 열려 있다면 초기화를 위한 함수 호출
+		// doAction 함수는 work.xfdl 에 정의
+		this.divWork.form.doAction(data);
+	}
+	else
+	{		
+		this.divWork.set_url(url);
+		this.divWork.form.doAction(data);
+	}
+}]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="scheduler" width="1027" height="875" titletext="New Form" onload="scheduler_onload">
+    <Layouts>
+      <Layout height="875" mobileorientation="landscape" width="1027">
+        <Graphics id="grpScheduler" taborder="0" left="10" top="60" ondblclick="grpScheduler_ondblclick" onclick="grpScheduler_onclick" onsize="grpScheduler_onsize" minwidth="100" maxwidth="" minheight="100" maxheight="" onmousemove="grpScheduler_onmousemove" bottom="10" right="10"/>
+        <Static id="stYearMonth" taborder="1" text="2021년 10월" left="65" top="26" width="100" height="28" cssclass="static_WF_year"/>
+        <Button id="btnToday" taborder="2" text="오늘" left="211" top="26" width="52" height="28" cssclass="btn_WF_today" onclick="btnToday_onclick"/>
+        <Button id="btnNext" taborder="3" left="170" top="26" width="25" height="28" onclick="btnNext_onclick" cssclass="btn_WF_right"/>
+        <Button id="btnPrev" taborder="4" left="35" top="26" width="25" height="28" onclick="btnPrev_onclick" cssclass="btn_WF_left"/>
+        <Button id="btnNew" taborder="5" text="신규일정" top="26" width="82" height="28" cssclass="btn_WF_new" onclick="btnNew_onclick" right="10"/>
+        <Button id="Button00" taborder="6" text="Button00" left="660" top="10" width="120" height="50" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > scheduler
+*  techtip Graphics Component를 활용한 월 스케줄러
+*  @FileName	workflow.xfdl 
+*******************************************************************************
+*  2020.06.12		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+**************************************************************************/
+include "lib::lib_base.xjs";
+include "lib::lib_date.xjs";
+include "lib_techtip::lib_schedulerv3.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+**************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+**************************************************************************/
+this.scheduler_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//스케줄러 설정정보 만들기
+	var objConfig = {
+						//오늘일자
+						"todate" : null,
+						
+						//현재 표현일자
+						"date" : null,
+						
+						//스케줄 정보를 가지고 있는 데이터셋
+						"binddataset" : this.dsSchedule,
+						
+						//요일 영역
+						"week" : {
+									//요일 표현 텍스트 리스트
+									"weekformat" : ["일", "월", "화", "수", "목", "금", "토"],
+									
+									//요일 영역 높이
+									"height" : 30,
+									
+									//요일 배경 속성
+									"graphicsrect" : {
+												"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+												"fillstyle" : "#ffffff",
+												"strokepen" : "1px solid #CCCCCC"
+											 },
+											 
+									//요일 텍스트 속성
+									"graphicstext" : {
+												"x" : 0, "y" : 0,
+												"text" : "",
+												"textAlign" : "center",
+												"verticalAlign" : "middle",
+												"font" : "13px NanumGothic",
+												"color" : "#000000",
+												"color_sun" : "#FF1D1D",
+												"color_sat" : "#000000",
+											 }
+									
+									
+								 },
+						
+						//일자 영역
+						"day" : {
+									//기본일자 텍스트 색상
+									"textcolor" : "#000000",
+									
+									//일요일 텍스트 색상
+									"textcolor_sun" : "#FF1D1D",
+									
+									//토요일 텍스트 색상
+									"textcolor_sat" : "#000000",
+									
+									//이전 or 이후 월 텍스트 색상
+									"textcolor_disable" : "#888888",
+									
+									//일자 배경 속성
+									"graphicsrect" : {
+												"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+												"fillstyle" : "#ffffff",
+												"strokepen" : "1px solid #CCCCCC"
+											 },
+											 
+									//일자 텍스트 속성
+									"graphicstext" : {
+												"x" : 0, "y" : 0,
+												"text" : "",
+												"textAlign" : "center",
+												"verticalAlign" : "top",
+												"font" : "13px NanumGothic",
+												"color" : ""
+											 }
+								},
+						//일정 영역		
+						"schedule" : {
+										//일정 타입별 배경색
+										"type" : {
+													"01" : "#FF5252",
+													"02" : "#7C4DFF",
+													"03" : "#00B0FF",
+													"04" : "#61C81C",
+													"05" : "#FF9100",
+													"99" : "#757575"
+												 },
+												 
+										//일정 영역 높이
+										"height" : 22,
+										
+										//일정 간 간격
+										"gap" : 4,
+										
+										//일정 배경 속성
+										"graphicsrect" : {
+															"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+															"fillstyle" : "#ffffff",
+															"strokepen" : "0px none",
+															"radiusx" : "4",
+															"radiusy" : "4"
+														 },
+														 
+										//일정 텍스트 속성
+										"graphicstext" : {
+													"x" : 0, "y" : 0,
+													"text" : "",
+													"textAlign" : "left",
+													"verticalAlign" : "middle",
+													"font" : '13px NanumGothic',
+													"color" : "#ffffff"
+												 }
+									 },
+						//더보기 영역		
+						"more" : {
+									//더보기 높이
+									"height" : 22,
+									
+									//더보기 배경 속성
+									"graphicsrect" : {
+														"x" : 0, "y" : 0, "width" : 0, "height" : 0,
+														"fillstyle" : "",
+														"strokepen" : "0px none"
+													 },
+									
+									//더보기 텍스트 속성
+									"graphicstext" : {
+														"x" : 0, "y" : 0,
+														"text" : "더보기",
+														"textAlign" : "left",
+														"verticalAlign" : "middle",
+														"font" : "13px NanumGothic",
+														"color" : "#777777"
+													 }
+								}
+					}
+	
+	//스케줄러 초기화 함수 호출
+	this.gfnInitScheduler(this.grpScheduler, objConfig);
+	
+	//스케줄러 현재월 텍스트 구해오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(this.grpScheduler.config.date, "yyyy년 MM월");
+	
+	//현재월 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description 신규일정 버튼 onclick 시 처리내역
+*/
+this.btnNew_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//팝업오픈 함수 호출
+	this.fnOpenSchedulePop("new");
+};
+
+this.btnToday_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = new Date();
+	
+	//이전월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objDate, "yyyy년 MM월");
+	
+	//이전월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//이전월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objDate);
+};
+
+/**
+ * @description 이전 버튼 onclick 시 처리내역
+*/
+this.btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = this.grpScheduler.config.date;
+	
+	//이전월 정보 가져오기
+	var objPrevDate = this.gfnAddMonth(objDate, -1);
+	
+	//이전월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objPrevDate, "yyyy년 MM월");
+	
+	//이전월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//이전월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objPrevDate);
+};
+
+/**
+ * @description 다음 버튼 onclick 시 처리내역
+*/
+this.btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//스케줄러 현재월 정보 가져오기
+	var objDate = this.grpScheduler.config.date;
+	
+	//다음월 정보 가져오기
+	var objNextDate = this.gfnAddMonth(objDate, 1);
+	
+	//다음월 텍스트 가져오기
+	var sYearMonth = this.gfnGetMaskFormatDateToString(objNextDate, "yyyy년 MM월");
+	
+	//다음월로 텍스트 설정
+	this.stYearMonth.set_text(sYearMonth);
+	
+	//다음월로 스케줄러 설정 함수 호출
+	this.gfnSetScheduler(this.grpScheduler, objNextDate);
+};
+
+/**
+ * @description Graphics Component onsize 시 처리내역
+*/
+this.grpScheduler_onsize = function(obj:nexacro.Graphics,e:nexacro.SizeEventInfo)
+{
+	//Graphics 컴포넌트의 사이즈가 변경되었을 경우
+	//스케줄러 설정함수를 호출하여 사이즈 갱신
+	this.gfnSetScheduler(this.grpScheduler);
+};
+
+/**
+ * @description Graphics Component onclick 시 처리내역
+*/
+this.grpScheduler_onclick = function(obj:nexacro.Graphics,e:nexacro.ClickEventInfo)
+{
+	//클릭된 위치의 Graphic 오브젝트 가져오기
+	var objHitTest = obj.hitTestAll(e.canvasx, e.canvasy)[0];
+			
+	var objSchedulePop = obj.getObjectByID("schedulepop");
+	
+	if(objSchedulePop)
+	{
+		if(objHitTest.id.split("_")[0]!="schedule")
+		{
+			this.gfnLoadScheduler(obj);
+			return;
+		}
+	}
+	
+	//클릭된 오브젝트가 더보기일 경우
+	if(objHitTest.id.split("_")[0]=="more")
+	{
+		//더보기 일정 팝업 함수 호출
+		this.gfnLoadSchedulePop(obj, objHitTest);
+	}
+};
+
+/**
+ * @description Graphics Component ondblclick 시 처리내역
+*/
+this.grpScheduler_ondblclick = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	var oArg;
+	var nRow;
+	var sId;
+	var sDate;
+	var sType;
+	var sTitle;
+	var sContent;
+	var objSchedule;
+	
+	//더블 클릭된 위치의 Graphic 오브젝트 가져오기
+	var objGraphic = obj.hitTestAll(e.canvasx, e.canvasy)[0];
+	
+	//스케줄러 설정정보 가져오기
+	var objConfig = obj.config;
+	
+	//스케줄러와 연결된 데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	
+	//더블 클릭된 오브젝트가 일정영역일 경우
+	if(objGraphic.id.split("_")[0]=="schedule")
+	{
+		//일정 그룹 오브젝트 가져오기
+		objSchedule = objGraphic.parent;
+		
+		//일정의 ID 가져오기
+		sId = objGraphic.id.split("_")[1];
+		
+		//데이터셋에서 ID에 해당하는 일정 찾기
+		nRow = objDs.findRow("id", sId);
+		
+		//일정 일자 가져오기
+		sSDate = objDs.getColumn(nRow, "sdate");
+		
+		//일정 일자 가져오기
+		sEDate = objDs.getColumn(nRow, "edate");
+		
+		//일정 타입 가져오기
+		sType = objDs.getColumn(nRow, "type");
+		
+		//일정 제목 가져오기
+		sTitle = objDs.getColumn(nRow, "title");
+		
+		//일정 내용 가져오기
+		sContent = objDs.getColumn(nRow, "content");
+		
+		//팝업오픈 함수 호출
+		this.fnOpenSchedulePop("modify", sId, sSDate, sEDate, sType, sTitle, sContent);
+		
+		return;
+	}
+	
+	var objHitTests = obj.hitTestAll(e.canvasx, e.canvasy);
+	
+	for(var i=0;i<objHitTests.length;i++)
+	{
+		objGraphic = objHitTests[i];
+		
+		//더블 클릭된 오브젝트가 일자영역일 경우
+		if(objGraphic.id.split("_")[0]=="day")
+		{
+			//일자 그룹 오브젝트 가져오기
+			objDay = objGraphic.parent;
+			
+			//일자 정보 가져오기(ex) day_20200612 --> 20200612)
+			sDate = objDay.id.split("_")[1];
+			
+			//팝업오픈 함수 호출
+			this.fnOpenSchedulePop("new", null, sDate);
+			
+			return;
+		}
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+**************************************************************************/
+/**
+* @description 	      	: 팝업 호출 함수
+* @param sPopupType		: 팝업 타입(new : 신규, modify 수정)
+* @param sId    		: 일정 ID
+* @param sDate    		: 일정 일자
+* @param sType    		: 일정 타입
+* @param sTitle    		: 일정 제목
+* @param sContent    	: 일정 내용
+* @return             	: 없음
+*/
+this.fnOpenSchedulePop = function(sPopupType, sId, sSDate, sEDate, sType, sTitle, sContent)
+{
+	var oArg = { "popuptype" : sPopupType, "scheduleid" : "", "sdate" : "", "edate" : "", "type" : "", "title" : "", "content" : "" };
+	
+	if(sId)oArg.scheduleid = sId;
+	if(sSDate)oArg.sdate = sSDate;
+	if(sEDate)oArg.edate = sEDate;
+	if(sType)oArg.type = sType;
+	if(sTitle)oArg.title = sTitle;
+	if(sContent)oArg.content = sContent;
+	
+	this.gfnShowModal("popupModal", oArg, "techtip::schedulerv3_popup.xfdl", "fnPopupCallBack", this, 421, 370, true, false, null);
+}
+
+/**
+* @description 	      	: 팝업 콜백 함수
+* @param sFormId		: 팝업 ID
+* @param sArg    		: 일정 정보
+* @return             	: 없음
+*/
+this.fnPopupCallBack = function(sFormId, sArg)
+{
+	if(sFormId == 'popupModal')
+	{
+		//일정 정보가 있을 경우
+		if(sArg)
+		{
+			var nRow;
+			
+			//일정 정보를 JSON오브젝트로 만들기
+			var objRtn = JSON.parse(sArg);
+			
+			//수정일 경우
+			if(objRtn.popuptype=="modify")
+			{
+				//데이터셋에서 ID에 해당하는 일정 찾기
+				nRow = this.dsSchedule.findRow("id", objRtn.id);
+				
+				//일정 정보 변경
+				this.dsSchedule.setColumn(nRow, "title", objRtn.title);
+				this.dsSchedule.setColumn(nRow, "sdate", objRtn.sdate);
+				this.dsSchedule.setColumn(nRow, "edate", objRtn.edate);
+				this.dsSchedule.setColumn(nRow, "type", objRtn.type);
+				this.dsSchedule.setColumn(nRow, "content", objRtn.content);
+			}
+			//신규일 경우
+			else if(objRtn.popuptype=="new")
+			{
+				//신규 Row 추가
+				nRow = this.dsSchedule.addRow();
+				
+				//일정 정보 등록
+				this.dsSchedule.setColumn(nRow, "id", nexacro.round(Math.random()*1000, 0));
+				this.dsSchedule.setColumn(nRow, "title", objRtn.title);
+				this.dsSchedule.setColumn(nRow, "sdate", objRtn.sdate);
+				this.dsSchedule.setColumn(nRow, "edate", objRtn.edate);
+				this.dsSchedule.setColumn(nRow, "type", objRtn.type);
+				this.dsSchedule.setColumn(nRow, "content", objRtn.content);
+			}
+			
+			//스케줄 조회 함수 호출
+			this.gfnLoadScheduler(this.grpScheduler);
+		}
+	}
+}
+
+/**
+* @description 	      		: 팝업 공통 함수
+* @param sPopupId  			: 팝업 ID
+* @param arrArguments    	: 전달할 Arguments
+* @param sPopupUrl    		: 팝업 URL
+* @param popupCallback    	: 팝업 Callback 함수명
+* @param obj    			: 부모 Form 오브젝트
+* @param nPopupWidth    	: 팝업 Width
+* @param nPopupHeight    	: 팝업 Height
+* @param bShowFrameTitle    : 타이틀바 표현 여부
+* @param bShowFrameStatus	: 스테이터스바 표현 여부
+* @param sAlignType			: 팝업 표시 위치 
+* @return             		: 없음
+*/
+this.gfnShowModal = function (sPopupId, arrArguments, sPopupUrl, popupCallback, obj, nPopupWidth, nPopupHeight, bShowFrameTitle, bShowFrameStatus, sAlignType)
+{
+	// 현재 구동되는 정보를 업데이트 한다.
+	var childFrame = new ChildFrame();
+	var parentFrame = obj.getOwnerFrame();
+	
+	var sOpenAlignType = "center middle";
+
+	// TO-DO 팝업사이즈 미지정 시 디폴트 값 적용
+	if (this.gfnIsNull(nPopupWidth)) 
+	{
+		nPopupWidth = obj.confing.popupWidth;
+	}
+
+	if (this.gfnIsNull(nPopupHeight)) 
+	{
+		nPopupHeight = obj.confing.popupHeight;
+	}
+
+	var sShowStatus;
+	if (this.gfnIsNull(bShowFrameStatus) || bShowFrameStatus == false) 
+	{
+		sShowStatus = false;
+	}
+	else if (bShowFrameStatus == true) 
+	{
+		sShowStatus = true;
+	}
+	
+	if (!this.gfnIsNull(sAlignType)) 
+	{
+		sOpenAlignType = sAlignType;
+	}
+
+	var nPopupLeft = "";
+	var nPopupTop = "";
+
+	// 팝업 포지션 값 위치 설정
+	nPopupLeft = 0;
+	nPopupTop = 0;
+	
+	/* ===== Statusbar 옵션 추가 - Start ===== */
+	if (sShowStatus == true) 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4 + 25, null, null, sPopupUrl);
+		childFrame.set_statusbarheight(25);
+		childFrame.set_showstatusbar(true);
+	}
+	else 
+	{
+		childFrame.init(sPopupId, nPopupLeft, nPopupTop, nexacro.toNumber(nPopupWidth) + 4, nexacro.toNumber(nPopupHeight) + 20 + 4, null, null, sPopupUrl);
+	}
+	
+	/* ===== Statusbar 옵션 추가 - End   ===== */
+	childFrame.set_openalign(sOpenAlignType);
+	childFrame.set_overlaycolor("RGBA(30, 144, 255, 0.75)");
+	childFrame.set_autosize(false);	
+	childFrame.set_dragmovetype("normal");
+
+	if (this.gfnIsNull(bShowFrameTitle) || bShowFrameTitle == true) 
+	{
+		childFrame.set_showtitlebar(true);
+		childFrame.set_border("3 solid #351b6f");
+		childFrame.set_border("normal");
+	}else{
+		childFrame.set_showtitlebar(false);
+	}
+	
+	// 동적으로 생성한 ChildFrame을 Modal Dialog로 보여줌.
+	childFrame.showModal(parentFrame, arrArguments, obj, popupCallback, true);
+};
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objImg = this.grpScheduler._layer._canvas.toDataURL();
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsSchedule">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="sdate" type="STRING" size="256"/>
+          <Column id="edate" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="content" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="id">01</Col>
+            <Col id="sdate">20211001</Col>
+            <Col id="edate">20211001</Col>
+            <Col id="title">국군의날</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">02</Col>
+            <Col id="sdate">20211003</Col>
+            <Col id="edate">20211003</Col>
+            <Col id="title">개천절</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">03</Col>
+            <Col id="sdate">20211004</Col>
+            <Col id="edate">20211004</Col>
+            <Col id="title">대체휴일</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">04</Col>
+            <Col id="sdate">20211009</Col>
+            <Col id="edate">20211009</Col>
+            <Col id="title">한글날</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">05</Col>
+            <Col id="sdate">20211011</Col>
+            <Col id="edate">20211011</Col>
+            <Col id="title">대체휴일</Col>
+            <Col id="content">휴일</Col>
+            <Col id="type">99</Col>
+          </Row>
+          <Row>
+            <Col id="id">06</Col>
+            <Col id="sdate">20211011</Col>
+            <Col id="edate">20211011</Col>
+            <Col id="title">주간보고</Col>
+            <Col id="content">주간보고</Col>
+            <Col id="type">02</Col>
+          </Row>
+          <Row>
+            <Col id="id">07</Col>
+            <Col id="sdate">20211012</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">오전회의</Col>
+            <Col id="content">오전회의</Col>
+            <Col id="type">02</Col>
+          </Row>
+          <Row>
+            <Col id="id">08</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">공지사항</Col>
+            <Col id="content">공지사항</Col>
+            <Col id="type">01</Col>
+          </Row>
+          <Row>
+            <Col id="id">09</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">오후반차</Col>
+            <Col id="content">오후반차</Col>
+            <Col id="type">04</Col>
+          </Row>
+          <Row>
+            <Col id="id">10</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">외부회의</Col>
+            <Col id="content">외부회의</Col>
+            <Col id="type">03</Col>
+          </Row>
+          <Row>
+            <Col id="id">11</Col>
+            <Col id="sdate">20211014</Col>
+            <Col id="edate">20211014</Col>
+            <Col id="title">내부교육</Col>
+            <Col id="content">내부교육</Col>
+            <Col id="type">05</Col>
+          </Row>
+          <Row>
+            <Col id="id">12</Col>
+            <Col id="sdate">20211015</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">외부회의</Col>
+            <Col id="content">외부회의</Col>
+            <Col id="type">03</Col>
+          </Row>
+          <Row>
+            <Col id="id">13</Col>
+            <Col id="type">05</Col>
+            <Col id="sdate">20211015</Col>
+            <Col id="edate">20211015</Col>
+            <Col id="title">온라인 교육</Col>
+            <Col id="content">온라인 교육</Col>
+          </Row>
+          <Row>
+            <Col id="id">14</Col>
+            <Col id="sdate">20211018</Col>
+            <Col id="edate">20211021</Col>
+            <Col id="title">공지사항</Col>
+            <Col id="content">공지사항</Col>
+            <Col id="type">01</Col>
+          </Row>
+          <Row>
+            <Col id="id">15</Col>
+            <Col id="sdate">20211018</Col>
+            <Col id="edate">20211022</Col>
+            <Col id="title">Nexacro N 컨퍼런스</Col>
+            <Col id="content">Nexacro N 컨퍼런스</Col>
+            <Col id="type">05</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

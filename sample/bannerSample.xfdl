@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="bannerSample" width="1280" height="720" titletext="New Form" ontimer="bannerSample_ontimer">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="stStep1" taborder="0" text="Static00" left="152" top="70" width="120" height="60" background="red" opacity="1"/>
+        <Static id="stStep0" taborder="1" text="Static00" left="152" top="50" width="120" height="60" background="blue" opacity="0"/>
+        <Button id="Button00" taborder="2" text="Button00" left="366" top="61" width="120" height="50" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.fv_stepIdx = 0;
+this.fv_timerIdx = 0;
+this.fv_timerMax = 50;
+this.fv_bChk = false;
+this.fv_color = ["#ff0000", "#00ff00", "#0000ff", "#ffff00"];
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.setTimer(1, 10);
+};
+
+this.bannerSample_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
+{
+	if(e.timerid==1)
+	{
+		var nOpacity = 0;
+		var nOpacity2 = 0;
+		
+		this.fv_timerIdx++;
+		
+		nOpacity = nexacro.round(this.gfn_easeOutCubic(this.fv_timerIdx, 0, 100, this.fv_timerMax)/100, 2);
+		nOpacity2 = nexacro.round(1-nOpacity, 2);
+		
+		if(this.fv_bChk==false)
+		{
+			this.stStep0.set_opacity(nOpacity);
+			this.stStep1.set_opacity(nOpacity2);
+		}else
+		{
+			this.stStep0.set_opacity(nOpacity2);
+			this.stStep1.set_opacity(nOpacity);
+		}
+		
+		
+		if(this.fv_timerIdx == this.fv_timerMax)
+		{
+			this.fv_stepIdx++;
+			
+			this.fv_stepIdx = this.fv_stepIdx % this.fv_color.length;
+			
+			if(this.fv_bChk==false)
+			{
+				this.fv_bChk = true;
+				this.stStep0.set_opacity(1);
+				this.stStep1.set_opacity(0);
+				
+				this.stStep1.set_background(this.fv_color[this.fv_stepIdx]);
+			}else
+			{
+				this.fv_bChk = false;
+				this.stStep0.set_opacity(0);
+				this.stStep1.set_opacity(1);
+				
+				this.stStep0.set_background(this.fv_color[this.fv_stepIdx]);
+			}
+			
+			this.killTimer(1);
+			
+			this.fv_timerIdx = 0;
+			this.setTimer(2, 1000);
+		}
+	}else if(e.timerid==2)
+	{
+		this.killTimer(2);
+		this.setTimer(1, 10);
+	}
+};
+
+this.gfn_linearTween = function (t, b, c, d) 
+{
+	return c*t/d + b;
+}
+
+this.gfn_easeOutCubic = function (t, b, c, d) 
+{
+	t /= d;
+	t--;
+	return c*(t*t*t + 1) + b;
+}]]></Script>
+  </Form>
+</FDL>

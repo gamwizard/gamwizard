@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ecma6Import" width="480" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="480">
+        <Button id="Button00" taborder="0" text="Import JQuery" left="10" top="10" width="120" height="50" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="1" text="Button01" left="140" top="10" width="120" height="50" onclick="Button01_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Template Strings
+	var a = 10;
+	var b = 5;
+	
+	var print3 = `입력된 값은 ${ a + b }입니다`;
+	//string text line 1
+   	//입력된 값은 15입니다.
+	trace(print3);
+	
+	
+	//Arrows
+	var bob = {
+			_name: "Bob",
+			_friends: ["John, Brian"],
+			printFriends() {
+			this._friends.forEach(f =>
+			  trace(this._name + " knows " + f));
+			}
+		};
+		
+	//Bob knows John, Brian
+	bob.printFriends();
+	
+};
+
+//Class
+class Polygon {
+	constructor(height, width) {
+    this.area = height * width;
+  }
+};
+
+
+this.Button01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var print4 = new Polygon(3, 4).area;
+	
+	//12
+	trace(print4);
+};
+]]></Script>
+  </Form>
+</FDL>

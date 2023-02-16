@@ -1,0 +1,984 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	    	: 스케줄러 초기화 함수
+* @param objGraphics  	: 스케줄러 설정할 Graphics Component
+* @param objConfig   	: 초기화 설정 값
+* @return           	: 없음
+*/
+this.gfnInitWeekScheduler = function(objGraphics, objConfig)
+{
+	//현재 년도 설정 값 가져오기
+	var sYear = objConfig.targetyear;
+	
+	//Graphics 컴포넌트에 config 정보 추가
+	objGraphics.config = objConfig;
+	
+	//스케줄러 설정 함수 호출
+	this.gfnSetWeekScheduler(objGraphics, sYear);
+}
+
+/**
+* @description 	    	: 스케줄러 설정 함수
+* @param objGraphics  	: 스케줄러 설정할 Graphics Component
+* @param objDate	   	: 설정할 일자 오브젝트
+* @return           	: 없음
+*/
+this.gfnSetWeekScheduler = function(objGraphics, sYear)
+{
+	//스케줄러 설정 정보 가져오기
+	var objConfig = objGraphics.config;
+	
+	//Graphics 컴포넌트 초기화
+	objGraphics.clear();
+	
+	//Draw 시작 좌표 만들기
+	var objRect = {"x" : 0, "y" : 0};
+	
+	//스케줄러 메인 GraphicsGroup 오브젝트 만들기
+	var objGraphicsGroupProp = objRect;
+			
+	var objGraphicsGroup = this.gfnSetGraphicProperties("GraphicsGroup", objGraphicsGroupProp);
+	
+	objGraphics.addChild("MainGroup", objGraphicsGroup);
+	
+	//년도 설정 값이 있을 경우 targetyear로 설정
+	if(sYear)objConfig.targetyear = sYear;
+	
+	//Head 영역 만들기 함수 호출
+	objRect = this.gfnMakeGroupHead(objGraphicsGroup, objConfig, objRect);
+	
+	//년도 Head 영역 만들기 함수 호출
+	if(objConfig.use_year==true)objRect = this.gfnMakeYear(objGraphicsGroup, objConfig, objRect);
+	
+	//월 Head 영역 만들기 함수 호출
+	if(objConfig.use_month==true)objRect = this.gfnMakeMonth(objGraphicsGroup, objConfig, objRect);
+	
+	//주차 Head 영역 만들기 함수 호출
+	if(objConfig.use_weekcount==true)objRect = this.gfnMakeWeekCount(objGraphicsGroup, objConfig, objRect);
+	
+	//요일 Head 영역 만들기 함수 호출
+	if(objConfig.use_week==true)objRect = this.gfnMakeWeek(objGraphicsGroup, objConfig, objRect);
+	
+	//날짜 Head 영역 만들기 함수 호출
+	if(objConfig.use_day==true)objRect = this.gfnMakeDay(objGraphicsGroup, objConfig, objRect);
+	
+	//Group Body 영역 만들기 함수 호출
+	objRect = this.gfnMakeGroupBody(objGraphicsGroup, objConfig, objRect);
+	
+	//Body 배경 영역 만들기 함수 호출
+	objRect = this.gfnMakeScheduleBg(objGraphicsGroup, objConfig, objRect);
+	
+	//스케줄 만들기 함수 호출
+	objRect = this.gfnMakeScheduleData(objGraphicsGroup, objConfig, objRect);
+	
+	//현재 스케줄러의 크기 구하기
+	objRect = objGraphicsGroup.getRect();
+	
+	//Graphics 컴포넌트 Width/Height를 스케줄 크기에 맞춰 리사이즈
+	objGraphics.setOffsetWidth(objRect.width);
+	objGraphics.setOffsetHeight(objRect.height);
+	objGraphics.redraw();
+	objGraphics.parent.resetScroll();
+}
+
+/**
+* @description 	    	: Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeGroupHead = function(objGraphics, objConfig, objRect)
+{
+	//Head 영역 배경 설정 정보 가져오기
+	var obbGroupHeadRectProp = objConfig.grouphead.graphicsrect;
+	
+	//Head 영역 배경 오브젝트
+	var objGroupHeadRact;
+	
+	//Head 영역 텍스트 설정 정보 가져오기
+	var objGroupHeadTextProp = objConfig.grouphead.graphicstext;
+	
+	//Head 영역 텍슽 오브젝트
+	var objGroupHeadText;
+	
+	//Head 영역 그룹 설정 정보
+	var objGroupHeadGroupProp
+	
+	//Head 영역 그룹 오브젝트
+	var objGroupHeadGroup;
+	
+	//그룹 설정정보 가져오기
+	var arrGroupList = objConfig.grouplist;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth;
+	var nHeight = 0;
+	
+	var sTitle;
+	
+	//년도 head를 사용할 경우 Block Height만큼 더하기
+	if(objConfig.use_year==true)nHeight += nBlockHeight;
+	
+	//월 head를 사용할 경우 Block Height만큼 더하기
+	if(objConfig.use_month==true)nHeight += nBlockHeight;
+	
+	//주차 head를 사용할 경우 Block Height만큼 더하기
+	if(objConfig.use_weekcount==true)nHeight += nBlockHeight;
+	
+	//요일 head를 사용할 경우 Block Height만큼 더하기
+	if(objConfig.use_week==true)nHeight += nBlockHeight;
+	
+	//일자 head를 사용할 경우 Block Height만큼 더하기
+	if(objConfig.use_day==true)nHeight += nBlockHeight;
+	
+	//그룹의 갯수 만큼 Loop
+	for(var i=0;i<arrGroupList.length;i++)
+	{
+		//현재 그룹의 Width 설정값 가져오기
+		nWidth = arrGroupList[i].width;
+		
+		//현재 그룹의 Title 설정값 가져오기
+		sTitle = arrGroupList[i].title;
+		
+		//현재 그룹 배경 만들기
+		objGroupHeadGroupProp = {"x" : nX, "y" : nY};
+			
+		objGroupHeadGroup = this.gfnSetGraphicProperties("GraphicsGroup", objGroupHeadGroupProp);
+		
+		obbGroupHeadRectProp.width = nWidth;
+		obbGroupHeadRectProp.height = nHeight;
+		obbGroupHeadRect = this.gfnSetGraphicProperties("GraphicsRect", obbGroupHeadRectProp);
+		
+		objGroupHeadGroup.addChild("grouphead_"+ i + "_bg", obbGroupHeadRect);
+		
+		//현재 그룹 텍스트 만들기
+		objGroupHeadTextProp.x = nWidth/2;
+		objGroupHeadTextProp.y = nHeight/2;
+		objGroupHeadTextProp.text = sTitle;
+		
+		objGroupHeadText = this.gfnSetGraphicProperties("GraphicsText", objGroupHeadTextProp);
+		
+		objGroupHeadGroup.addChild("grouphead_"+ i + "_text", objGroupHeadText);
+		
+		objGraphics.addChild("grouphead_"+i, objGroupHeadGroup)
+		
+		//다음 그룹의 X좌표 만들기
+		nX += nWidth;
+	}
+	
+	//마지막 그룹의 Right 좌표값을 x좌표로 설정 후 리턴
+	objRect.x = nX;
+	return objRect;
+}
+
+/**
+* @description 	    	: 년도 Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeYear = function(objGraphics, objConfig, objRect)
+{
+	//년도 Head 영역 배경 설정 정보 가져오기
+	var objYearRectProp = objConfig.year.graphicsrect;
+	
+	//년도 Head 영역 배경 오브젝트
+	var objYearRact;
+	
+	//년도 Head 영역 텍스트 설정 정보 가져오기
+	var objYearTextProp = objConfig.year.graphicstext;
+	
+	//년도 Head 영역 텍스트 오브젝트
+	var objYearText;
+	
+	//년도 Head 그룹 설정 정보
+	var objYearGroupProp
+	
+	//년도 Head 그룹 오브젝트
+	var objYearGroup;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth = nBlockWidth * 366;
+	var nHeight = nBlockHeight;
+	
+	//년도 Head 영역 GraphicsGroup 오브젝트 만들기
+	objYearGroupProp = {"x" : nX, "y" : nY};
+			
+	objYearGroup = this.gfnSetGraphicProperties("GraphicsGroup", objYearGroupProp);
+	
+	//년도 Head 영역 배경 오브젝트 만들기
+	objYearRectProp.width = nWidth;
+	objYearRectProp.height = nHeight;
+	objYearRact = this.gfnSetGraphicProperties("GraphicsRect", objYearRectProp);
+	objYearGroup.addChild("year_bg", objYearRact);
+		
+	//년도 Head 영역 텍스트 오브젝트 만들기
+	objYearTextProp.x = nWidth/2;
+	objYearTextProp.y = nHeight/2;
+	objYearTextProp.text = "2020";
+	objYearText = this.gfnSetGraphicProperties("GraphicsText", objYearTextProp);
+	objYearGroup.addChild("year_text", objYearText);
+	
+	
+	objGraphics.addChild("year", objYearGroup)
+	
+	//년도 Head의 bottom 좌표값을 y좌표로 설정 후 리턴
+	objRect.y = objRect.y + nHeight;
+	return objRect;
+}
+
+/**
+* @description 	    	: 월 Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeMonth = function(objGraphics, objConfig, objRect)
+{
+	//월 Head 영역 배경 설정 정보 가져오기
+	var objMonthRectProp = objConfig.month.graphicsrect;
+	
+	//월 Head 영역 배경 오브젝트
+	var objMonthRact;
+	
+	//월 Head 영역 텍스트 설정 정보 가져오기
+	var objMonthTextProp = objConfig.month.graphicstext;
+	
+	//월 Head 영역 텍스트 오브젝트
+	var objMonthText;
+	
+	//월 Head 영역 그룹 설정 정보
+	var objMonthGroupProp
+	
+	//월 Head 영역 그룹 오브젝트
+	var objMonthGroup;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth;
+	var nHeight = nBlockHeight;
+	var nDayCount;
+	
+	var sTargetYear = objConfig.targetyear;
+	var objTargetDate = new Date(sTargetYear, 0, 1);
+	var objFromDate;
+	var objToDate;
+	
+	//1~12월 표현을 위해 loop
+	for(i=0;i<12;i++)
+	{
+		//현재 월 1일 설정 
+		objFromDate = this.gfnAddMonth(objTargetDate, i);
+		
+		//다음 월 1일 설정
+		objToDate = this.gfnAddMonth(objTargetDate, i+1);
+		
+		//현재월의 일자 갯수 구하기
+		nDayCount = this.gfnGetDiffDay(objFromDate, objToDate);
+		
+		//현재월 Head의 Width값 = Block Width * 현재월의 일자 갯수
+		nWidth = nBlockWidth * nDayCount;
+		
+		//현재 월 Head 영역 GraphicsGroup 오브젝트 만들기
+		objMonthGroupProp = {"x" : nX, "y" : nY};
+			
+		objMonthGroup = this.gfnSetGraphicProperties("GraphicsGroup", objMonthGroupProp);
+		
+		//현재 월 Head 영역 배경 오브젝트 만들기
+		objMonthRectProp.width = nWidth;
+		objMonthRectProp.height = nHeight;
+		objMonthRact = this.gfnSetGraphicProperties("GraphicsRect", objMonthRectProp);
+		
+		objMonthGroup.addChild("month_"+i+"_bg", objMonthRact);
+			
+			
+		//현재 월 Head 영역 텍스트 오브젝트 만들기
+		objMonthTextProp.x = nWidth/2;
+		objMonthTextProp.y = nHeight/2;
+		objMonthTextProp.text = i+1;
+		
+		objMonthText = this.gfnSetGraphicProperties("GraphicsText", objMonthTextProp);
+		
+		objMonthGroup.addChild("month_"+i+"_text", objMonthText);
+		
+		objGraphics.addChild("month_"+i, objMonthGroup);
+		
+		//다음 월 Head 영역의 x좌표값 설정
+		nX = nX + nWidth;
+	}
+	
+	//월 Head의 bottom 좌표값을 y좌표로 설정 후 리턴
+	objRect.y = objRect.y + nHeight;
+	
+	return objRect;
+}
+
+/**
+* @description 	    	: 주차 Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeWeekCount = function(objGraphics, objConfig, objRect)
+{
+	//주차 Head 영역 배경 설정 정보 가져오기
+	var objWeekCountRectProp = objConfig.weekcount.graphicsrect;
+	
+	//주차 Head 영역 배경 오브젝트
+	var objWeekCountRact;
+	
+	//주차 Head 영역 텍스트 설정 정보 가져오기
+	var objWeekCountTextProp = objConfig.weekcount.graphicstext;
+	
+	//주차 Head 영역 텍스트 오브젝트
+	var objWeekCountText;
+	
+	//주차 Head 영역 그룹 설정 정보
+	var objWeekCountGroupProp
+	
+	//주차 Head 영역 그룹 오브젝트
+	var objWeekCountGroup;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth = 0;
+	var nHeight = nBlockHeight;
+	
+	//현재 년도 가져오기
+	var sTargetYear = objConfig.targetyear;
+	
+	//현재년도 시작일자 만들기
+	var objStartDate = new Date(sTargetYear, 0, 1);
+	var objTargetDate;
+	var nWeekCount = 1;
+	var nDay;
+	
+	//365일 표현을 위한 loop
+	for(i=0;i<366;i++)
+	{
+		//현재 일자 구하기
+		objTargetDate = this.gfnAddDate(objStartDate, i);
+		
+		//현재 요일 구하기
+		nDay = objTargetDate.getDay();
+		
+		//주차 영역 Width += Block Width 
+		nWidth += nBlockWidth;
+		
+		//토요일 또는 마지막 일자일 경우
+		if(nDay==6||i==365)
+		{
+			
+			//주차 Head 영역 GraphicsGroup 오브젝트 만들기
+			objWeekCountGroupProp = {"x" : nX, "y" : nY};
+			
+			objWeekCountGroup = this.gfnSetGraphicProperties("GraphicsGroup", objWeekCountGroupProp);
+			
+			//주차 Head 영역 배경 오브젝트 만들기
+			objWeekCountRectProp.width = nWidth;
+			objWeekCountRectProp.height = nHeight;
+			objWeekCountRact = this.gfnSetGraphicProperties("GraphicsRect", objWeekCountRectProp);
+			
+			objWeekCountGroup.addChild("weekcount_"+nWeekCount+"_bg", objWeekCountRact);
+				
+			
+			//주차 Head 영역 텍스트 오브젝트 만들기
+			objWeekCountTextProp.x = nWidth/2;
+			objWeekCountTextProp.y = nHeight/2;
+			objWeekCountTextProp.text = nWeekCount;
+			objWeekCountText = this.gfnSetGraphicProperties("GraphicsText", objWeekCountTextProp);
+			
+			objWeekCountGroup.addChild("weekcount_"+nWeekCount+"_text", objWeekCountText);
+			
+			objGraphics.addChild("weekcount_"+nWeekCount, objWeekCountGroup);
+			
+			//다음 주차 x좌표 설정
+			nX = nX + nWidth;
+			
+			//주차 1 증가
+			nWeekCount++;
+			
+			//주차 영역 Width 초기화
+			nWidth = 0;
+		}
+	}
+	
+	//주차 Head의 bottom 좌표값을 y좌표로 설정 후 리턴
+	objRect.y = objRect.y + nHeight;
+	return objRect;
+}
+
+/**
+* @description 	    	: 요일 Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeWeek = function(objGraphics, objConfig, objRect)
+{
+	//요일 표현 값 가져오기
+	var arrWeekFormat = objConfig.week.weekformat;
+	
+	//요일 표현 칼라 가져오기
+	var arrWeekFontColor = objConfig.week.weekfontcolor;
+	
+	//요일 Head 영역 배경 설정정보 가져오기
+	var objWeekRectProp = objConfig.week.graphicsrect;
+	
+	//요일 Head영역 배경 오브젝트
+	var objWeekRact;
+	
+	//요일 Head 영역 텍스트 설정정보 가져오기
+	var objWeekTextProp = objConfig.week.graphicstext;
+	
+	//요일 Head 영역 텍스트 오브젝트
+	var objWeekText;
+	
+	//요일 Head 영역 그룹 설정 정보
+	var objWeekGroupProp
+	
+	//요일 Head 영역 그룹 오브젝트
+	var objWeekGroup;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+		
+	var nWidth = nBlockWidth;
+	var nHeight = nBlockHeight;
+	var nDayCount;
+	
+	var sTargetYear = objConfig.targetyear;
+	var objStartDate = new Date(sTargetYear, 0, 1);
+	var objTargetDate;
+	
+	//365일 표현을 위한 loop
+	for(i=0;i<366;i++)
+	{
+		//현재 일자 가져오기
+		objTargetDate = this.gfnAddDate(objStartDate, i);
+		
+		//요일 Head 영역 GraphicsGroup 오브젝트 만들기
+		objWeekGroupProp = {"x" : nX, "y" : nY};
+			
+		objWeekGroup = this.gfnSetGraphicProperties("GraphicsGroup", objWeekGroupProp);
+		
+		//요일 Head 영역 배경 오브젝트 만들기
+		objWeekRectProp.width = nWidth;
+		objWeekRectProp.height = nHeight;
+		objWeekRact = this.gfnSetGraphicProperties("GraphicsRect", objWeekRectProp);
+		
+		objWeekGroup.addChild("week_"+i+"_bg", objWeekRact);
+			
+		//요일 Head 영역 텍스트 오브젝트 만들기
+		objWeekTextProp.x = nWidth/2;
+		objWeekTextProp.y = nHeight/2;
+		objWeekTextProp.text = arrWeekFormat[objTargetDate.getDay()];
+		objWeekText = this.gfnSetGraphicProperties("GraphicsText", objWeekTextProp);
+		
+		objWeekText.set_color(arrWeekFontColor[objTargetDate.getDay()]);
+		
+		objWeekGroup.addChild("week_"+i+"_text", objWeekText);
+		
+		objGraphics.addChild("week_"+i, objWeekGroup);
+		
+		//다음 요일 x좌표 설정
+		nX = nX + nWidth;
+	}
+	
+	//요일 Head의 bottom 좌표값을 y좌표로 설정 후 리턴
+	objRect.y = objRect.y + nHeight;
+	return objRect;
+}
+
+/**
+* @description 	    	: 일자 Head 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeDay = function(objGraphics, objConfig, objRect)
+{
+	//일자 Head 영역 배경 설정정보 가져오기
+	var objWeekRectProp = objConfig.week.graphicsrect;
+	
+	//일자 Head 영역 배경 오브젝트
+	var objWeekRact;
+		
+	//일자 Head 영역 텍스트 설정정보 가져오기
+	var objWeekTextProp = objConfig.week.graphicstext;
+	
+	//일자 Head 영역 텍스트 오브젝트
+	var objWeekText;
+	
+	//일자 Head 영역 그룹 설정 정보
+	var objWeekGroupProp
+	
+	//일자 Head 영역 그룹 오브젝트
+	var objWeekGroup;
+	
+	var nX = objRect.x;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+		
+	var nWidth = nBlockWidth;
+	var nHeight = nBlockHeight;
+	var nDayCount;
+	
+	var sTargetYear = objConfig.targetyear;
+	var objStartDate = new Date(sTargetYear, 0, 1);
+	var objTargetDate;
+	
+	//365일 표현을 위한 loop
+	for(i=0;i<366;i++)
+	{
+		//현재 일자 가져오기
+		objTargetDate = this.gfnAddDate(objStartDate, i);
+		
+		
+		//일자 Head 영역 GraphicsGroup 오브젝트 만들기
+		objWeekGroupProp = {"x" : nX, "y" : nY};
+			
+		objWeekGroup = this.gfnSetGraphicProperties("GraphicsGroup", objWeekGroupProp);
+		
+		
+		//일자 Head 영역 배경 오브젝트 만들기
+		objWeekRectProp.width = nWidth;
+		objWeekRectProp.height = nHeight;
+		objWeekRact = this.gfnSetGraphicProperties("GraphicsRect", objWeekRectProp);
+		
+		objWeekGroup.addChild("day_"+i+"_bg", objWeekRact);
+			
+			
+		//일자 Head 영역 텍스트 오브젝트 만들기
+		objWeekTextProp.x = nWidth/2;
+		objWeekTextProp.y = nHeight/2;
+		objWeekTextProp.text = objTargetDate.getDate();
+		
+		objWeekText = this.gfnSetGraphicProperties("GraphicsText", objWeekTextProp);
+		
+		objWeekGroup.addChild("day_"+i+"_text", objWeekText);
+		
+		objGraphics.addChild("day_"+i, objWeekGroup);
+		
+		//다음 일자 x좌표 설정
+		nX = nX + nWidth;
+	}
+	
+	//일자 Head의 bottom 좌표값을 y좌표로 설정 후 리턴
+	objRect.y = objRect.y + nHeight;
+	
+	return objRect;
+}
+
+/**
+* @description 	    	: 그룹 Body 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeGroupBody = function(objGraphics, objConfig, objRect)
+{
+	//그룹 Body 영역 배경 설정정보 가져오기
+	var objGroupBodyRectProp = objConfig.groupbody.graphicsrect;
+	
+	//그룹 Body 영역 배경 오브젝트
+	var objGroupBodyRact;
+	
+	//그룹 Body 영역 텍스트 설정정보 가져오기
+	var objGroupBodyTextProp = objConfig.groupbody.graphicstext;
+	
+	//그룹 Body 영역 텍스트 오브젝트
+	var objGroupBodyText;
+	
+	//그룹 Body 영역 그룹 설정 정보
+	var objGroupBodyGroupProp
+	
+	//그룹 Body 영역 그룹 오브젝트
+	var objGroupBodyGroup;
+	
+	//그룹 설정 정보 가져오기
+	var arrGroupList = objConfig.grouplist;
+	
+	//데이터셋 정보 가져오기
+	var objDs = objConfig.binddataset;
+	
+	var nX = 0;
+	var nY = objRect.y;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth;
+	var nWidthMax = 0;
+	var nHeight = nBlockHeight;
+	
+	var sId;
+	var sLabel
+	
+	var sIdValues;
+	var sLabelValue;
+	
+	var sGroupBodyId = "";
+	var bChkAddRow = true;
+	
+	//그룹 리스트 갯수 만큼 Loop
+	for(var i=0;i<arrGroupList.length;i++)
+	{
+		//전체 그룹의 Width 구하기
+		nWidthMax += arrGroupList[i].width;
+	}
+	
+	//그룹정보를 역순으로 그리기 위해
+	//전체 그룹 Width를 x좌표로 설정
+	nX = nWidthMax;
+	
+	//일정 갯수 만큼 Loop
+	for(var i=0;i<objDs.rowcount;i++)
+	{
+		sGroupBodyId = "";
+		bChkAddRow = true;
+		
+		//그룹 갯수 만큼 역순으로 Loop
+		for(var j=arrGroupList.length-1;j>=0;j--)
+		{
+			//현재 그룹의 Width 가져오기
+			nWidth = arrGroupList[j].width;
+			
+			//현재 그룹의 Width 만큼 x좌표에서 마이너스
+			nX = nX - nWidth;
+			
+			sId = arrGroupList[j].id;
+			sLabel = arrGroupList[j].label;
+			
+			sIdValues = objDs.getColumn(i, sId);
+			sLabelValue = objDs.getColumn(i, sLabel);
+			
+			//순차적으로 Group Id 만들기
+			sGroupBodyId = "";
+			for(var k = 0; k<=j; k++)
+			{
+				sId = arrGroupList[k].id;
+				sIdValues = objDs.getColumn(i, sId);
+				sGroupBodyId += "_" + sIdValues;
+			}
+			
+			//Group Id로 이미 만들어진 Group 오브젝트가 있는지 찾기
+			objGroupBodyGroup = objGraphics.getObjectByID("groupbody"+sGroupBodyId);
+			
+			//그룹 오브젝트가 있을 경우
+			if(objGroupBodyGroup)
+			{
+				//마지막 Depth의 그룹일 경우
+				if(j==arrGroupList.length-1)
+				{
+					//Row 추가 여부 false로 변경
+					bChkAddRow = false;
+				}else
+				{
+					//Row 추가 여부가 true일 경우
+					//배경 및 텍스트 오브젝트의 Height 값을 증가
+					if(bChkAddRow==true)
+					{
+						objGroupBodyRect = objGraphics.getObjectByID("groupbody"+ sGroupBodyId + "_bg");
+						objGroupBodyRect.set_height(objGroupBodyRect.height + nHeight);
+						
+						objGroupBodyText = objGraphics.getObjectByID("groupbody"+ sGroupBodyId + "_text");
+						objGroupBodyText.set_y(objGroupBodyRect.height/2);
+					}
+				}
+			}
+			//그룹 오브젝트가 없을 경우
+			else
+			{
+				//그룹 Body 영역 GraphicsGroup 오브젝트 만들기
+				objGroupBodyGroupProp = {"x" : nX, "y" : nY};
+				
+				objGroupBodyGroup = this.gfnSetGraphicProperties("GraphicsGroup", objGroupBodyGroupProp);
+				
+				//그룹 Body 영역 배경 오브젝트 만들기
+				objGroupBodyRectProp.width = nWidth;
+				objGroupBodyRectProp.height = nHeight;
+				objGroupBodyRect = this.gfnSetGraphicProperties("GraphicsRect", objGroupBodyRectProp);
+				
+				objGroupBodyGroup.addChild("groupbody"+ sGroupBodyId + "_bg", objGroupBodyRect);
+				
+				
+				//그룹 Body 영역 텍스트 오브젝트 만들기
+				objGroupBodyTextProp.x = nWidth/2;
+				objGroupBodyTextProp.y = nHeight/2;
+				objGroupBodyTextProp.text = sLabelValue;
+				
+				objGroupBodyText = this.gfnSetGraphicProperties("GraphicsText", objGroupBodyTextProp);
+				
+				objGroupBodyGroup.addChild("groupbody"+ sGroupBodyId + "_text", objGroupBodyText);
+				
+				objGraphics.addChild("groupbody"+sGroupBodyId, objGroupBodyGroup);
+			}
+		}
+		//그룹정보를 역순으로 그리기 위해
+		//전체 그룹 Width를 x좌표로 설정
+		nX = nWidthMax;
+		
+		//Row 추가 여부 true일 경우 nY 좌표 nHeight만큼 이동
+		if(bChkAddRow==true)nY = nY + nHeight;
+	}
+	
+	//그룹 Body 영역의 right 좌표값을 x좌표로 설정 후 리턴
+	objRect.x = nWidthMax;
+	return objRect;
+}
+
+/**
+* @description 	    	: Body 배경 영역 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Component
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeScheduleBg = function(objGraphics, objConfig, objRect)
+{
+	//Body 배경 영역 라인 설정정보 가져오기
+	var objBodyLinePathProp = objConfig.groupbody.graphicspath;
+	
+	//Body 배경 영역 라인 오브젝트
+	var objBodyLinePath;
+	
+	//Body 배경 영역 라인 리스트 설정정보 가져오기
+	var objBodyLinePathListProp = objConfig.groupbody.graphicspath;
+	
+	//Body 배경 영역 라인 리스트 오브젝트
+	var objBodyLinePathList;
+		
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nX = 0;
+	var nY = 0;
+	var nWidth = objGraphics.getRect().width - objRect.x -2;
+	var nHeight = objGraphics.getRect().height - objRect.y - 2;
+	
+	var nColCount = nexacro.round(nWidth/nBlockWidth);
+	var nRowCount = nexacro.round(nHeight/nBlockHeight);
+	
+	//Body 배경 영역 라인 리스트 오브젝트 만들기
+	objBodyLinePathListProp.x = objRect.x;
+	objBodyLinePathListProp.y = objRect.y;
+	objBodyLinePathList = this.gfnSetGraphicProperties("GraphicsPaths", objBodyLinePathListProp);
+	
+	//일자 갯수 만큼 Loop
+	for(var i=0;i<nColCount;i++)
+	{
+		//Body 배경 영역 라인 오브젝트 만들기
+		nX += nBlockWidth;
+		objBodyLinePathProp.x = nX;
+		objBodyLinePathProp.y = 0;
+		objBodyLinePath = this.gfnSetGraphicProperties("GraphicsPath", objBodyLinePathProp);
+		
+		objBodyLinePath.moveTo(0, 0);
+		objBodyLinePath.lineTo(0, nHeight);
+		objBodyLinePathList.addChild("linecol_"+i, objBodyLinePath);
+	}
+	
+	//그룹 갯수 만큼 Loop
+	for(var i=0;i<nRowCount;i++)
+	{
+		//Body 배경 영역 라인 오브젝트 만들기
+		nY += nBlockHeight;
+		objBodyLinePathProp.x = 0;
+		objBodyLinePathProp.y = nY;
+		objBodyLinePath = this.gfnSetGraphicProperties("GraphicsPath", objBodyLinePathProp);
+		
+		objBodyLinePath.moveTo(0, 0);
+		objBodyLinePath.lineTo(nWidth, 0);
+		objBodyLinePathList.addChild("linerow_"+i, objBodyLinePath);
+	}
+	
+	objGraphics.addChild("bodylinepathlist", objBodyLinePathList);
+	return objRect;
+}
+
+/**
+* @description 	    	: 스케줄 만들기 함수
+* @param objGraphics  	: 설정할 Graphics Compon ent
+* @param objConfig  	: 스케줄러 설정 정보
+* @param objRect	  	: 현재 영역 시작 위치 정보(x,y)
+* @return           	: 없음
+*/
+this.gfnMakeScheduleData = function(objGraphics, objConfig, objRect)
+{
+	//스케줄 타입 가져오기
+	var objScheduleType = objConfig.schedule.type;
+	
+	//스케줄 배경 설정 정보 가져오기
+	var objScheduleRectProp = objConfig.schedule.graphicsrect;
+	
+	//스케줄 배경 오브젝트
+	var objScheduleRect;
+	
+	//스케줄 텍스트 설정 정보 가져오기
+	var objScheduleTextProp = objConfig.schedule.graphicstext;
+	
+	//스케줄 텍스트 오브젝트
+	var objScheduleText;
+	
+	//스케줄 그룹 설정 정보 
+	var objScheduleGroupProp;
+	
+	//스케줄 그룹 오브젝트
+	var objScheduleGroup;
+	
+	//그룹 리스트 가져오기
+	var arrGroupList = objConfig.grouplist;
+	
+	var nX = 0;
+	var nY = 0;
+	var nBlockWidth = objConfig.width_block;
+	var nBlockHeight = objConfig.height_block;
+	
+	var nWidth;
+	var nHeight = nBlockHeight;
+	
+	//데이터셋 가져오기
+	var objDs = objConfig.binddataset;
+	var nRowCount;
+	
+	var sId;
+	var sIdValue;
+	var sGroupId;
+	var sScheduleId;
+	var sScheduleType;
+	var sTitle;
+	var sSDate;
+	var sEDate;
+	
+	//설정년도 가져오기
+	var sTargetYear = objConfig.targetyear;
+	
+	//설정년도 시작일자 가져오기
+	var objStartDate = new Date(sTargetYear, 0, 1);
+	
+	//시작일자 텍스트 가져오기
+	var sStartDate = this.gfnGetMaskFormatDateToString(objStartDate, "yyyyMMdd");
+	
+	objDs.set_enableevent(false);
+	
+	//현재 년도 일정 Filter
+	objDs.filter("sdate.substring(0, 4)=='"+sTargetYear+"'||edate.substring(0,4)=='"+sTargetYear+"'");
+	
+	//스케줄 갯수 가져오기
+	nRowCount = objDs.rowcount;
+	
+	//스케줄 갯수 만큼 Loop
+	for(var i=0;i<nRowCount;i++)
+	{
+		//스케줄 정보 가져오기
+		sScheduleId = objDs.getColumn(i, "scheduleid");
+		sScheduleType = objDs.getColumn(i, "scheduletype");
+		sTitle = objDs.getColumn(i, "title");
+		sSDate = objDs.getColumn(i, "sdate");
+		sEDate = objDs.getColumn(i, "edate");
+		
+		sId = "";
+		sIdValues = "";
+		sGroupId = "";
+		
+		//순차적으로 그룹 ID 만들기
+		for(var j = 0; j<arrGroupList.length; j++)
+		{
+			sId = arrGroupList[j].id;
+			sIdValues = objDs.getColumn(i, sId);
+			sGroupId += "_" + sIdValues;
+		}
+		
+		//스케줄 시작일자로 x좌표 구하기
+		nX = objRect.x + this.gfnGetDiffDay(sStartDate, sSDate) * nBlockWidth;
+		
+		//그룹 ID로 y좌표 구하기
+		objGroupBodyGroup = objGraphics.getObjectByID("groupbody"+sGroupId);
+		nY = objGroupBodyGroup.getRect().top + 1;
+		
+		//스케줄 시작일자, 종료일자로 Width 구하기
+		nWidth = (this.gfnGetDiffDay(sSDate, sEDate)+1) * nBlockWidth;
+		
+		
+		//스케줄 GraphicsGroup 오브젝트 만들기
+		objScheduleGroupProp = {"x" : nX, "y" : nY};
+		
+		objScheduleGroup = this.gfnSetGraphicProperties("GraphicsGroup", objScheduleGroupProp);
+		
+		//스케줄 배경 오브젝트 만들기
+		objScheduleRectProp.width = nWidth;
+		objScheduleRectProp.height = nHeight;
+		objScheduleRectProp.fillstyle = objScheduleType[sScheduleType];
+		objScheduleRect = this.gfnSetGraphicProperties("GraphicsRect", objScheduleRectProp);
+		
+		objScheduleGroup.addChild("schedule_"+sScheduleId+"_bg", objScheduleRect);
+			
+		//스케줄 텍스트 오브젝트 만들기
+		objScheduleTextProp.x = nWidth/2;
+		objScheduleTextProp.y = nHeight/2;
+		objScheduleTextProp.text = sTitle;
+		
+		objScheduleText = this.gfnSetGraphicProperties("GraphicsText", objScheduleTextProp);
+		
+		objScheduleGroup.addChild("schedule_"+sScheduleId+"_text", objScheduleText);
+		
+		objGraphics.addChild("schedule_"+sScheduleId, objScheduleGroup);
+	}
+	objDs.filter("");
+	objDs.set_enableevent(true);
+	return objRect;
+}
+
+/**
+* @description 	    : Graphics 하위 오브젝트 생성 및 속성 설정 함수
+* @param sCompId  	: 오브젝트 명
+* @param jsnProps   : 오브젝트 속성 값
+* @return           : Graphics 하위 오브젝트
+*/
+this.gfnSetGraphicProperties = function(sCompId, jsnProps)
+{
+	//Graphics 하위 오브젝트 생성
+	var objComp = new nexacro[sCompId];
+	var objFunc;
+	var sProp;
+	
+	//설정정보를 오브젝트의 속성으로 설정
+	for(sProp in jsnProps)
+	{
+		//속성 설정함수 가져오기
+		objFunc = objComp["set_"+sProp];
+		
+		if(objFunc)
+		{
+			//속성 설정함수 실행
+			objFunc.call(objComp, jsnProps[sProp]);
+		}
+	}
+	
+	//생성된 Graphics 하위 오브젝트 리턴
+	return objComp;
+}]]></Script>

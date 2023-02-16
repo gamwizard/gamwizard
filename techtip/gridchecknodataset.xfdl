@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="gridchecknodataset" width="640" height="500" titletext="Grid CheckBox No Dataset (그리드의 CheckBox를 Dataset없이 사용하기)" onload="gridchecknodataset_onload">
+    <Layouts>
+      <Layout height="500" mobileorientation="landscape" width="640">
+        <Grid id="grdList" taborder="0" left="10" top="10" height="480" width="380" binddataset="dsList" cellsizingtype="col" treeinitstatus="expand,all" treeusecheckbox="false" onheadclick="grdTree_onheadclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="48"/>
+                <Column size="48"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="상태"/>
+                <Cell col="1" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="2" text="일자"/>
+                <Cell col="3" text="팀명"/>
+                <Cell col="4" text="사원명"/>
+                <Cell col="5" text="상품구분"/>
+                <Cell col="6" text="상품명"/>
+                <Cell col="7" text="수량"/>
+                <Cell col="8" text="단가"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:dataset.getRowType(currow)==&quot;2&quot;?&quot;입력&quot;:dataset.getRowType(currow)==&quot;4&quot;?&quot;수정&quot;:&quot;일반&quot;" textAlign="center"/>
+                <Cell col="1" displaytype="checkboxcontrol" edittype="checkbox" text="expr:dataset.checkarray[dataset.findNFRowIndex(currow)]"/>
+                <Cell col="2" text="bind:Column0"/>
+                <Cell col="3" text="bind:Column1" edittype="text"/>
+                <Cell col="4" text="bind:Column2"/>
+                <Cell col="5" text="bind:Column3"/>
+                <Cell col="6" text="bind:Column4"/>
+                <Cell col="7" text="bind:Column5"/>
+                <Cell col="8" text="bind:Column6"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="1" text="추가" left="400" top="10" width="120" height="30" onclick="Button00_onclick"/>
+        <Button id="Button00_00" taborder="2" text="삭제" left="400" top="50" width="120" height="30" onclick="Button00_00_onclick"/>
+        <Button id="Button00_00_00" taborder="3" text="모두 삭제" left="400" top="90" width="120" height="30" onclick="Button00_00_00_onclick"/>
+        <Button id="Button00_00_00_00" taborder="4" text="클리어데이터" left="400" top="130" width="120" height="30" onclick="Button00_00_00_00_onclick"/>
+        <Button id="Button00_00_00_00_00" taborder="5" text="이동" left="400" top="210" width="120" height="30" onclick="Button00_00_00_00_00_onclick"/>
+        <Button id="Button00_00_00_00_00_00" taborder="6" text="교환" left="400" top="250" width="120" height="30" onclick="Button00_00_00_00_00_00_onclick"/>
+        <Button id="Button00_00_00_00_01" taborder="7" text="클리어" left="400" top="170" width="120" height="30" onclick="Button00_00_00_00_01_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList" onrowsetchanged="dsList_onrowsetchanged">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="INT" size="256"/>
+          <Column id="Column6" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">0</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">21</Col>
+            <Col id="Column6">13000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">1</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">796</Col>
+            <Col id="Column6">76000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">2</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">125</Col>
+            <Col id="Column6">37000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">3</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">889</Col>
+            <Col id="Column6">19000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">4</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">129</Col>
+            <Col id="Column6">13000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">5</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">259</Col>
+            <Col id="Column6">47000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">6</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">76</Col>
+            <Col id="Column6">73000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">7</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">589</Col>
+            <Col id="Column6">89000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">8</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">319</Col>
+            <Col id="Column6">45000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">9</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">184</Col>
+            <Col id="Column6">40000</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > gridcheckondataset
+*  techtip 데이터셋 없이 그리드 전체 체크/체크해제 샘플
+*  @FileName	gridchecknodataset.xfdl 
+*******************************************************************************
+*  2019.07.09		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+include "lib_techtip::lib_gridcheckondataset.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ /**
+ * @description 화면 onload시 처리내역
+*/
+this.gridchecknodataset_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//그리드의 체크박스를 Dataset 없이 사용하는 함수 실행
+	this.gfnSetCheckBoxNoDataset(this.dsList, this.grdList, 1); 
+};
+
+ /**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+* 사용자 FUNCTION 영역
+**************************************************************************/
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.insertRow(2);
+	//this.dsList.addRow();
+};
+
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.deleteRow(2);
+};
+
+this.Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.deleteAll();
+};
+
+this.Button00_00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.clearData();
+};
+
+this.Button00_00_00_00_01_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.clear();
+};
+
+this.Button00_00_00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.moveRow(4, 2);
+	this.gfnMoveCheckRow(this.grdList, 4, 2);
+};
+
+this.Button00_00_00_00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.dsList.exchangeRow(4, 1);
+	this.gfnExChangeCheckRow(this.grdList, 4, 1);
+};]]></Script>
+  </Form>
+</FDL>

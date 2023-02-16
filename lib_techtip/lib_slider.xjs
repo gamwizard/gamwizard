@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	      : 슬라이더 초기화 함수
+* @param objConfig    : 초기화 설정 값
+* @return             : 없음
+*/
+this.gfnInitSliderBar = function(objConfig)
+{
+	//슬라이더가 만들어질 Form 컴포넌트 가져오기
+	var objForm = objConfig.targetForm;
+	
+	//슬라이더 Bar로 활용할 컴포넌트 가져오기
+	var objSliderBar = objConfig.targetBar;
+	
+	//슬라이더 배경으로 활용할 컴포넌트
+	var objSliderBg = objConfig.targetBg;
+	
+	//Drag여부를 체크하기 위한 멤버변수 초기화
+	objConfig.dragFlag = false;
+	
+	//Drag 시작 X좌표 설정을 위한 멤버변수 초기화
+	objConfig.x = -1;
+	
+	//Drag 시작 Y좌표 설정을 위한 멤버변수 초기화
+	objConfig.y = -1;
+	
+	//슬라이더의 Pos 값 초기화
+	objConfig.pos = 0;
+	
+	//슬라이더의 1 Pos당 이동할 px값 초기화
+	objConfig.point = 0;
+	
+	//이동뱡항이 좌/우일 경우
+	if(objConfig.slideType=="vertical")
+	{
+		//슬라이더 point값 계산하기
+		//슬라이더 배경 Width - 슬라이더 Bar Width / 100
+		objConfig.point = (objSliderBg.getOffsetWidth()-objSliderBar.getOffsetWidth())/100;
+	}
+	//이동방향이 상/하일 경우
+	else if(objConfig.slideType=="horizontal")
+	{
+		//슬라이더 point값 계산하기
+		//슬라이더 배경 Height - 슬라이더 Bar Height / 100
+		objConfig.point = (objSliderBg.getOffsetHeight()-objSliderBar.getOffsetHeight())/100;
+	}
+	
+	//슬라이더 Bar에 Config정보 설정
+	objSliderBar.config = objConfig;
+	
+	//Drag 처리를 위해 onlbuttondown 이벤트 추가
+	objSliderBar.addEventHandler("onlbuttondown", this.gfnSliderBar_onlbuttondown, objForm);
+	
+	//Drop 처리를 위해 onlbuttonup 이벤트 추가
+	objSliderBar.addEventHandler("onlbuttonup", this.gfnSliiderBar_onlbuttonup, objForm);
+	
+	//DragMove 처리를 위해 onmousemove 이벤트 추가
+	objForm.addEventHandler("onmousemove", this.gfnSlideBar_onmousemove, objForm);
+	
+	//슬라이더 Pos 변경 함수 호출
+	this.gfnSetSliderBar(objSliderBar, 0);
+}
+
+/**
+* @description 	   : 슬라이더 바 onlbuttondown 이벤트
+* @param obj       : 이벤트 발생한 컴포넌트
+* @param e         : 이벤트 오브젝트
+* @return          : 없음
+*/
+this.gfnSliderBar_onlbuttondown = function(obj,e:nexacro.MouseEventInfo)
+{
+	var objForm = obj.config.targetForm;
+	
+	//Form onmousemove 이벤트 시 이동시킬 슬라이더 Bar 컴포넌트를 설정
+	objForm.targetSlider = obj;
+	
+	//Drag 가능하도록 Flag를 true로 변경
+	obj.config.dragFlag = true;
+	
+	//Drag시작 좌표값 설정
+	obj.config.x = e.clientx;
+	obj.config.y = e.clienty;
+};
+
+/**
+* @description 	   : 슬라이더 바 onlbuttonup 이벤트
+* @param obj       : 이벤트 발생한 컴포넌트
+* @param e         : 이벤트 오브젝트
+* @return          : 없음
+*/
+this.gfnSliiderBar_onlbuttonup = function(obj,e:nexacro.MouseEventInfo)
+{
+	var objForm = obj.config.targetForm;
+	
+	//From에 설정되었던 슬라이더 Bar 컴포넌트를 null 처리
+	objForm.targetSlider = null;
+	
+	//Drag가 불가능 하도록 flag를 false로 변경
+	obj.config.dragFlag = false;
+};
+
+/**
+* @description 	   : Form onmousemove 이벤트
+* @param obj       : 이벤트 발생한 컴포넌트
+* @param e         : 이벤트 오브젝트
+* @return          : 없음
+*/
+this.gfnSlideBar_onmousemove = function(obj:nexacro.Form,e:nexacro.MouseEventInfo)
+{
+	//DragMove할 슬라이더 Bar 컴포넌트 가져오기
+	var objSlider = obj.targetSlider;
+	
+	//DragMove할 슬라이더 Bar 컴포넌트가 있을 경우
+	if(objSlider)
+	{
+		//슬라이더의 설정정보 가져오기
+		var objConfig = objSlider.config;
+		
+		//슬라이더 배경 컴포넌트 가져오기
+		var objSliderBarBg = objConfig.targetBg;
+		
+		//Drag 가능여부 Flag 가져오기
+		var bDragFlag = objConfig.dragFlag;
+		
+		//슬라이더 이동 방향 설정 값 가져오기
+		var sSlideType = objConfig.slideType;
+		
+		//슬라이더 Point값 가져오기
+		var nPoint = objConfig.point;
+		
+		//Drag Flag가 true인 경우 DragMove 처리
+		if(bDragFlag==true)
+		{
+			//Drag 시작 X좌표 값 가져오기
+			var nStartX = objConfig.x;
+			
+			//Drag 시작 Y좌표 값 가져오기
+			var nStartY = objConfig.y;
+			
+			var nPos;
+			
+			//이동뱡항이 좌/우일 경우
+			if(sSlideType=="vertical")
+			{
+				//Pos값 계산 : (현재 X좌표 - Drag 시작 X좌표) / point값(1 Pos에 해당하는 px값)
+				nPos = (e.clientx - nStartX - objSliderBarBg.getOffsetLeft())/nPoint;
+			}
+			//이동뱡항이 상/하일 경우
+			else if(sSlideType=="horizontal")
+			{
+				//Pos값 계산 : (현재 ㅛ좌표 - Drag 시작 Y좌표) / point값(1 Pos에 해당하는 px값)
+				nPos = (e.clienty - nStartY - objSliderBarBg.getOffsetTop())/nPoint;
+			}
+			
+			//슬라이더 Pos 변경 함수 호출
+			this.gfnSetSliderBar(objSlider, nPos);
+		}
+	}
+};
+
+/**
+* @description 	      : 슬라이더 Pos 변경 함수
+* @param objSlider    : Pos를 변경할 슬라이더 Bar 컴포넌트
+* @param nPos		  : 변경할 Pos 값
+* @return             : 없음
+*/
+this.gfnSetSliderBar = function(objSlider, nPos)
+{
+	//슬라이더의 설정정보 가져오기
+	var objConfig = objSlider.config;
+	
+	//슬라이더 배경 컴포넌트 가져오기
+	var objSliderBarBg = objConfig.targetBg;
+	
+	//슬라이더 이동 방향 설정 값 가져오기
+	var sSlideType = objConfig.slideType;
+	
+	//슬라이더 Point값 가져오기
+	var nPoint = objConfig.point;
+	
+	//Drag 시작 X좌표 값 가져오기
+	var nStartX = objConfig.x;
+	
+	//Drag 시작 Y좌표 값 가져오기
+	var nStartY = objConfig.y;
+	
+	var nMoveX, nMoveY;
+	var nMinX, nMinY;
+	
+	//Pos값 정수로 만들기
+	nPos = nexacro.round(nPos);
+	
+	//Pos값이 범위를 넘어가지 않도록 설정(0~100)
+	if(nPos<0)nPos = 0;
+	else if(nPos>100)nPos = 100;
+	
+	//이동뱡항이 좌/우일 경우
+	if(sSlideType=="vertical")
+	{
+		//Pos 0에 해당하는 px값 
+		nMinX = objSliderBarBg.getOffsetLeft();
+		
+		//슬라이더 Bar가 이동할 px좌표값 계산
+		nMoveX = nMinX + (nPos * nPoint);
+		
+		//슬라이더 Bar가 슬라이더 배경의 중앙에 위치하도록 계산
+		nMoveY = objSliderBarBg.getOffsetTop() + (objSliderBarBg.getOffsetHeight()/2 - objSlider.getOffsetHeight()/2);
+				
+	}
+	//이동뱡항이 상/하일 경우
+	else if(sSlideType=="horizontal")
+	{
+		//Pos 0에 해당하는 px값 
+		nMinY = objSliderBarBg.getOffsetTop();
+	
+		//슬라이더 Bar가 슬라이더 배경의 중앙에 위치하도록 계산
+		nMoveX = objSliderBarBg.getOffsetLeft() + (objSliderBarBg.getOffsetWidth()/2 - objSlider.getOffsetWidth()/2);
+		
+		//슬라이더 Bar가 이동할 px좌표값 계산
+		nMoveY = nMinY + (nPos * nPoint);
+	}
+	
+	//설정정보의 Pos값 변경
+	objSlider.config.pos = nPos;
+	
+	//슬라이더 Bar 위치 변경
+	objSlider.move(nMoveX, nMoveY);
+	
+	//설정된 콜백함수가 있을 경우
+	if(objConfig.fnCallback)
+	{
+		//콜백함수가 호출될 Scope 가져오기
+		var objForm = objConfig.targetForm;
+		
+		//콜백함수 호출
+		objConfig.fnCallback.call(objForm, objSlider, nPos);
+	}
+}
+
+/**
+* @description 	      : 슬라이더 Pos 정보 가져오는 함수
+* @param objSlider    : 슬라이더 Bar 컴포넌트
+* @return             : 슬라이더의 현재 Pos 값 리턴
+*/
+this.gfnGetSliderBar = function(objSliderBar)
+{
+	//슬라이더 설정정보의 Pos값 리턴
+	return objSliderBar.config.pos;
+}]]></Script>

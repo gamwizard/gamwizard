@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="fileupdownSample" width="840" height="530" titletext="New Form" onload="fileupdownList_onload">
+    <Layouts>
+      <Layout height="530" mobileorientation="landscape" width="840">
+        <Div id="Div00" taborder="1" text="Div00" left="20" top="20" bottom="20" visible="true" right="20">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList">
+        <ColumnInfo>
+          <Column id="list_no" type="STRING" size="256"/>
+          <Column id="list_title" type="STRING" size="256"/>
+          <Column id="list_contents" type="STRING" size="256"/>
+          <Column id="list_date" type="STRING" size="256"/>
+          <Column id="attach_include" type="STRING" size="256"/>
+          <Column id="attach_allsize" type="STRING" size="256"/>
+          <Column id="attach_path" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="list_no">10</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">9</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">8</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">7</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">6</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">5</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">4</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">3</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">2</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">1</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[include "techtip::fileupdown.xjs";
+
+this.fileupdownList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{	
+	var objConfig  = {
+						status		: "list",
+						list		: this.Div00,
+						detail		: this.fnCreateDetail(this.Div00)
+				   }
+				   
+	obj.config = objConfig;
+	
+	obj.config.list.set_url("techtip::fileupdownList.xfdl");
+};
+
+this.fnCreateDetail = function (objDiv)
+{
+	var objDetail = new Div();
+	var objDetailId = "div_detail";
+	objDetail.init(objDetailId,objDiv.getOffsetLeft(),objDiv.getOffsetTop(),objDiv.getOffsetWidth(),objDiv.getOffsetHeight());
+	objDetail.set_url("techtip::fileupdownDetail.xfdl");
+	this.addChild(objDetailId,objDetail);
+	objDetail.show();
+	objDetail.set_visible(false);
+	objDetail.move(objDiv.getOffsetLeft(),objDiv.getOffsetTop(),"","",objDiv.getOffsetRight(),objDiv.getOffsetBottom);
+	
+	objDiv.bringToFront();
+	
+	return objDetail;
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+/**
+ * @description Transaction CallBack 함수
+*/
+this.fnCallback = function(sId,errCode,errMsg)
+{
+	if(sId == "List")
+	{
+		
+	}
+}
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+/**
+ * @description 조회
+*/
+this.fnSearchList = function()
+{
+	this.dsList.clearData();
+	
+	//List search transaction
+	var sId 	= "List";
+	var sUrl 	= "http://localhost:7001/myTest/list_search.jsp";
+	var sInDs 	= "";
+	var sOutDs 	= "dsList=output";
+	var sParam 	= "";
+	var sCallback 	= "fnCallback";
+	
+	this.transaction(sId, sUrl, sInDs, sOutDs, sParam, sCallback);
+};
+
+this.goDetailPage = function(type)
+{
+	if(type=="list")
+	{
+		this.config.list.set_visible(true);
+		this.config.detail.set_visible(false);
+		this.config.detail.bringToFront();
+	}
+	else
+	{
+		this.config.list.set_visible(false);
+		this.config.detail.set_visible(true);
+		this.config.detail.bringToFront();
+		
+		this.config.detail.form.fnSetFormStatus(type);
+	}		
+}
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,1080 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="datasetdistinct" width="600" height="530" titletext="Dataset Distinct ( 데이터 중복제거 함수)">
+    <Layouts>
+      <Layout height="530" mobileorientation="landscape" width="600">
+        <Grid id="grdList" taborder="0" left="10" top="7" binddataset="ds_list" cellmovingtype="col" autosizingtype="row" width="580" height="233">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="년월"/>
+                <Cell col="1" text="팀명"/>
+                <Cell col="2" text="사원명"/>
+                <Cell col="3" text="구분"/>
+                <Cell col="4" text="상세구분"/>
+                <Cell col="5" text="수량"/>
+                <Cell col="6" text="단가"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0" displaytype="date" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button00" taborder="1" text="팀명 중복제거" left="359" top="252" width="90" height="30" onclick="Button00_onclick"/>
+        <Button id="Button00_00" taborder="2" text="팀명+사원명 중복제거" left="459" top="252" width="130" height="30" onclick="Button00_00_onclick"/>
+        <Grid id="grdDistinct" taborder="3" left="10" top="287" binddataset="ds_distinct" cellmovingtype="col" autosizingtype="row" width="580" height="233">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="년월"/>
+                <Cell col="1" text="팀명"/>
+                <Cell col="2" text="사원명"/>
+                <Cell col="3" text="구분"/>
+                <Cell col="4" text="상세구분"/>
+                <Cell col="5" text="수량"/>
+                <Cell col="6" text="단가"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0" displaytype="date" calendardateformat="yyyy-MM-dd"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+                <Cell col="3" text="bind:Column3"/>
+                <Cell col="4" text="bind:Column4"/>
+                <Cell col="5" text="bind:Column5"/>
+                <Cell col="6" text="bind:Column6"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="Button01" taborder="4" text="Button01" left="270" top="252" width="80" height="30" onclick="Button01_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_list">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="INT" size="256"/>
+          <Column id="Column6" type="INT" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">21</Col>
+            <Col id="Column6">13000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">796</Col>
+            <Col id="Column6">76000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">125</Col>
+            <Col id="Column6">37000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">889</Col>
+            <Col id="Column6">19000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">129</Col>
+            <Col id="Column6">13000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">259</Col>
+            <Col id="Column6">47000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">76</Col>
+            <Col id="Column6">73000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">589</Col>
+            <Col id="Column6">89000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">319</Col>
+            <Col id="Column6">45000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">184</Col>
+            <Col id="Column6">40000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">831</Col>
+            <Col id="Column6">71000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">946</Col>
+            <Col id="Column6">43000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">298</Col>
+            <Col id="Column6">21000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">282</Col>
+            <Col id="Column6">71000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181101</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">959</Col>
+            <Col id="Column6">85000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">Cabin</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">811</Col>
+            <Col id="Column6">92000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">693</Col>
+            <Col id="Column6">33000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">267</Col>
+            <Col id="Column6">66000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">313</Col>
+            <Col id="Column6">91000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">56</Col>
+            <Col id="Column6">84000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">218</Col>
+            <Col id="Column6">97000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">805</Col>
+            <Col id="Column6">45000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">366</Col>
+            <Col id="Column6">60000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">718</Col>
+            <Col id="Column6">69000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">239</Col>
+            <Col id="Column6">89000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">446</Col>
+            <Col id="Column6">65000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">570</Col>
+            <Col id="Column6">46000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">507</Col>
+            <Col id="Column6">67000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">579</Col>
+            <Col id="Column6">31000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">549</Col>
+            <Col id="Column6">63000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">989</Col>
+            <Col id="Column6">30000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">544</Col>
+            <Col id="Column6">75000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">131</Col>
+            <Col id="Column6">91000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">301</Col>
+            <Col id="Column6">91000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">802</Col>
+            <Col id="Column6">20000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">59</Col>
+            <Col id="Column6">100000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181102</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">564</Col>
+            <Col id="Column6">63000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">Charles</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">155</Col>
+            <Col id="Column6">66000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">Charles</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">169</Col>
+            <Col id="Column6">61000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">168</Col>
+            <Col id="Column6">30000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">819</Col>
+            <Col id="Column6">46000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">853</Col>
+            <Col id="Column6">55000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">795</Col>
+            <Col id="Column6">17000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">306</Col>
+            <Col id="Column6">47000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">635</Col>
+            <Col id="Column6">74000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">867</Col>
+            <Col id="Column6">91000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">693</Col>
+            <Col id="Column6">71000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">720</Col>
+            <Col id="Column6">56000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">680</Col>
+            <Col id="Column6">75000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">914</Col>
+            <Col id="Column6">78000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">643</Col>
+            <Col id="Column6">39000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">82</Col>
+            <Col id="Column6">62000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">191</Col>
+            <Col id="Column6">62000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">393</Col>
+            <Col id="Column6">6000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">744</Col>
+            <Col id="Column6">95000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">609</Col>
+            <Col id="Column6">62000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">107</Col>
+            <Col id="Column6">95000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">328</Col>
+            <Col id="Column6">58000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">253</Col>
+            <Col id="Column6">95000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">260</Col>
+            <Col id="Column6">1000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">93</Col>
+            <Col id="Column6">33000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">219</Col>
+            <Col id="Column6">61000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">239</Col>
+            <Col id="Column6">57000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">456</Col>
+            <Col id="Column6">27000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">638</Col>
+            <Col id="Column6">10000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">354</Col>
+            <Col id="Column6">76000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">700</Col>
+            <Col id="Column6">51000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">333</Col>
+            <Col id="Column6">68000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">유제품</Col>
+            <Col id="Column5">615</Col>
+            <Col id="Column6">86000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">700</Col>
+            <Col id="Column6">52000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">70</Col>
+            <Col id="Column6">92000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">334</Col>
+            <Col id="Column6">53000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181103</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">962</Col>
+            <Col id="Column6">78000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">15</Col>
+            <Col id="Column6">10000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">414</Col>
+            <Col id="Column6">16000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">57</Col>
+            <Col id="Column6">48000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">910</Col>
+            <Col id="Column6">69000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">213</Col>
+            <Col id="Column6">88000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">842</Col>
+            <Col id="Column6">38000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업2팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">승용차</Col>
+            <Col id="Column5">318</Col>
+            <Col id="Column6">61000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">978</Col>
+            <Col id="Column6">47000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">노트북</Col>
+            <Col id="Column5">924</Col>
+            <Col id="Column6">27000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">221</Col>
+            <Col id="Column6">94000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업3팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">997</Col>
+            <Col id="Column6">41000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">509</Col>
+            <Col id="Column6">9000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">644</Col>
+            <Col id="Column6">70000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">컴퓨터</Col>
+            <Col id="Column5">803</Col>
+            <Col id="Column6">58000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">영업4팀</Col>
+            <Col id="Column2">최길동</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">889</Col>
+            <Col id="Column6">45000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">558</Col>
+            <Col id="Column6">98000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">김영수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">159</Col>
+            <Col id="Column6">64000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">342</Col>
+            <Col id="Column6">27000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략2팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">키보드</Col>
+            <Col id="Column5">472</Col>
+            <Col id="Column6">84000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">김길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">826</Col>
+            <Col id="Column6">49000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전략3팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">597</Col>
+            <Col id="Column6">84000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">전산장비</Col>
+            <Col id="Column4">프린터</Col>
+            <Col id="Column5">474</Col>
+            <Col id="Column6">95000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박길동</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">609</Col>
+            <Col id="Column6">92000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">운송장비</Col>
+            <Col id="Column4">화물차</Col>
+            <Col id="Column5">900</Col>
+            <Col id="Column6">79000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181104</Col>
+            <Col id="Column1">전력1팀</Col>
+            <Col id="Column2">이철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">845</Col>
+            <Col id="Column6">19000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181105</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">김철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">농산물</Col>
+            <Col id="Column5">707</Col>
+            <Col id="Column6">52000</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">20181105</Col>
+            <Col id="Column1">영업1팀</Col>
+            <Col id="Column2">박철수</Col>
+            <Col id="Column3">식품</Col>
+            <Col id="Column4">수산물</Col>
+            <Col id="Column5">300</Col>
+            <Col id="Column6">7000</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_distinct">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+          <Column id="Column3" type="STRING" size="256"/>
+          <Column id="Column4" type="STRING" size="256"/>
+          <Column id="Column5" type="INT" size="256"/>
+          <Column id="Column6" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > datasetdistinct
+*  techtip Dataset 데이터 중복 제거
+*  @FileName	datasetdistinct.xfdl 
+*******************************************************************************
+*  2021.07.21		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+**************************************************************************/
+include "lib_techtip::lib_datasetdistinct.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+**************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description 중복제거 버튼 onclick 시 처리내역
+*/
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//원본 데이터셋 
+	var objTargetDs = this.ds_list;
+	
+	//중복제거된 데이터를 리턴 받을 데이터셋
+	var objReturnDs = this.ds_distinct;
+	
+	//중복제거할 컬럼 리스트
+	var arrColumnList = ["Column1"];
+	
+	//중복제거 함수 호출
+	this.gfnGetDistinctData(objTargetDs, objReturnDs, arrColumnList);
+};
+
+/**
+ * @description 중복제거 버튼 onclick 시 처리내역
+*/
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//원본 데이터셋 
+	var objTargetDs = this.ds_list;
+	
+	//중복제거된 데이터를 리턴 받을 데이터셋
+	var objReturnDs = this.ds_distinct;
+	
+	//중복제거할 컬럼 리스트
+	var arrColumnList = ["Column1", "Column2"];
+	
+	//중복제거 함수 호출
+	this.gfnGetDistinctData(objTargetDs, objReturnDs, arrColumnList);
+};]]></Script>
+  </Form>
+</FDL>

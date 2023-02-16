@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Button.btn_WF_admin, .Button.btn_WF_admin[status=mouseover], .Button.btn_WF_admin[userstatus=pushed],
+.Button.btn_WF_admin[status=focused], .Button.btn_WF_admin[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-admin.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : pointer;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+.Button.btn_WF_admin[status=disabled]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-adminA.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : default;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+
+
+/* chart */
+.Button.btn_WF_chart, .Button.btn_WF_chart[status=mouseover], .Button.btn_WF_chart[userstatus=pushed],
+.Button.btn_WF_chart[status=focused], .Button.btn_WF_chart[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-chart.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : pointer;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	
+}
+.Button.btn_WF_chart[status=disabled]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-chartA.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : default;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+
+
+/* document */
+.Button.btn_WF_document, .Button.btn_WF_document[status=mouseover], .Button.btn_WF_document[userstatus=pushed],
+.Button.btn_WF_document[status=focused], .Button.btn_WF_document[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-document.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : pointer;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	
+}
+.Button.btn_WF_document[status=disabled]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-documentA.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : default;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}
+
+
+/* setting */
+.Button.btn_WF_setting, .Button.btn_WF_setting[status=mouseover], .Button.btn_WF_setting[userstatus=pushed],
+.Button.btn_WF_setting[status=focused], .Button.btn_WF_setting[userstatus=selected]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-setting.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : pointer;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+	
+}
+.Button.btn_WF_setting[status=disabled]
+{
+	-nexa-border : 0px none;
+	-nexa-icon : url('imagerc::colorchangebutton/img-settingA.png');
+	background : #ffffff;
+	border-radius : 25px;
+	cursor : default;
+	color : #ffffff;
+	font : bold 13px "Arial","Malgun Gothic","Gulim";
+}]]></XCSS>

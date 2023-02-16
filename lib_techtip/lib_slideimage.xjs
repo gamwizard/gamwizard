@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+//슬라이드 이미지 초기화 함수
+this.gfnInitSlideImage = function(objDiv, objDs)
+{
+	var objAni;
+
+	//Div의 Scrollbar를 안보이게 설정
+	objDiv.set_formscrollbartype("none");
+
+	//기존에 생성된 슬라이드 이미지 삭제 함수 호출
+	this.gfnClearSlideImage(objDiv);
+
+	//슬라이드 이미지 생성 함수 호출
+	this.gfnCreateSlideImage(objDiv, objDs);
+
+	//슬라이드 애니메이션 생성 함수 호출
+	objAni = this.gfnCreateSlideImageAni(objDiv);
+
+	//슬라이드 인덱스 초기화
+	objDiv.stepIdx = 0;
+
+	//애니메이션 객체를 Div의 사용자 프로퍼티로 등록
+	objDiv.targetAni = objAni;
+
+	//리셋스크롤 실행
+	objDiv.form.resetScroll();
+}
+
+//기존에 생성된 슬라이드 이미지 삭제 함수
+this.gfnClearSlideImage = function(objDiv)
+{
+	var i;
+	var objComponents = objDiv.form.components;
+	var nCount = objComponents.length;
+	var objImgViewer;
+
+	//Div에 포함된 모든 컴포넌트 삭제
+	for(i=nCount-1;i>=0;i--)
+	{
+		objDiv.form.removeChild(objComponents[i].name);
+	}
+
+	objDiv.form.resetScroll();
+}
+
+//슬라이드 이미지 생성 함수
+this.gfnCreateSlideImage = function(objDiv, objDs)
+{
+	var i;
+	var nCount = objDs.rowcount;
+	var nLeft = 0;
+	var nTop = 0;
+	var nWidth = objDiv.getOffsetWidth();
+	var nHeight = objDiv.getOffsetHeight();
+
+	var objImgViewer;
+	var sImg;
+
+	for(i=0;i<nCount;i++)
+	{
+		//데이터셋에서 background 컬럼 데이터 가져오기
+		sImg = objDs.getColumn(i, "img");
+
+		//이미지를 표현할 ImageViewer 컴포넌트 생성
+		objImgViewer = new ImageViewer("imgView"+i, nLeft, nTop, nWidth, nHeight, null, null);
+		objDiv.form.addChild(objImgViewer.name, objImgViewer);
+		objImgViewer.show();
+
+		//background 프로퍼티 설정(이미지설정)
+		objImgViewer.set_image(sImg);
+
+		//이미지를 리사이즈하여 컴포넌트에 맞게 Fit
+		//사용할 이미지에 따라 다르게 변경 필요
+		objImgViewer.set_stretch("fit");
+
+		//다음에 생성될 ImageViewer 컴포넌트의 Left 위치값
+		nLeft = objImgViewer.getOffsetLeft() + objImgViewer.getOffsetWidth();
+	}
+}
+
+//슬라이드 애니메이션 생성 함수
+this.gfnCreateSlideImageAni = function(objDiv)
+{
+	var objAni;
+
+	//기존에 생성된 애니메이션이 있을 경우
+	if(this.isValidObject(objDiv.name+"_ani")==true)
+	{
+		objAni = this.all[objDiv.name+"_ani"];
+	}
+	//기존에 생성된 애니메이션이 없을 경우
+	else
+	{
+		//애니메이션 생성
+		objAni = new nexacro.Animation(objDiv.name+"_ani", this);
+		this.addChild( objAni.name, objAni );
+
+		//애니메이션 동작시간 설정
+		objAni.set_duration( 500 );
+
+		//애니메이션 Easing 설정
+		objAni.set_easing( "easeOutCubic" );
+
+		//애니메이션이 동작될 컴포넌트와 프로퍼티 설정
+		objAni.addTarget( "AniItem00", objDiv, "aniIdx:100" );
+
+		//이벤트에서 동작중인 컴포넌트를 찾을수 있도록 사용자 프로퍼티로 설정
+		objAni.targetComp = objDiv;
+
+		//onrun 이벤트 추가
+		objAni.addEventHandler("onrun", this.gfnSlideImage_onrun, this);
+	}
+
+	//애니메이션 동작 프로퍼티 초기화
+	objDiv.aniIdx = 0;
+
+	//애니메이션 리턴
+	return objAni;
+}
+
+//애니메이션 동작시 발생하는 이벤트
+this.gfnSlideImage_onrun = function(obj,e)
+{
+	//애니메이션 동작 처리 함수 호출
+	this.gfnRunSlideImage(obj.targetComp);
+}
+
+//애니메이션 동작 처리 함수
+this.gfnRunSlideImage = function(objDiv)
+{
+	//현재 스크롤 위치 + (이동할 스크롤 위치 * (애니메이션 동작 진행율));
+	var nHPos = objDiv.startScrollPos + (objDiv.changeScrollPos * (objDiv.aniIdx/100));
+
+	//스크롤 위치 이동
+	objDiv.form.scrollTo(nHPos, 0);
+}
+
+//이미지 슬라이드 실행 함수
+this.gfnSetSlideImage = function(objDiv, nIdx)
+{
+	//슬라이드되어 표시될 ImageViewer 컴포넌트
+	var objImgViewer = objDiv.form.components["imgView"+nIdx];
+
+	//현재 스크롤 위치
+	var nStartScrollPos = objDiv.form.getHScrollPos();
+
+	//표시될 ImageViewer 컴포넌트의 Left 위치
+	var nChangeScrollPos = nexacro.toNumber(objImgViewer.getOffsetLeft());
+
+	//현재 스크롤 위치
+	objDiv.startScrollPos = nStartScrollPos;
+
+	//이동할 스크롤 위치 = ImageViewer 컴포넌트의 Left위치 - 현재 스크롤 위치
+	objDiv.changeScrollPos = nChangeScrollPos - nStartScrollPos;
+
+	//애니메이션 동작 프로퍼티 초기화
+	objDiv.aniIdx = 0;
+
+	//표시될 ImageViewer 컴포넌트의 Index 값
+	objDiv.stepIdx = nIdx;
+
+	//애니메이션 실행
+	objDiv.targetAni.play();
+}
+]]></Script>

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="calendarTest" width="1120" height="790" titletext="New Form">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Div id="divDay" taborder="0" left="10" top="10" width="290" height="350" background="#ffffff">
+          <Layouts>
+            <Layout>
+              <Button id="btnYearMonth" taborder="0" text="2021년 5월" left="10" top="10" width="120" height="40" onclick="divDay_btnYearMonth_onclick"/>
+              <Button id="btnPrev" taborder="50" text="▲" left="195" top="10" width="40" height="40" onclick="divDay_btnPrev_onclick"/>
+              <Button id="btnNext" taborder="51" text="▼" top="10" width="40" height="40" left="240" onclick="divDay_btnNext_onclick"/>
+              <Static id="stSun" taborder="1" text="일" left="10" top="70" width="30" height="30"/>
+              <Static id="stMon" taborder="8" text="월" left="50" top="70" width="30" height="30"/>
+              <Static id="stTue" taborder="15" text="화" left="90" top="70" width="30" height="30"/>
+              <Static id="stWed" taborder="22" text="수" left="130" top="70" width="30" height="30"/>
+              <Static id="stThu" taborder="29" text="목" left="170" top="70" width="30" height="30"/>
+              <Static id="stFri" taborder="36" text="금" left="210" top="70" width="30" height="30"/>
+              <Static id="stSta" taborder="43" text="토" left="250" top="70" width="30" height="30"/>
+              <Button id="btn_0" taborder="2" text="25" left="10" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_1" taborder="9" text="26" left="50" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_2" taborder="16" text="27" left="90" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_3" taborder="23" text="28" left="130" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_4" taborder="30" text="29" left="170" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_5" taborder="37" text="30" left="210" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_6" taborder="44" text="1" left="250" top="110" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_7" taborder="3" text="2" left="10" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_8" taborder="10" text="3" left="50" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_9" taborder="17" text="4" left="90" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_10" taborder="24" text="5" left="130" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_11" taborder="31" text="6" left="170" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_12" taborder="38" text="7" left="210" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_13" taborder="45" text="8" left="250" top="150" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_14" taborder="4" text="9" left="10" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_15" taborder="11" text="10" left="50" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_16" taborder="18" text="11" left="90" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_17" taborder="25" text="12" left="130" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_18" taborder="32" text="13" left="170" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_19" taborder="39" text="14" left="210" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_20" taborder="46" text="15" left="250" top="190" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_21" taborder="5" text="16" left="10" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_22" taborder="12" text="17" left="50" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_23" taborder="19" text="18" left="90" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_24" taborder="26" text="19" left="130" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_25" taborder="33" text="20" left="170" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_26" taborder="40" text="21" left="210" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_27" taborder="47" text="22" left="250" top="230" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_28" taborder="6" text="23" left="10" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_29" taborder="13" text="24" left="50" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_30" taborder="20" text="25" left="90" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_31" taborder="27" text="26" left="130" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_32" taborder="34" text="27" left="170" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_33" taborder="41" text="28" left="210" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_34" taborder="48" text="29" left="250" top="270" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_35" taborder="7" text="30" left="10" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_36" taborder="14" text="31" left="50" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_37" taborder="21" text="1" left="90" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_38" taborder="28" text="2" left="130" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_39" taborder="35" text="3" left="170" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_40" taborder="42" text="4" left="210" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+              <Button id="btn_41" taborder="49" text="5" left="250" top="310" width="30" height="30" onclick="DayButton_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Button id="Button00" taborder="1" text="Button00" left="414" top="51" width="120" height="50" onclick="Button00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.targetDate;
+
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.targetDate = new nexacro.Date();
+	this.fnSetDivDay();
+};
+
+this.fnSetDivDay = function()
+{
+	var nYear = this.targetDate.getFullYear();
+	var nMonth = this.targetDate.getMonth();
+	var nDate = this.targetDate.getDate();
+	var objTempDate = new Date(nYear, nMonth, 1);
+	var nTempDate;
+	var nWeek = objTempDate.getDay();
+	
+	var objComponents = this.divDay.form.components;
+	var objComp;
+	objTempDate.addDate(-nWeek);
+	
+	var sYearMonth = nYear + "년 " + (nMonth+1)+"월";
+	
+	this.divDay.form.btnYearMonth.set_text(sYearMonth);
+	for(var i=0;i<42;i++)
+	{
+		nTempDate = objTempDate.getDate();
+		objComp = objComponents["btn_"+i];
+		objComp.set_text(nTempDate);
+		
+		if(nTempDate==nDate)objComp.set_enable(false);
+		else objComp.set_enable(true);
+		
+		objTempDate.addDate(1);
+	}
+}
+
+this.divDay_btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.targetDate.addMonth(-1);
+	this.fnSetDivDay();
+};
+
+this.divDay_btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.targetDate.addMonth(1);
+	this.fnSetDivDay();
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip listView create format sample library
+*  @MenuPath	techtip > datasetsearch
+*  @FileName	datasetsearch.xjs
+*  @Desction	dataset find data and change decorate info
+*******************************************************************************
+*  2019.10.31		nana			최초 생성
+*******************************************************************************
+*/
+
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define config object and addEventHandler
+* @param objForm : form,
+*		 objConfig : {objDiv, objListview, objDs, cellclass}
+* @return
+*/
+this.fnInitDynamicListviewForm = function (objForm,objConfig)
+{
+	objConfig.objDiv.cellclass = objConfig.cellclass;
+	objForm.config = objConfig;
+}
+
+/**
+* @description fnCreateListviewFormat --> create listview formats and apply formats : 리스트뷰 포맷 생성 및 적용
+* @param obj : button (click)
+* @return
+*/
+this.fnCreateListviewFormat = function(obj)
+{
+	//obj : 클릭된 버튼 (버튼의 parent = form :  this)
+	var objThis = obj.parent;
+
+	var objDiv = objThis.config.objDiv;
+
+	//format 생성
+	var strFormats = '<Formats>';
+		strFormats += '  <Format id="default">';
+		strFormats += '    <Band id="body" width="'+objDiv.getOffsetWidth()+'" height="'+objDiv.getOffsetHeight()+'">';
+
+	var strCell = '';
+	var objComps = objDiv.form.components;
+	var objComponent;
+
+	for(var i=0; i<objComps.length; i++)
+	{
+		//cell format 생성
+		objComponent = objComps[i];
+		strCell += '      <Cell id="Cell' + this.gfnLPad(i,'0',2)+'" ';
+		strCell += this.fnGetComponentTypeformat(objComponent,objDiv.cellclass);	//컴포넌트 별 cell format 정의
+		strCell += '/>';
+	}
+		strFormats += strCell;
+
+		strFormats += '    </Band>';
+		strFormats += '  </Format>';
+		strFormats += '</Formats>';
+
+		//dataset bind 및 set formats
+		objThis.config.objListview.set_binddataset(objThis.config.objDs.name);
+		objThis.config.objListview.set_formats(strFormats);
+}
+
+/**
+* @description fnGetComponentTypeformat --> insert cell formats : cell 별 format 삽입
+* @param obj : cell component (diplaytype),
+		 strCssclass : cell cssclass
+* @return rtnString : cell format
+*/
+this.fnGetComponentTypeformat = function(obj,strCssclass)
+{
+	var rtnString = " ";
+	var nLeft, nWidth, nTop, nHeight, nRight, nBottom;
+
+	//각 컴포넌트별 위치값 지정 (현재는 left, top, width, height 기준)
+	if(!this.gfnIsNull(obj.left))	nLeft = obj.left;
+	if(!this.gfnIsNull(obj.width))	nWidth = obj.width;
+	if(!this.gfnIsNull(obj.top))	nTop = obj.top;
+	if(!this.gfnIsNull(obj.height))	nHeight = obj.height;
+	if(!this.gfnIsNull(obj.right))	nRight = obj.right;
+	if(!this.gfnIsNull(obj.bottom))	nBottom = obj.bottom;
+
+	var comptype = "";
+	var nText = "";
+
+	if(!this.gfnIsNull(obj.bind))		nText = "bind:"+obj.bind;
+	else if(!this.gfnIsNull(obj.text))	nText = obj.text;
+	else								nText = obj.value;
+
+	//컴포넌트 별 format 생성 - Static, Button, Edit, ImageViewer 만 구현되어있음 타 컴포넌트 사용 시 추가 구현 필요함
+	if(obj == "[object Static]")
+	{
+		comptype = ' displaytype="normal"';
+		comptype+= ' verticalAlign="'+obj.verticalAlign+'"';
+		comptype+= ' wordWrap="'+obj.wordWrap+'"';
+	}
+	else if(obj == "[object Button]")
+	{
+		comptype = ' displaytype="buttoncontrol"';
+	}
+	else if(obj == "[object Edit]")
+	{
+		comptype = ' displaytype="normal"';
+		comptype+= ' edittype ="normal"';
+	}
+	else if(obj == "[object ImageViewer]")
+	{
+		comptype = ' displaytype="imagecontrol"';
+		comptype+= ' imagestretch="'+obj.stretch+'"';
+	}
+	else
+	{
+		comptype = ' displaytype="normal"';
+	}
+
+	comptype += ' ';
+
+	//전체 cell format string 구성
+	rtnString = 'left="'+nLeft+'" top="'+nTop+'" width="'+nWidth+'" text="'+ nText +  '" ' + comptype + ' cssclass="'+ strCssclass+' " height="'+nHeight+'"';
+	return rtnString;
+
+}
+
+/**
+ * Function Name : gfnIsNull
+ * Description   : 입력값이 null에 해당하는 경우 모두를 한번에 체크한다.
+ * Arguments     : sValue - 체크할 문자열( 예 : null 또는 undefined 또는 "" 또는 "abc" )
+ * Return        : Boolean sValue이 undefined, null, NaN, "", Array.length = 0인 경우 true
+*/
+this.gfnIsNull = function (sValue)
+{
+	if (new String(sValue).valueOf() == "undefined")
+	{
+		return true;
+	}
+	if (sValue == null)
+	{
+		return true;
+	}
+
+	var v_ChkStr = new String(sValue);
+
+	if (v_ChkStr == null)
+	{
+		return true;
+	}
+	if (v_ChkStr.toString().length == 0)
+	{
+		return true;
+	}
+
+	return false;
+};
+
+/**
+ * Function Name: gfnLPad
+ * Description  : 자리수 만큼 왼쪽에 문자열 추가
+ * Arguments    : sOrg - 원래 문자열
+ sPad - Pad할 문자열
+ nCnt - 자리수
+ * Return       : String Pad된 문자열
+ */
+this.gfnLPad = function (sOrg, sPad, nCnt)
+{
+	var i;
+	var nLength;
+	var sRet = "";
+
+	if (this.gfnIsNull(sOrg))
+	{
+		return "";
+	}
+
+	if (this.gfnIsNull(sPad))
+	{
+		sPad = " ";
+	}
+
+	if (this.gfnIsNull(nCnt))
+	{
+		nCnt = 1;
+	}
+
+	for (i = 0; i < nCnt; i++)
+	{
+		sRet += sPad;
+	}
+
+	sRet += sOrg;
+
+	nLength = this.gfnLength(sOrg) > nCnt ? this.gfnLength(sOrg) : nCnt;
+
+	return this.gfnRight(sRet, nLength);
+};
+
+/**
+ * Function Name: gfnLength
+ * Description  : 입력값 형태에 따라서 길이 또는 범위를 구하는 함수
+ * Arguments    : Val - 문자열
+ * Return       : Integer Type에 따라 구해진 길이
+ */
+this.gfnLength = function (Val)
+{
+	return this.gfnToString(Val).length;
+};
+
+/**
+ * Function Name: gfnLeft
+ * Description  : 문자열의 왼쪽부분을 지정한 길이만큼 Return
+ * Arguments    : Val - 왼쪽 부분을 얻어올 원본 문자열
+ nSize - 얻어올 크기. [Default Value = 0]
+ * Return       : String 문자열
+ */
+this.gfnLeft = function (Val, nSize)
+{
+	return this.gfnToString(Val).substr(0, nSize);
+};
+
+/**
+ * Function Name: gfnRight
+ * Description  : 문자열의 오른쪽부분을 지정한 길이만큼 Return
+ * Arguments    : Val - 오른 부분을 얻어올 원본 문자열
+ nSize - 얻어올 크기. [Default Value = 0]
+ * Return       : String 문자열
+ */
+this.gfnRight = function (Val, nSize)
+{
+	var nStart = this.gfnToString(Val).length;
+	var nEnd = Number(nStart) - Number(nSize);
+	var rtnVal = Val.substring(nStart, nEnd);
+
+	return rtnVal;
+};
+
+/**
+ * Function Name: gfnToString
+ * Description  : 입력값을 String으로 변경
+ * Arguments    : Val - 문자열
+ * Return       : String 문자열
+ */
+this.gfnToString = function (Val)
+{
+	if (this.gfnIsNull(Val))
+	{
+		return new String();
+	}
+
+	return new String(Val);
+};
+
+]]></Script>

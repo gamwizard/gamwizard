@@ -1,0 +1,778 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip library
+*  @MenuPath	techtip > excelimporttogrid
+*  @FileName	lib_excelimporttogrid.xjs
+*  @Desction	excel import sample (select sheet & column mappings) library
+*******************************************************************************
+*  2020.10.07		nana			최초 생성
+*******************************************************************************
+*/
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @function name : gfnInitExcelImportToGridFormOnload
+* @description	 : form onload --> define config object
+* @arguments	 : objForm   - Form,
+*		 		   objConfig - {	
+									importGrd	: this.grdList01,
+									importRdo	: this.rdoAddType,
+									importBtn	: this.btnImportList,
+									importText	: this.txtLog,
+									dsCboList	: this.dsCombo,
+									divSheet	: this.divSelectSheet,
+									divMapping	: this.divColumnMappings,
+									sheetList	: "grdSheetList",
+									dataList	: "grdDataList",
+									mappingList : "grdColumnMappings",
+									applyList 	: "grdDataApply",
+									sSaveUrl	: "",
+									sImportUrl	: "http://localhost:8080/nexacro17-xeni/",
+									sUploadUrl 	: "http://localhost:8080/nexacro17-xeni/import/",
+									sFolderName	: "fileUpload.jsp?fileFolder=import"
+								}
+* @return		 : none
+*/ 
+this.gfnInitExcelImportToGridFormOnload = function (objForm, objConfig)
+{
+	//Grid addEventHandler
+	objConfig.divSheet.form.grdSheetList.addEventHandler('oncelldblclick',this.grdSheetList_oncelldblclick,this);
+	
+	//div Button addEventHandler
+	objConfig.divSheet.form.btnNext.addEventHandler('onclick',    this.divButton_onclick,this);
+	objConfig.divSheet.form.btnCancel.addEventHandler('onclick',  this.divButton_onclick,this);
+	objConfig.divMapping.form.btnBack.addEventHandler('onclick',  this.divButton_onclick,this);
+	objConfig.divMapping.form.btnFinish.addEventHandler('onclick',this.divButton_onclick,this);
+	objConfig.divMapping.form.btnCancel.addEventHandler('onclick',this.divButton_onclick,this);
+	objConfig.divMapping.form.btnApply.addEventHandler('onclick', this.divButton_onclick,this);
+	
+	//import excel data row count "static"
+	objConfig.objCountStatic = objConfig.divSheet.form.stCount;
+	
+	//A First Head row "checkbox"
+	objConfig.objChkbox = objConfig.divMapping.form.chkHeaderRow;
+	
+	//getsheetlist grid = this.divSelectSheet.form.grdSheetList
+	var objGrid = objConfig.divSheet.form.components[objConfig.sheetList];
+	var sBindName = objGrid.binddataset;
+	
+	//sheet list dataset name
+	objConfig.bindSheetList = sBindName;
+	
+	//getsheetdata grid = this.divSelectSheet.form.grdDataList
+	objGrid = objConfig.divSheet.form.components[objConfig.dataList];
+	sBindName = objGrid.binddataset;
+	
+	//sheet data list dataset name
+	objConfig.bindDataList = sBindName;
+	
+	objForm.config = objConfig;
+	
+	this.gfnDivControl("init",objConfig.divSheet);
+};
+
+/**
+* @function name : gfnDivControl
+* @description   : div visible and position control
+* @arguments     : sType - "status type"
+				   objDiv - clicked button parent form (div)
+* @return        : none
+*/
+this.gfnDivControl = function (sType, objDiv)
+{
+	var objForm = objDiv.parent;
+	var objSheetDiv	  = objForm.config.divSheet;
+	var objMappingDiv = objForm.config.divMapping;
+	var objListGrid   = objForm.config.importGrd;
+	
+	if(sType == "init")
+	{
+		//set position and visible
+		//div width = 450 (objDiv.getOffsetWidth())
+		//left fit = 10
+		var nLeft = objForm.width - 460;
+		var nTop  = objListGrid.getOffsetTop();
+		
+		objSheetDiv.setOffsetLeft(nLeft);
+		objSheetDiv.setOffsetTop(nTop);
+		
+		objMappingDiv.setOffsetLeft(nLeft);
+		objMappingDiv.setOffsetTop(nTop);
+		
+		objSheetDiv.set_visible(false);	
+		objMappingDiv.set_visible(false);	
+	}	
+	else if(sType == "selectsheet")
+	{
+		objSheetDiv.set_visible(true);
+		objMappingDiv.set_visible(false);
+	}
+	else if(sType == "columnmappling")
+	{
+		objSheetDiv.set_visible(false);	
+		objMappingDiv.set_visible(true);		
+		
+		this.gfnExcelToGridColumnMapping(objListGrid);
+	}
+	else if(sType == "finish")
+	{
+		objMappingDiv.set_visible(false);		
+		this.gfnExcelImportToGrid(objListGrid);
+	}
+	else
+	{
+		//param : "close"
+		objMappingDiv.set_visible(false);		
+	}
+};
+
+/**
+* @function name : gfnCreateFileDialogObject
+* @description   : create FileDialog and return object
+* @arguments     : none
+* @return        : objFileDialog - FileDialog 
+*/
+this.gfnCreateFileDialogObject = function ()
+{
+	var sFileDialogId = "objFileDialog";
+	
+	//FileDialog : invisible object
+	var objFileDialog = this.objects[sFileDialogId];
+	
+	//already created FileDialog
+    if(!this.gfnIsNull(objFileDialog))
+    {
+        return objFileDialog;
+    }
+	
+	//create FileDialog object
+	objFileDialog = new FileDialog(sFileDialogId, this);
+	this.addChild(sFileDialogId,objFileDialog);
+	
+	//set file type - only nexacro runtime environment
+	objFileDialog.set_filter( "Excel Files(*.xlsx)|*.xlsx;" );
+	
+	//add event handler
+	objFileDialog.addEventHandler("onclose", this.fileDialog_onclose, this);
+	
+	return objFileDialog;
+};
+
+/**
+* @function name : gfnCreateFileUpTeansferObject
+* @description   : create FileUpTransfer and return object
+* @arguments     : none
+* @return        : objFileUpTransfer - FileUpTransfer 
+*/
+this.gfnCreateFileUpTeansferObject = function ()
+{
+	var sFileUpTransferId = "objFileUpTransfer";
+	
+	//ExcelImportObject : invisible object
+	var objFileUpTransfer = this.objects[sFileUpTransferId];
+	
+	//already created FileUpTransfer
+    if(!this.gfnIsNull(objFileUpTransfer))
+    {
+		//fileupload list clear
+		objFileUpTransfer.clearFileList();
+        return objFileUpTransfer;
+    }
+	
+	//create FileUpTransfer object
+	objFileUpTransfer = new FileUpTransfer(sFileUpTransferId, this);
+	this.addChild(sFileUpTransferId,objFileUpTransfer);
+	
+	//add event handler
+	objFileUpTransfer.addEventHandler("onsuccess",  this.fileUpTrans_onsuccess,  this);
+	objFileUpTransfer.addEventHandler("onerror",    this.fileUpTrans_onerror,    this);
+	objFileUpTransfer.addEventHandler("onprogress", this.fileUpTrans_onprogress, this);
+	
+	return objFileUpTransfer;
+};
+
+/**
+* @function name : gfnCreateImportObject
+* @description   : create ExcelImportObject and return object
+* @arguments     : none
+* @return        : objImport - ExcelImportObject 
+*/
+this.gfnCreateImportObject = function ()
+{
+    var sImportId = "objExcelImport";
+
+    //ExcelImportObject : invisible object
+    var objImport = this.objects[sImportId];
+
+    //already created ExcelImportObject
+    if(!this.gfnIsNull(objImport))
+    {
+        return objImport;
+    }
+
+	//create ExcelImportObject object
+    objImport = new ExcelImportObject(sImportId,this);
+	this.addChild(sImportId,objImport);
+	
+	//objForm == this
+	var objForm = objImport.parent;
+	var sUrl	= objForm.config.sImportUrl;
+	
+	//"xeni import url"
+    objImport.set_importurl(sUrl+"XImport");
+	
+	//excel 2007 xml
+    objImport.set_importtype(nexacro.ImportTypes.EXCEL2007);
+	
+	//server mode : only server file import
+	objImport.set_importfilemode("server");
+	
+	//data form type property
+	objImport.set_userawdatevalue(false);
+	objImport.set_userawnumbervalue(true);
+
+    //add event - onsuccess, onerror
+    objImport.addEventHandler("onsuccess", this.Import_onsuccess, this);
+    objImport.addEventHandler("onerror",   this.Import_onerror,   this);
+
+    return objImport;
+};
+
+/**
+* @function name : gfnSheetListImport
+* @description   : import sheet list / ExcelImportObject.importDataEx(importid,source, range, output dataset) 
+* @arguments     : none
+* @return        : none
+*/
+this.gfnSheetListImport = function()
+{
+    //excel import object
+    var objImport = this.gfnCreateImportObject();
+
+	//config info
+	var objForm 	= objImport.parent;
+	var sServerUrl  = objForm.config.sSaveUrl;
+	var sDsName		= objForm.config.bindSheetList;
+	
+	//command info - "getsheetlist"
+    var sImportCommand  = "[Command=getsheetlist;Output=output1;]";
+    var sDatasetList = sDsName+"=output1";
+		
+	//importid = searchsheet
+   	objImport.importDataEx("searchsheet", sServerUrl, sImportCommand, sDatasetList);
+};
+
+/**
+* @function name : gfnSelectSheetAreaImport
+* @description   : select sheet name (grid oncelldblclick) - import sheet data / ExcelImportObject.importDataEx(importid, source, range, output dataset)
+* @arguments     : none
+* @return        : none
+*/
+this.gfnSelectSheetAreaImport = function(sSheetName)
+{
+    //excel import object
+    var objImport = this.gfnCreateImportObject();
+	
+	//config info
+	var objForm 	= objImport.parent;
+	var sServerUrl  = objForm.config.sSaveUrl;
+	var sDsName		= objForm.config.bindDataList;
+	
+	//command info - "getsheetdata" & select sheet name & head : A1~Z1, body : A2 ~ all
+	var sImportCommand  = "[Command=getsheetdata;Output=output2;Head="+sSheetName+"!A1:Z1;Body="+sSheetName+"!A2]";
+    var sDatasetList    = sDsName+"=output2";
+	
+	//importid = searchdata
+    objImport.importDataEx("searchdata", sServerUrl, sImportCommand, sDatasetList);
+};
+
+/**
+* @function name : gfnFileUpload
+* @description   : file upload on server
+* @arguments     : vFile : virture file
+* @return        : none
+*/ 
+this.gfnFileUpload = function (vFile)
+{
+	//create fileUpTranfer Object
+	var objFileupTransfer = this.gfnCreateFileUpTeansferObject();
+		
+	//add filelist
+	objFileupTransfer.addFile(vFile.name,vFile);
+	
+	//file name add postdatalist (string)
+	objFileupTransfer.setPostData("fileName",vFile.name);
+	
+	//config info
+	var objParent = objFileupTransfer.parent;
+	var sUrl = objParent.config.sUploadUrl;
+	var sFolferName = objParent.config.sFolderName;
+	
+	//file upload excute
+	objFileupTransfer.upload(sUrl+sFolferName);
+};
+
+/**
+* @function name : gfnExcelToGridColumnMapping
+* @description   : select sheet > Next button click : grid head & excel head column mapping
+* @arguments     : objGrid : this.grdList01
+* @return        : none
+*/ 
+this.gfnExcelToGridColumnMapping = function (objGrid)
+{
+	//config info
+	var objForm = objGrid.parent;
+	
+	//objApplyGrid == this.divColumnMappings.form.grdDataApply
+	var objApplyGrid = objForm.config.divMapping.form.components[objForm.config.applyList];
+	var	sBindName	 = objApplyGrid.binddataset;
+	var objApplyDataset = this.objects[sBindName];
+	
+	//applyDataList clear
+	objApplyDataset.clear();
+	objApplyGrid.createFormat();
+	
+	var objExcelDataList = this.objects[objForm.config.bindDataList];
+	
+	//objMappingGrid == this.divColumnMappings.form.grdColumnMappings
+	var objMappingGrid 	= objForm.config.divMapping.form.components[objForm.config.mappingList];
+		sBindName 		= objMappingGrid.binddataset;	
+	var objDataset = this.objects[sBindName];
+	
+	//not enableevent
+	objDataset.set_enableevent(false);
+	objDataset.clearData();	
+	
+	//grid Row count
+	var nRowCnt = objGrid.getFormatRowCount();
+	
+	//grid Head Row count 
+	var nHeadRowCnt = 0;
+	
+	//get grid Head Row count
+	for(i=0;i<nRowCnt;i++)
+	{
+		//Row band property == head : +1 count 
+		if(objGrid.getFormatRowProperty(i, "band")=="head")
+		{
+			nHeadRowCnt++;
+		}
+	}
+	
+	//grid Head Cell count
+	var nHeadCellCnt = objGrid.getCellCount("head");
+	
+	//newRow (addRow position)
+	var nRow = -1;
+	
+	//excel Head column count (dsDataList col position)
+	var nExcelCol = 0;
+	
+	//get grid Head Cell count
+	for(i=0;i<nHeadCellCnt;i++)
+	{		
+		//start cell Row Index
+		nHeadRowStart = objGrid.getCellProperty("head", i, "row");
+		
+		//cell Row Sapn 
+		nHeadRowSpan = objGrid.getCellProperty("head", i, "rowspan");
+		
+		//end Cell Row Index
+		nHeadRowEnd = nHeadRowStart + nHeadRowSpan -1;
+		
+		//get Head end Row
+		if (nHeadRowEnd==nHeadRowCnt-1)
+		{			
+			//get Head end Row Cell property(text)
+			sText = objGrid.getCellProperty("head", i, "text");
+						
+			//add Column Mapping data List
+			nRow = objDataset.addRow();
+		
+			objDataset.setColumn(nRow,"ex",0);
+			objDataset.setColumn(nRow,"excelHead",objExcelDataList.getColID(nExcelCol));
+			objDataset.setColumn(nRow,"grdHead",sText);
+						
+			nExcelCol++;
+		}
+	}
+	
+	//enableevent
+	objDataset.set_enableevent(true);
+};
+
+/**
+* @function name : gfnApplyColumnMapplingData
+* @description   : finish button click : copy Data List 
+* @arguments     : objDiv : this.divColumnMappings
+* @return        : none
+*/ 
+this.gfnApplyColumnMapplingData = function (objDiv)
+{
+	//config info
+	var objForm = objDiv.parent;
+	
+	//objApplyGrid == this.divColumnMappings.form.grdDataApply
+	var objApplyGrid = objForm.config.divMapping.form.components[objForm.config.applyList];
+	var	sBindName	 = objApplyGrid.binddataset;
+	var objApplyDataset = this.objects[sBindName];
+	
+	//not enableevent
+	objApplyDataset.set_enableevent(false);
+	objApplyGrid.set_enableevent(false);
+	
+	//reset grid and dataset
+	if(objApplyGrid.getFormatRowCount() > 1)
+	{
+		objApplyDataset.clear();
+		objApplyGrid.createFormat();
+	}
+	
+	var bCheckedHeadRow = true;
+	if(!objForm.config.objChkbox.value)
+	{
+		//not header row is first.
+		bCheckedHeadRow = false;
+	}
+	
+	//objMappingGrid == this.divColumnMappings.form.grdColumnMappings
+	var objMappingGrid 	= objForm.config.divMapping.form.components[objForm.config.mappingList];
+		sBindName 		= objMappingGrid.binddataset;	
+	var objMappingDs	= this.objects[sBindName];
+	
+	var bEx = 0;
+	var sGridHead = "";
+	var sExcelHead = "";
+			
+	var nHeadCol = 0;
+	var nRow = -1;
+	var nCol = -1;
+	var nColNum = -1;
+	
+	//get columnMapping List dataset row count
+	var nColCount = objMappingDs.getRowCount();
+	
+	//copyRow option(match column info) "ToColumnID=FromColumnID,ToColumnID1=FromColumnID1"
+	var sCopyColList = "";
+		
+	for(var i=0; i<nColCount; i++)
+	{
+		bEx = objMappingDs.getColumn(i,"ex");
+		sGridHead = objMappingDs.getColumn(i,"grdHead");
+		sExcelHead = objMappingDs.getColumn(i,"excelHead");		
+		
+		nCol = objApplyDataset.addColumn(sGridHead,"string");
+		
+		//insertContentsCol
+		nColNum = objApplyGrid.insertContentsCol("body",i);
+		
+		//insertContentsCol return -1,2,3,4 ...
+		if(nColNum < 0)
+		{
+			//first insertContentsCol return -1 
+			nColNum = 0;
+			
+			//insertContentsRow("head") - grid list head row
+			objApplyGrid.insertContentsRow("head",0);
+			
+			//appendContentsRow("body")
+			objApplyGrid.appendContentsRow("body",true);
+			
+			if(bCheckedHeadRow)
+			{
+				//appendContentsRow("head") - grid excel head row
+				objApplyGrid.appendContentsRow("head",true);
+			}
+			else
+			{
+				//excel head - insert body row in dataset (rowposition : 0)
+				nRow = objApplyDataset.addRow();
+			}
+		}
+
+		//string format "a=a,b=b,c=c..."
+		if(!this.gfnIsNull(sCopyColList))
+		{
+			sCopyColList += ",";
+		}
+		
+		//set grid cell text property
+		objApplyGrid.setCellProperty( "head", nColNum, "text", sGridHead );
+		objApplyGrid.setCellProperty( "body", nColNum, "text", "bind:" + sGridHead );
+		
+		//bEx = grid exclusion check
+		if(bEx < 1)
+		{
+			//bCheckedHeadRow = first head row (excel) checkbox
+			if(bCheckedHeadRow)
+			{
+				//grid excel head row
+				nHeadCol = (1*nColNum +nColNum +1);
+				
+				//set grid cell text property
+				objApplyGrid.setCellProperty( "head", nHeadCol, "text", sExcelHead );
+			}
+			else
+			{
+				//addrow data
+				objApplyDataset.setColumn(nRow,nCol,sExcelHead);
+			}
+			
+			//match column info
+			sCopyColList += sGridHead + "=" + sExcelHead;
+			
+			//grid col size
+			objApplyGrid.setFormatColProperty(i,"size",100);
+		}
+		else
+		{
+			objApplyGrid.setFormatColProperty(i,"size",0);
+		}
+	}
+	
+	//objExcelDataList == getsheetdata
+	var objExcelDataList = this.objects[objForm.config.bindDataList];
+	
+	//import excel row count
+	var nImportCount	 = objExcelDataList.getRowCount();
+	
+	nRow = -1;
+	
+	//add import excel data
+	for(var i=0; i<nImportCount; i++)
+	{
+		nRow = objApplyDataset.addRow();
+		objApplyDataset.copyRow(nRow,objExcelDataList,i,sCopyColList);
+	}
+	
+	//enableevent
+	objApplyDataset.set_enableevent(true);
+	objApplyGrid.set_enableevent(true);
+};
+
+/**
+* @function name : gfnCreateColumnComboList
+* @description   : create excel head column combo dataset
+* @arguments     : objForm - form
+* @return        : none
+*/
+this.gfnCreateColumnComboList = function (objForm)
+{
+	//objDs == getsheetdata (import excel data)
+	var objDs 	  = this.objects[objForm.config.bindDataList];
+	
+	//objGrid == this.divSelectSheet.form.grdDataList
+	var objGrid	  = objForm.config.divSheet.form.components[objForm.config.dataList];
+	
+	//objStatic == this.divSelectSheet.form.stCount
+	var objStatic = objForm.config.objCountStatic;	
+		objStatic.set_text("row count : " + objDs.getRowCountNF());
+	
+	//reset grid format
+	objGrid.createFormat();
+	
+	//dsComboList == this.dsCombo
+	var dsComboList = objForm.config.dsCboList;
+	
+	//not enableevent
+	dsComboList.set_enableevent(false);
+	
+	//combo dataset clear
+	dsComboList.clearData();
+	
+	//dataList column count
+	var nColCount = objDs.getColCount();
+	var nRow = -1;
+	var sColumnId = "";
+	
+	//set combo dataset "code", "value"
+	for(var i=0; i<nColCount; i++)
+	{
+		sColumnId = objDs.getColID(i);
+		nRow = dsComboList.addRow();
+		dsComboList.setColumn(nRow,"code",sColumnId);
+		dsComboList.setColumn(nRow,"value",sColumnId);
+	}
+	
+	//enableevent
+	dsComboList.set_enableevent(true);
+};
+
+/**
+* @function name : gfnExcelImportToGrid
+* @description   : import excel data copy to grid list
+* @arguments     : objGrid : this.grdList01
+* @return        : none
+*/
+this.gfnExcelImportToGrid = function (objGrid)
+{
+	//config info : objGrid == this.grdList01
+	var objForm = objGrid.parent;
+	
+	//objDs == this.dsList01
+	var objDs	= this.objects[objGrid.binddataset];
+	
+	//objForm.config.importRdo == this.rdoAddType
+	var sDataAddType = objForm.config.importRdo.value;
+	
+	//objApplyGrid == this.divColumnMappings.form.grdDataApply
+	var objApplyGrid	= objForm.config.divMapping.form.components[objForm.config.applyList];
+	var	sBindName	 	= objApplyGrid.binddataset;
+	var dsCopyDataList	= this.objects[sBindName];
+	
+	//not enableevent
+	objDs.set_enableevent(false);
+	
+	//sDataAddType : "change" or "adddata"
+	if(sDataAddType == "change")
+	{
+		objDs.clearData();
+	}
+	
+	var nRow = -1;
+	
+	//DataApply dataset row count
+	var nRowCount = dsCopyDataList.getRowCount();
+	
+	//addrow import excel data
+	for(var i=0; i<nRowCount; i++)
+	{
+		nRow = objDs.addRow();
+		objDs.copyRow(nRow,dsCopyDataList,i);
+	}
+	
+	//enableevent
+	objDs.set_enableevent(true);
+};
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+/**
+ * @description Button onclick event : btnCancel, btnNext, btnBack, btnFinish, btnApply
+*/
+this.divButton_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sButtonId = obj.name;
+	var objDiv = obj.parent.parent;
+	if(sButtonId == "btnCancel")
+	{
+		this.gfnDivControl("close", objDiv);
+	}
+	else if(sButtonId == "btnNext")
+	{
+		this.gfnDivControl("columnmappling",objDiv);
+	}
+	else if(sButtonId == "btnBack")
+	{
+		this.gfnDivControl("selectsheet",objDiv);
+	}
+	else if(sButtonId == "btnFinish")
+	{
+		this.gfnDivControl("finish",objDiv);
+	}
+	else if(sButtonId == "btnApply")
+	{
+		this.gfnApplyColumnMapplingData(objDiv);
+	}
+};
+/**
+* @description popupdiv grdSheetList oncelldblclick event
+*/
+this.grdSheetList_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{	
+	var objDataset = this.objects[obj.binddataset];
+	
+	//get sheet name
+	var sSheetId = objDataset.getColumn(e.row,"sheetname");
+	
+	//import sheet data : gfnSelectSheetAreaImport()
+	this.gfnSelectSheetAreaImport(sSheetId);
+};
+
+/**
+ * @description FileDialog onclose event --> fileDialog_onclose
+*/
+this.fileDialog_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	if(this.gfnIsNull(e.virtualfiles))
+	{
+		return;
+	}
+	
+	//return 1 file : open()옵션 : FileDialog.LOAD
+	var objFile = e.virtualfiles[0];
+	
+	//FileupTransfer
+	this.gfnFileUpload(objFile);
+};
+
+/**
+ * @description FileUpTransfer onprogress event --> fileUpTrans_onprogress
+*/
+this.fileUpTrans_onprogress = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferProgressEventInfo)
+{
+	//empty
+};
+
+/**
+ * @description FileUpTransfer onsuccess event --> fileUpTrans_onsuccess
+*/
+this.fileUpTrans_onsuccess = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferEventinfo)
+{
+	//config info
+	var objForm = obj.parent;
+	
+	//file save url on server
+	objForm.config.sSaveUrl = e.message;
+	
+	//get sheet list
+	this.gfnSheetListImport();	
+};
+
+/**
+ * @description FileUpTransfer onerror event --> fileUpTrans_onerror
+*/
+this.fileUpTrans_onerror = function(obj:nexacro.FileUpTransfer,e:nexacro.FileUpTransferErrorEventInfo)
+{
+	trace(e.errormsg);
+};
+
+/**
+* @description ExcelImportObject onsuccess event
+*/
+this.Import_onsuccess = function (obj:ExcelImportObject, e:nexacro.ExcelImportEventInfo)
+{
+	//config info
+	var objForm = obj.parent;
+	
+	//gfnDivControl() option
+	var objDiv  = objForm.config.divSheet;
+	
+	//log text
+	var sLogText  = this.txtLog.value;
+	    sLogText += e.importid +  " Import_onsuccess\n";
+  
+	if(e.importid == "searchsheet")
+	{
+		this.gfnDivControl("selectsheet",objDiv);				
+		this.serverUrl = e.url;
+	}
+	else if(e.importid == "searchdata")
+	{
+		this.gfnCreateColumnComboList(objForm);
+		this.serverUrl = "";
+	}
+	
+	sLogText += "--------------------------------\n";
+	this.txtLog.set_value(sLogText);
+};
+
+/**
+* @description ExcelImportObject onerror event
+*/
+this.Import_onerror = function (obj:ExcelImportObject, e:nexacro.ExcelImportErrorEventInfo)
+{
+    this.txtLog.set_value(this.txtLog.value + e.eventid +  "  Import_onerror\n");
+};]]></Script>

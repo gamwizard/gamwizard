@@ -1,0 +1,575 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="OrganizationChart" width="1060" height="530" titletext="Organization Chart( Graphics Component를 이용한 조직도 만들기)" onmove="OrganizationChart_onmove" onmousemove="OrganizationChart_onmousemove" onmousewheel="OrganizationChart_onmousewheel" onload="OrganizationChart_onload">
+    <Layouts>
+      <Layout height="530" mobileorientation="landscape" width="1060">
+        <Graphics id="Graphics00" taborder="0" left="10" top="30" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" background="#eeeeee" right="10" bottom="10"/>
+        <Button id="btnSubmit" taborder="1" text="실행" top="5" width="90" height="20" onclick="btnSubmit_onclick" right="10"/>
+        <Button id="btnZoomOut" taborder="2" text="Zoom Out" top="5" width="90" height="20" onclick="btnZoomOut_onclick" right="110"/>
+        <Button id="btnZoomIn" taborder="3" text="Zoom In" top="5" width="90" height="20" onclick="btnZoomIn_onclick" right="210"/>
+        <Radio id="rdoDirection" taborder="4" top="5" width="160" height="20" innerdataset="dsDirection" codecolumn="code" datacolumn="value" direction="vertical" index="0" text="가로정렬" value="horizontal" right="310"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsOrg">
+        <ColumnInfo>
+          <Column id="ORG_NUM" type="STRING" size="256"/>
+          <Column id="LEVEL" type="INT" size="256"/>
+          <Column id="ORG_NM" type="STRING" size="256"/>
+          <Column id="EMP_NM" type="STRING" size="256"/>
+          <Column id="UPER_ORG_NUM" type="STRING" size="256"/>
+          <Column id="COLLAPSE" type="INT" size="256"/>
+          <Column id="JOB_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="LEVEL">0</Col>
+            <Col id="ORG_NUM">010000</Col>
+            <Col id="ORG_NM">홍길동</Col>
+            <Col id="UPER_ORG_NUM">0</Col>
+            <Col id="COLLAPSE">0</Col>
+            <Col id="EMP_NM">내과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">010300</Col>
+            <Col id="ORG_NM">김영수</Col>
+            <Col id="UPER_ORG_NUM">010000</Col>
+            <Col id="COLLAPSE">0</Col>
+            <Col id="EMP_NM">내과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">010301</Col>
+            <Col id="ORG_NM">김철수</Col>
+            <Col id="UPER_ORG_NUM">010300</Col>
+            <Col id="COLLAPSE">0</Col>
+            <Col id="EMP_NM">내과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">010200</Col>
+            <Col id="ORG_NM">김영희</Col>
+            <Col id="UPER_ORG_NUM">010000</Col>
+            <Col id="COLLAPSE">0</Col>
+            <Col id="EMP_NM">내분비과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">010201</Col>
+            <Col id="ORG_NM">김선희</Col>
+            <Col id="UPER_ORG_NUM">010200</Col>
+            <Col id="COLLAPSE">0</Col>
+            <Col id="EMP_NM">내분비과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NUM">010202</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="UPER_ORG_NUM">010200</Col>
+            <Col id="ORG_NM">최길동</Col>
+            <Col id="EMP_NM">내분비과</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">박길동</Col>
+            <Col id="EMP_NM">소화기내과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">011200</Col>
+            <Col id="UPER_ORG_NUM">010000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이철수</Col>
+            <Col id="EMP_NM">소화기내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">011201</Col>
+            <Col id="UPER_ORG_NUM">011200</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영수</Col>
+            <Col id="EMP_NM">소화기내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">011202</Col>
+            <Col id="UPER_ORG_NUM">011200</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영희</Col>
+            <Col id="EMP_NM">심장내과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">011400</Col>
+            <Col id="UPER_ORG_NUM">010000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이선희</Col>
+            <Col id="EMP_NM">심장내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">011401</Col>
+            <Col id="UPER_ORG_NUM">011400</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최철수</Col>
+            <Col id="EMP_NM">심장내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">011402</Col>
+            <Col id="UPER_ORG_NUM">011400</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최영수</Col>
+            <Col id="EMP_NM">혈액내과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">012300</Col>
+            <Col id="UPER_ORG_NUM">010000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최영희</Col>
+            <Col id="EMP_NM">혈액내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">012301</Col>
+            <Col id="UPER_ORG_NUM">012300</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최선희</Col>
+            <Col id="EMP_NM">혈액내과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">012302</Col>
+            <Col id="UPER_ORG_NUM">012300</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">홍길동</Col>
+            <Col id="EMP_NM">외과</Col>
+            <Col id="LEVEL">0</Col>
+            <Col id="ORG_NUM">020000</Col>
+            <Col id="UPER_ORG_NUM">0</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김영수</Col>
+            <Col id="EMP_NM">외과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">021800</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김철수</Col>
+            <Col id="EMP_NM">외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">021801</Col>
+            <Col id="UPER_ORG_NUM">021800</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김영희</Col>
+            <Col id="EMP_NM">대장항문외과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">020400</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김선희</Col>
+            <Col id="EMP_NM">대장항문외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">020401</Col>
+            <Col id="UPER_ORG_NUM">020400</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최길동</Col>
+            <Col id="EMP_NM">대장항문외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">020402</Col>
+            <Col id="UPER_ORG_NUM">020400</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">박길동</Col>
+            <Col id="EMP_NM">비뇨기과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">020900</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이철수</Col>
+            <Col id="EMP_NM">비뇨기과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">020901</Col>
+            <Col id="UPER_ORG_NUM">020900</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영수</Col>
+            <Col id="EMP_NM">비뇨기과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">020902</Col>
+            <Col id="UPER_ORG_NUM">020900</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영희</Col>
+            <Col id="EMP_NM">성형외과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">021100</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이선희</Col>
+            <Col id="EMP_NM">성형외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">021101</Col>
+            <Col id="UPER_ORG_NUM">021100</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최철수</Col>
+            <Col id="EMP_NM">성형외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">021102</Col>
+            <Col id="UPER_ORG_NUM">021100</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최영수</Col>
+            <Col id="EMP_NM">이비인후과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">021700</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최영희</Col>
+            <Col id="EMP_NM">이비인후과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">021701</Col>
+            <Col id="UPER_ORG_NUM">021700</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최선희</Col>
+            <Col id="EMP_NM">이비인후과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">021702</Col>
+            <Col id="UPER_ORG_NUM">021700</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">홍길동</Col>
+            <Col id="EMP_NM">정형외과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">022000</Col>
+            <Col id="UPER_ORG_NUM">020000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김영수</Col>
+            <Col id="EMP_NM">정형외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">022001</Col>
+            <Col id="UPER_ORG_NUM">022000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김철수</Col>
+            <Col id="EMP_NM">정형외과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">022002</Col>
+            <Col id="UPER_ORG_NUM">022000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김영희</Col>
+            <Col id="EMP_NM">건강의학과</Col>
+            <Col id="LEVEL">0</Col>
+            <Col id="ORG_NUM">000000</Col>
+            <Col id="UPER_ORG_NUM">0</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">김선희</Col>
+            <Col id="EMP_NM">건강의학과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">000100</Col>
+            <Col id="UPER_ORG_NUM">000000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">최길동</Col>
+            <Col id="EMP_NM">건강의학과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">000101</Col>
+            <Col id="UPER_ORG_NUM">000100</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">박길동</Col>
+            <Col id="EMP_NM">건강의학과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">000102</Col>
+            <Col id="UPER_ORG_NUM">000100</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이철수</Col>
+            <Col id="EMP_NM">병리과</Col>
+            <Col id="LEVEL">1</Col>
+            <Col id="ORG_NUM">000800</Col>
+            <Col id="UPER_ORG_NUM">000000</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영수</Col>
+            <Col id="EMP_NM">병리과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">000801</Col>
+            <Col id="UPER_ORG_NUM">000800</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+          <Row>
+            <Col id="ORG_NM">이영희</Col>
+            <Col id="EMP_NM">병리과</Col>
+            <Col id="LEVEL">2</Col>
+            <Col id="ORG_NUM">000802</Col>
+            <Col id="UPER_ORG_NUM">000800</Col>
+            <Col id="JOB_NM"/>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsDirection">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">horizontal</Col>
+            <Col id="value">가로정렬</Col>
+          </Row>
+          <Row>
+            <Col id="code">vertical</Col>
+            <Col id="value">세로정렬</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > organizationchart
+*  techtip Graphics Component를 활용한 조직도
+*  @FileName	organizationchart.xfdl 
+*******************************************************************************
+*  2020.02.10		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_organizationchart.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+//Drag&Drop 정보를 관리할 오브젝트
+this.objDargChecker;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.OrganizationChart_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//Drag 이벤트 발생시 전달할 정보 오브젝트로 만들기
+	this.objDargChecker = 	{
+							"x" : 0, "y" : 0,
+							"dragFlag" : false,
+							"targetObj" : null
+						};
+};
+
+/**
+ * @description 화면 onmoucemove시 처리내역
+*/
+this.OrganizationChart_onmousemove = function(obj:nexacro.Form,e:nexacro.MouseEventInfo)
+{
+	var objDrag = this.objDargChecker;
+	
+	//Drag 여부값이 시작 상태일 경우
+	if(objDrag.dragFlag==true)
+	{
+		var nX1, nX2, nY1, nY2;
+		var objGraphics;
+		
+		//Drag 시작 X/Y좌표
+		nX1 = objDrag.x;
+		nY1 = objDrag.y;
+		
+		//현재 X/Y좌표
+		nX2 = e.clientx;
+		nY2 = e.clienty;
+		
+		//Drag가 발생한 오브젝트 가져오기
+		objGraphics = objDrag.targetObj;
+		
+		//조직도 위치 변경함수 호출
+		this.gfnMoveOrganizationChart(objGraphics, nX1, nX2, nY1, nY2);
+	}
+};
+
+/**
+ * @description 화면 onmousewheel시 처리내역
+*/
+this.OrganizationChart_onmousewheel = function(obj:nexacro.Form,e:nexacro.MouseWheelEventInfo)
+{
+	var objTargetGraphics;
+	
+	//Graphics 컴포넌트에서 마우스 휠 이벤트가 발생했을 경우
+	if(e.fromreferenceobject == "[object Graphics]")
+	{
+		//Graphics 컴포넌트 가져오기
+		objTargetGraphics = e.fromreferenceobject;
+		
+		//위로 올렸을 경우
+		if(e.amount>0)
+		{
+			//줌처리 함수 호출(Zoom In)
+			this.gfnZoomOrganization(objTargetGraphics, 1.1, e.clientx, e.clienty)
+		}
+		//아래로 내렸을 경우
+		else if(e.amount<0)
+		{
+			////줌처리 함수 호출(Zoom Out)
+			this.gfnZoomOrganization(objTargetGraphics, 0.9, e.clientx, e.clienty)
+		}
+	}
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description 실행 버튼 onclick 시 처리내역
+*/
+ this.btnSubmit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//조직도 정렬 방향 설정 값 가져오기
+	var sDirection = this.rdoDirection.value;
+	
+	//조직도 설정값 만들기
+	var objConfig = {
+						"targetDs" : this.dsOrg,
+						"direction" : sDirection,
+						"nodeWidth" : 100,
+						"nodeHeight" : 50,
+						"margin" : { "x" : 10, "y" : 10},
+						"point" : { "x" : 0, "y" : 0},
+						"zoomlevel" : 0
+					}
+	
+	//조직도 초기화 설정 함수 호출
+	this.gfninitOrganization(this.Graphics00, objConfig);
+	
+	//조직도 그리기 함수 호출
+	this.gfnDrawOrganization(this.Graphics00);
+};
+
+/**
+ * @description 줌인 버튼 onclick 시 처리내역
+*/
+this.btnZoomIn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//줌처리 함수 호출(Zoom In)
+	this.gfnZoomOrganization(this.Graphics00, 1.1);
+};
+
+/**
+ * @description 줌아웃 버튼 onclick 시 처리내역
+*/
+this.btnZoomOut_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//줌처리 함수 호출(Zoom Out)
+	this.gfnZoomOrganization(this.Graphics00, 0.9);
+};
+
+/**
+ * @description Graphics Component onlbuttondown 시 처리내역
+*/
+this.Graphics00_onlbuttondown = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	var objBoard;
+	var objPath;
+	var objDrag = this.objDargChecker;
+		
+	//Drag 여부값 설정(드래그 시작)
+	objDrag.dragFlag = true;
+	
+	//클릭된 좌표값 설정
+	objDrag.x = e.clientx;
+	objDrag.y = e.clienty;
+	
+	//클릭된 컴포넌트 설정
+	objDrag.targetObj = obj;
+	
+	
+	
+	//조직도 오브젝트들을 관리하는 그룹 오브젝트 가져오기
+	objBoard = obj.getObjectByID("board");
+	
+	//그룹오브젝트가 존재할 경우
+	if(objBoard)
+	{
+		//현재 x, y좌표값을 orgX, orgY에 저장
+		//DragMove시 기준좌표로 사용하기 위함
+		objBoard.orgX = objBoard.x;
+		objBoard.orgY = objBoard.y;
+	}
+	
+	//클릭된 오브젝트 가져오기
+	objPath = obj.hitTest(e.clientx, e.clienty);
+	
+	//클릭된 오브젝트가 접기/펼치기 버튼일 경우
+	if(objPath&&objPath.id=="btnExpand")
+	{
+		//하위노드 접기/펼치기 함수 호출
+		this.gfnShowChildNode(obj, objPath);
+	}
+};
+
+/**
+ * @description Graphics Component onlbuttonup 시 처리내역
+*/
+this.Graphics00_onlbuttonup = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	//Drag 여부값 설정(드래그 종료)
+	this.objDargChecker.dragFlag = false;
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+**************************************************************************/
+]]></Script>
+  </Form>
+</FDL>

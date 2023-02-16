@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") {
+		return true;
+	}
+	
+	if (Val == null) {
+		return true;
+	}
+	
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) {
+		return true;
+	}
+	
+	if (Val.length == 0) {
+		return true;
+	}
+
+	return false;
+};]]></Script>

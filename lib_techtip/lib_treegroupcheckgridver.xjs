@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[ /**
+* @description 	     : 자식트리 체크박스 체크하는 함수
+* @param objGrid   	 : 체크박스 처리할 그리드 오브젝트
+* @param nRow    	 : 데이터셋에서 값이 변경된 ROW
+* @param sNewValue   : 데이터셋에 설정할 새로운 값(체크/체크해제)
+* @return            : 없음
+*/
+this.fnSetTreeChildCheck = function(objGrid, nRow, sNewValue)
+{
+	//사용자가 클릭한 Row
+	var nFRow = nRow;
+	
+	//그리드에 바인드된 데이터셋
+	var objDs = objGrid.getBindDataset();
+	
+	//현재 row의 자식을 찾기 위한 while문
+	while (1)
+	{
+		//현재 Row의 자식의 개수
+		var nChildCnt = objGrid.getTreeChildCount(nFRow);
+		
+		//자식이 없으면 while문 종료
+		if(nChildCnt == 0)
+		{
+			break;
+		}
+		
+		//자식이 있을 경우
+		//데이터셋에서 찾으려는 row index 값 
+		var nChildRow= nChildCnt-1;
+		
+		//마지막 자식의 데이터셋에서의 row 값
+		var nFRow= objGrid.getTreeChildRow(nFRow,nChildRow);
+		trace("row index : "+nFRow);
+		
+	}
+	//클릭한 row부터 찾은 자식들 row들까지 Check
+	for (var i=nRow; i<=nFRow; i++) {
+		objDs.setColumn(i, "체크", sNewValue);
+	}
+};]]></Script>

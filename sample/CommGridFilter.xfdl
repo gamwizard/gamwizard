@@ -1,0 +1,478 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="cmmGridFilter" width="470" height="300" titletext="그리드필터" onload="form_onload">
+    <Layouts>
+      <Layout height="300" width="470">
+        <Grid id="grd_Filter" taborder="0" left="15" top="46" height="200" binddataset="ds_Filter" autofittype="col" griduserproperty="!sort,!rowfix,!colfix,!filter,!initial" right="15" autoenter="select">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="175"/>
+                <Column size="66"/>
+                <Column size="190"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="컬럼명" expandchar="popup.columnname"/>
+                <Cell col="1" text="필터기준" expandchar="popup.filtercriteria"/>
+                <Cell col="2" text="찾을조건" expandchar="popup.findcondition"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:title" displaytype="text" edittype="none" combodataset="dsFilterCol" combodatacol="columnName" combocodecol="columnId"/>
+                <Cell col="1" displaytype="combocontrol" edittype="combo" combodataset="ds_FilterType" combodatacol="name" combocodecol="code" text="bind:filtertype"/>
+                <Cell col="2" text="bind:filtervalue" displaytype="editcontrol" edittype="text"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btn_FilterCancel" taborder="1" text="필터취소" top="19" width="70" height="22" uWord="popup.cancel" onclick="btn_FilterCancel_onclick" right="15" cssclass="btn_WF_grdCom"/>
+        <Button id="btn_Up" taborder="2" left="15" top="17" width="24" height="24" onclick="btn_Up_onclick" cssclass="btn_WF_shuttleT"/>
+        <Button id="btn_Down" taborder="3" left="44" top="17" width="24" height="24" onclick="btn_Down_onclick" cssclass="btn_WF_shuttleB"/>
+        <Button id="btn_SetFilter" taborder="4" text="적용" left="177" top="261" width="56" height="24" uWord="popup.apply" onclick="btn_SetFilter_onclick" cssclass="btn_pop_yes"/>
+        <Button id="btn_Close" taborder="5" text="닫기" width="56" height="24" uWord="popup.close" onclick="btn_Close_onclick" cssclass="btn_pop_no" top="261" left="btn_SetFilter:5"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_FilterType">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="name">선택</Col>
+          </Row>
+          <Row>
+            <Col id="code">=</Col>
+            <Col id="name">같은</Col>
+          </Row>
+          <Row>
+            <Col id="code">&gt;</Col>
+            <Col id="name">보다 큰</Col>
+          </Row>
+          <Row>
+            <Col id="code">&lt;</Col>
+            <Col id="name">보다 작은</Col>
+          </Row>
+          <Row>
+            <Col id="code">!=</Col>
+            <Col id="name">같지않는</Col>
+          </Row>
+          <Row>
+            <Col id="code">like</Col>
+            <Col id="name">포함하는</Col>
+          </Row>
+          <Row>
+            <Col id="code">nolike</Col>
+            <Col id="name">포함하지 않는</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_Filter" firefirstcount="0" firenextcount="0" useclientlayout="false" updatecontrol="true" enableevent="true" loadkeymode="keep" loadfiltermode="keep" reversesubsum="false">
+        <ColumnInfo>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="filtertype" type="STRING" size="256"/>
+          <Column id="columid" type="STRING" size="256"/>
+          <Column id="filtervalue" type="STRING" size="256"/>
+          <Column id="displaytype" type="STRING" size="256"/>
+          <Column id="combocodecol" type="STRING" size="256"/>
+          <Column id="combodatacol" type="STRING" size="256"/>
+          <Column id="combodataset" type="STRING" size="256"/>
+          <Column id="col" type="INT" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_Temp" firefirstcount="0" firenextcount="0" useclientlayout="false" updatecontrol="true" enableevent="true" loadkeymode="keep" loadfiltermode="keep" reversesubsum="false">
+        <ColumnInfo>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="col" type="INT" size="256"/>
+          <Column id="body" type="STRING" size="256"/>
+          <Column id="filtertype" type="STRING" size="256"/>
+          <Column id="displaytype" type="STRING" size="256"/>
+          <Column id="edittype" type="STRING" size="256"/>
+          <Column id="combodatacol" type="STRING" size="256"/>
+          <Column id="combocodecol" type="STRING" size="256"/>
+          <Column id="combodataset" type="STRING" size="256"/>
+          <Column id="filtervalue" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath   		공통>그리드 필터팝업
+*  @FileName		CommGridFilter.xfdl
+*  @Creator			Common
+*  @CreateDate  	2020/08/04
+*  @Desction     	그리드 필터팝업
+*
+****************************** 소스 수정 이력 ***************************
+*  Modify Date        	Modifier             	Description
+***************************************************************************
+*  2020/08/04			Common					최초 생성 
+***************************************************************************
+*/
+
+/**************************************************************************
+ * 전역변수 선언 영역
+ **************************************************************************/
+this.fv_objTargetGrid; 	  //대상그리드 OBJECT
+this.fv_objTargetDataset; //대상데이터셋 OBJECT
+
+/**************************************************************************
+ * FORM EVENT 영역
+ **************************************************************************/
+this.form_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{	
+	this.fv_objTargetGrid = this.getOwnerFrame().pv_objGrid;
+	this.fv_objTargetDataset = this.fv_objTargetGrid.getBindDataset();
+	
+	var bUserHeader = this._gfnGridUserHeaderFlg(this.fv_objTargetGrid);
+	
+	if( !bUserHeader) {
+		this.fn_getHeadText(this.fv_objTargetGrid);
+	}else{ 
+		this.fn_getUserHeader(this.fv_objTargetGrid);
+	}
+};
+ 
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+ * @description 그리드의 헤드정보를 받아와 콤보 세팅(userHeader prop 사용)
+*/
+this.fn_getUserHeader = function (objGrid)
+{
+	var objTargetDataset = this.fv_objTargetDataset;
+	var objDsTemp = this.ds_Temp;
+	var nHeadCellCount = objGrid.getCellCount("head");
+	var sHeadCellProperty;
+	var sBodyText;
+	var nRow;
+	var i, j, n;
+	
+	for(i=0; i<nHeadCellCount; i++){
+		sHeadCellProperty = objGrid.getCellProperty("head", i, "calendarweekformat");
+		if(this.gfn_isNull(sHeadCellProperty)) continue;
+		
+		for(j=0; j<objGrid.getCellCount("body"); j++)
+		{
+			var nCell =0;
+			if(sHeadCellProperty == objGrid.getCellProperty("body", j,"text"))
+			{
+				nCell = j;
+				sBodyText = objGrid.getCellProperty("body", nCell, "text");
+				nRow = objDsTemp.addRow();
+				var displaytype = objGrid.getCellProperty("body", nCell, "displaytype");
+				
+				if( displaytype == "combotext" || displaytype == "combocontrol")
+				{
+					displaytype = "combo";
+					sBodyText = objGrid.getCellProperty("body", nCell, "text").substring(5);
+					objTargetDataset.set_enableevent(false);
+					objTargetDataset.set_updatecontrol(false);
+					objTargetDataset.addColumn(sBodyText+"_text");                    
+					for(n=0; n<objTargetDataset.getRowCount(); n++)
+					{
+						objTargetDataset.setColumn(n, sBodyText+"_text", this.fv_objTargetGrid.getCellText(n, j));
+					}
+					objTargetDataset.set_enableevent(true);
+					objTargetDataset.set_updatecontrol(true);
+					objDsTemp.setColumn(nRow, "body", "bind:"+sBodyText+"_text"); 
+				}
+				else
+				{
+					objDsTemp.setColumn(nRow, "body", sBodyText); 
+				}
+				
+				objDsTemp.setColumn(nRow, "col", j);
+				objDsTemp.setColumn(nRow, "displaytype",  displaytype);
+				objDsTemp.setColumn(nRow, "combocodecol", objGrid.getCellProperty("body", j, "combocodecol"));
+				objDsTemp.setColumn(nRow, "combodatacol", objGrid.getCellProperty("body", j, "combodatacol"));
+				objDsTemp.setColumn(nRow, "combodataset", objGrid.getCellProperty("body", j, "combodataset"));
+				objDsTemp.setColumn(nRow, "title", objGrid.getCellProperty("head", i, "text"));
+			}
+		}
+	}
+	this.fn_initFilter();
+};
+
+/**
+ * @description 그리드의 헤드정보를 받아와 콤보 세팅(defualt)
+*/
+this.fn_getHeadText = function (objGrid)
+{
+	var objTargetDataset = this.fv_objTargetDataset;
+	var objDsTemp = this.ds_Temp;
+	var sBodyText;
+	var sBind;	
+	var nRow; 
+	var sDisplaytype;
+	var sColumName;
+	var i;
+
+	// 바디의 갯수만큼 디스플레이정보 및 콤보의 정보를 설정한다.     
+    for(i=0;i<objGrid.getCellCount("Body");i++)
+    {
+        if(objGrid.getCellProperty("Body", i, "displaytype") != "image")
+        {
+			sBodyText = objGrid.getCellProperty("Body", i, "text");	
+			if( sBodyText == "bind:GRID_COMM_CHECK") continue; //공통체크박스 제외
+
+			if (this.gfn_isNull(sBodyText) == false) sBind = sBodyText.substr(0, 5);
+			else sBind = "";
+			
+			if (sBind == "bind:")
+			{
+				nRow = objDsTemp.addRow();
+				
+				sDisplaytype = "text";
+				if( objGrid.getCellProperty("Body", i, "displaytype") == "combotext" ||objGrid.getCellProperty("Body", i, "displaytype") == "combocontrol")
+				{
+					sDisplaytype = "combo";
+					
+					// 콤보의 경우는 TEXT로 필터링이 되질않기 때문에 해당 _text 를 동적으로 생성해서 그 값을 이용하도록 한다. 
+					sColumName = objGrid.getCellProperty("Body", i, "text").substring(5);                
+					if( this.gfn_isNull(this.fv_objTargetDataset.getColumnInfo(sColumName+"_text")) )
+					{
+						objTargetDataset.set_enableevent(false);
+						objTargetDataset.set_updatecontrol(false);
+						objTargetDataset.addColumn(sColumName+"_text");                    
+						for(var j=0;j<objTargetDataset.getRowCount();j++)
+						{
+							objTargetDataset.setColumn(j, sColumName+"_text", this.fv_objTargetGrid.getCellText(j, i));
+						}
+						objTargetDataset.set_enableevent(true);
+						objTargetDataset.set_updatecontrol(true);
+					}
+					
+					objDsTemp.setColumn(nRow, "body", "bind:"+sColumName+"_text");            
+				}
+				else
+				{
+					objDsTemp.setColumn(nRow, "body", objGrid.getCellProperty("Body", i, "text"));            
+				}
+				
+				objDsTemp.setColumn(nRow, "col", i);
+				objDsTemp.setColumn(nRow, "displaytype",  sDisplaytype);
+				objDsTemp.setColumn(nRow, "combocodecol", objGrid.getCellProperty("Body", i, "combocodecol"));
+				objDsTemp.setColumn(nRow, "combodatacol", objGrid.getCellProperty("Body", i, "combodatacol"));
+				objDsTemp.setColumn(nRow, "combodataset", objGrid.getCellProperty("Body", i, "combodataset"));
+			}
+        }
+    }
+
+    var sBodyText;
+	// 바디에 매칭되는 헤더의 타이틀을 설정한다. 
+    for(i=0; i<objGrid.getCellCount("Head");i++)
+    {
+        sBodyText   = objGrid.getCellProperty("Body", i,   "text");
+        
+        //  콤보일때는 _text 로 처리한다. 
+        var display = objGrid.getCellProperty("Body", objGrid.getCellProperty("Head", i,   "col"), "displaytype");        
+        if( display == "combotext" || display=="combocontrol")
+        {
+            sBodyText = "bind:"+sBodyText.substring(5)+"_text";
+        }
+            
+        nRow = objDsTemp.findRow("body", sBodyText);     
+        if( nRow != -1 )
+        {
+            objDsTemp.setColumn(nRow, "title", objGrid.getCellProperty("Head", i,   "text"));
+        }
+    }
+	
+	this.fn_initFilter();
+};
+
+this.fn_initFilter = function ()
+{
+	var filterlist= new Array();
+    var filterstr = this.fv_objTargetDataset.filterstr;
+    var tempbuff  = filterstr.split("&&");
+	
+	var columinfo;
+	var columname;
+	var condition;
+	var filtertype;
+	var filtervalue;
+
+    var i, j;
+	
+    for(i=0;i<tempbuff.length;i++)
+    {
+        columinfo = tempbuff[i].trim();
+        columname   = "";
+        condition   = "";
+        filtertype  = "";
+        filtervalue = columinfo.split("'")[1];
+        
+        for(j=0;j<columinfo.length;j++)
+        {
+            if( "1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".indexOf(columinfo.charAt(j)) == -1 )
+            {
+                columname = columinfo.substring(0, j);
+                condition = columinfo.substring(j);
+                break;
+            }
+        }
+
+        // 포함여부 
+        if( condition.indexOf("indexOf") != -1 )
+        {
+			// ITO : 필터 선택 콤보 오류
+            if( condition.indexOf("==") != -1 )  filtertype = "notlike";
+            else filtertype = "like";
+        }
+        else
+        {
+            if( condition.indexOf("==") != -1 ) filtertype = "=";
+            else if( condition.indexOf("!=") != -1 )  filtertype = "!=";
+			else if( condition.indexOf(">") != -1 ) filtertype = ">";
+            else if( condition.indexOf("<") != -1 ) filtertype = "<";
+        }
+        
+        filterlist.push({body:"bind:"+columname, filtertype:filtertype, filtervalue:filtervalue});
+    }
+	
+    var objDsTemp = this.ds_Temp;
+    var objDsFilter = this.ds_Filter;
+    var nRow;
+
+	// 이전의 필터조건을 이용해서 설정하고 소팅처리한다. 
+    for(i=0;i<filterlist.length;i++)
+    {
+        nRow = this.ds_Temp.findRow("body", filterlist[i].body);
+        objDsTemp.setColumn(nRow, "col",       -(filterlist.length-i)     );
+        objDsTemp.setColumn(nRow, "filtertype",  filterlist[i].filtertype );
+        objDsTemp.setColumn(nRow, "filtervalue", filterlist[i].filtervalue);
+    }
+    
+    objDsTemp.set_keystring("S:col");    
+    for(i=0;i<objDsTemp.getRowCount();i++)
+    {
+        var body = objDsTemp.getColumn(i, "body").substring(5);
+        var sTitle = objDsTemp.getColumn(i, "title");        
+		if ( this.gfn_isNull(sTitle) == false )
+	    {	    
+			nRow = objDsFilter.addRow();    
+			objDsFilter.setColumn(nRow, "title",       sTitle);
+			objDsFilter.setColumn(nRow, "filtertype",  objDsTemp.getColumn(i, "filtertype"));
+			objDsFilter.setColumn(nRow, "filtervalue", objDsTemp.getColumn(i, "filtervalue"));
+			objDsFilter.setColumn(nRow, "columid",     body);                
+			objDsFilter.setColumn(nRow, "displaytype", objDsTemp.getColumn(i, "displaytype"));
+			objDsFilter.setColumn(nRow, "combocodecol",objDsTemp.getColumn(i, "combocodecol"));
+			objDsFilter.setColumn(nRow, "combodatacol",objDsTemp.getColumn(i, "combodatacol"));
+			objDsFilter.setColumn(nRow, "combodataset",objDsTemp.getColumn(i, "comboobjTargetDataset"));
+        }
+    }    
+    objDsFilter.set_rowposition(0);
+};
+
+this.fn_setFilter = function()
+{
+	var objTargetDataset = this.fv_objTargetDataset;
+    var filterstr = "";
+    
+    for(var i=0;i<this.ds_Filter.getRowCount();i++)
+    {
+        var columid    = this.ds_Filter.getColumn(i, "columid");
+        var filtervalue= this.ds_Filter.getColumn(i, "filtervalue");
+        var filtertype = this.ds_Filter.getColumn(i, "filtertype");
+        
+        if( !this.gfn_isNull(filtertype) && !this.gfn_isNull(filtervalue) )
+        {
+            var tempfilter = "";
+            
+            if( filtertype == "=" )
+            {
+                tempfilter = columid+"=='"+filtervalue+"'";
+            }
+            else if( filtertype == "!=" )
+            {
+                tempfilter = columid+"!='"+filtervalue+"'";
+            }
+            else if( filtertype == ">" )
+            {
+                tempfilter = columid+">'"+filtervalue+"'";
+            }
+            else if( filtertype == "<" )
+            {
+                tempfilter = columid+"<'"+filtervalue+"'";
+            }
+            else if( filtertype == "like" )
+            {
+                tempfilter = columid+".indexOf('"+filtervalue+"')!=-1";
+            }
+            else if( filtertype == "notlike" )
+            {
+                tempfilter = columid+".indexOf('"+filtervalue+"')==-1";
+            }
+            
+            if( this.gfn_isNull(filterstr) )
+                filterstr = tempfilter;
+            else
+                filterstr += " && "+tempfilter;
+        }
+    }
+    
+    objTargetDataset.set_filterstr(filterstr);
+	
+	this.close();
+}
+
+/**************************************************************************
+ * COMPONENT 별 EVENT 영역
+ **************************************************************************/
+
+/**
+ * @description 필터취소 버튼클릭이벤트
+*/
+this.btn_FilterCancel_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fv_objTargetDataset.set_filterstr("");
+};
+
+/**
+ * @description 업 버튼클릭이벤트
+*/
+this.btn_Up_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var currow = this.ds_Filter.rowposition;
+    
+    if( currow == 0 ) return;
+    
+    this.ds_Filter.moveRow(currow, --currow);
+};
+
+/**
+ * @description 다운 버튼클릭이벤트
+*/
+this.btn_Down_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var currow = this.ds_Filter.rowposition;
+    
+    if( currow == this.ds_Filter.getRowCount()-1 ) return;
+	
+    this.ds_Filter.moveRow(currow, ++currow);
+};
+
+/**
+ * @description 적용 버튼클릭이벤트
+*/
+this.btn_SetFilter_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fn_setFilter();
+};
+
+/**
+ * @description 닫기 버튼클릭이벤트
+*/
+this.btn_Close_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+]]></Script>
+  </Form>
+</FDL>

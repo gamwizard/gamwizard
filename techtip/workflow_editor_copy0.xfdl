@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="workflow" width="1280" height="720" titletext="New Form" onmousemove="workflow_onmousemove" onload="workflow_onload">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Graphics id="Graphics00" taborder="0" left="10" top="40" onlbuttondown="Graphics00_onlbuttondown" onlbuttonup="Graphics00_onlbuttonup" right="10" bottom="10"/>
+        <Button id="Button00" taborder="1" text="실행" left="880" top="5" width="90" height="20" onclick="Button00_onclick"/>
+        <Button id="Button00_00" taborder="2" text="라인추가" left="681" top="5" width="90" height="20" onclick="Button00_00_onclick"/>
+        <Button id="Button00_00_00" taborder="3" text="노드추가" left="781" top="5" width="90" height="20" onclick="Button00_00_00_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > workflow
+*  techtip Graphics Component를 활용한 워크플로우(Editor 기능 추가)
+*  @FileName	workflow_editor.xfdl 
+*******************************************************************************
+*  2020.02.18		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_workflow.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+//Drag&Drop 정보를 관리할 오브젝트
+this.objDargChecker;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ /**
+ * @description 화면 onload시 처리내역
+*/
+this.workflow_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//Drag 이벤트 발생시 전달할 정보 오브젝트로 만들기
+	this.objDargChecker = 	{
+							"x" : 0, "y" : 0,
+							"dragFlag" : false,
+							"targetObj" : null,
+							"targetReferenceObj" : null
+						};
+};
+
+
+ /**
+ * @description 화면 onmoucemove시 처리내역
+*/
+this.workflow_onmousemove = function(obj:nexacro.Form,e:nexacro.MouseEventInfo)
+{
+	var objDrag = this.objDargChecker;
+	
+	//Drag 여부값이 시작 상태일 경우
+	if(objDrag.dragFlag==true)
+	{
+		var nX1, nX2, nY1, nY2;
+		var objGraphics;
+		var objPath;
+		var objSelectPath;
+		var arrId;
+		
+		//Drag가 발생한 오브젝트 가져오기
+		objGraphics = objDrag.targetObj;
+		objPath = objDrag.targetReferenceObj;
+		objSelectPath = objGraphics.selectPath;
+		
+		//Drag 시작 X/Y좌표
+		nX1 = objDrag.x;
+		nY1 = objDrag.y;
+		
+		//현재 X/Y좌표
+		nX2 = e.screenx;
+		nY2 = e.screeny;
+		
+		//Path ID Array로 만들기
+		//arrId[0] : Path Type(guide : 가이드, node : item Path, line : line Path)
+		//arrId[1] : Path Id
+		//arrId[2] : 하위 Path일 경우의 구분값
+		arrId = objPath.id.split("_");
+		
+		//가이드 오브젝트 이동시킬 경우
+		if(arrId[0]=="guide")
+		{
+			//가이드 오브젝트 이동 함수 호출
+			this.gfnMoveGuide(objGraphics, objPath, objSelectPath, nX1, nX2, nY1, nY2);
+		}
+		//노드 오브젝트를 이동시킬 경우
+		else if(arrId[0]=="node")
+		{
+			//노드 오브젝트 이동 함수 호출
+			this.gfnMoveNode(objGraphics, objSelectPath, nX1, nX2, nY1, nY2);
+		}
+		//연결선 오브젝트를 이동시킬 경우
+		else if(arrId[0]=="line")
+		{
+			//연결선 오브젝트 이동 함수 호출
+			this.gfnMoveLine(objGraphics, objSelectPath, nX1, nX2, nY1, nY2);
+		}
+		//아무것도 선택되지 않았을 경우
+		else
+		{
+			//워크플로우 위치 변경 함수 호출
+			this.gfnMoveWorkFlow(objGraphics, nX1, nX2, nY1, nY2);
+		}
+	}
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+ 
+ /**
+ * @description Graphics Component onlbuttondown 시 처리내역
+*/
+this.Graphics00_onlbuttondown = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	var objDrag = this.objDargChecker;
+	var objPath = obj.hitTest(e.canvasx, e.canvasy);
+	var arrId;
+	var sTargetId;
+	var objTargetPath;
+	
+	if(!objPath)return true;
+	
+	//Drag 여부값 설정(드래그 시작)
+	objDrag.dragFlag = true;
+	
+	//클릭된 좌표값 설정
+	objDrag.x = e.screenx;
+	objDrag.y = e.screeny;
+	
+	//클릭된 컴포넌트 설정
+	objDrag.targetObj = obj;
+	objDrag.targetReferenceObj = objPath;
+	
+	//조직도 오브젝트들을 관리하는 그룹 오브젝트 가져오기
+	objBoard = obj.getObjectByID("board");
+	
+	//그룹오브젝트가 존재할 경우
+	if(objBoard)
+	{
+		//현재 x, y좌표값을 orgX, orgY에 저장
+		//DragMove시 기준좌표로 사용하기 위함
+		objBoard.orgX = objBoard.x;
+		objBoard.orgY = objBoard.y;
+	}
+	
+	//클릭된 오브젝트가 있을 경우
+	if(objPath)
+	{
+		//클릭된 오브젝트 가져오기 함수 호출
+		objPath = this.gfnSelectPath(obj, objPath);
+		
+		//가이드 오브젝트 보여주기 함수 호출
+		this.gfnViewGuidePath(obj, objPath);
+	}
+};
+
+this.Graphics00_onlbuttonup = function(obj:nexacro.Graphics,e:nexacro.MouseEventInfo)
+{
+	//Drag 여부값 설정(드래그 종료)
+	this.objDargChecker.dragFlag = false;
+};
+
+/**
+ * @description 실행 버튼 onclick 시 처리내역
+*/
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objConfig = {
+						//노드 데이터셋
+						"itemsDs" : this.dsItems,
+						//연결선 데이터셋
+						"linesDs" : this.dsLines,
+						//노드 포멧 정보 01
+						"type01" : {
+										"x" : 0,
+										"y" : 0,
+										"width" : 140,
+										"height" : 30,
+										"fillstyle" : "#8547FE",
+										
+										title : {
+											"font" : 'bold 9px/normal "Arial","Malgun Gothic","Gulim',
+											"color" : "#ffffff",
+											"textAlign" : "center",
+											"verticalAlign" : "middle",
+										}
+									},
+						//노드 포멧 정보 02
+						"type02" : {
+										"x" : 0,
+										"y" : 0,
+										"width" : 140,
+										"height" : 30,
+										"radiusx" : 70,
+										"radiusy" : 15,
+										"fillstyle" : "#8547FE",
+										
+										title : {
+											"font" : 'bold 9px/normal "Arial","Malgun Gothic","Gulim',
+											"color" : "#ffffff",
+											"textAlign" : "center",
+											"verticalAlign" : "middle",
+										}
+									},
+						//노드 포멧 정보 03
+						"type03" : {
+										"x" : 0,
+										"y" : 0,
+										"width" : 140,
+										"height" : 30,
+										title : {
+											"font" : 'bold 9px/normal "Arial","Malgun Gothic","Gulim',
+											"color" : "#000000",
+											"textAlign" : "center",
+											"verticalAlign" : "middle",
+										}
+									},
+						//연결선 정보
+						"line" : {
+										"fillstyle" : "#8547FE",
+										"strokepen" : "1px solid #8547FE",
+										"capwidth" : 10,
+										"capheight" : 10
+									}
+					}
+					
+	//워크플로우 그리기 함수 호출
+	this.gfnDrawWorkFlow(this.Graphics00, objConfig, true);
+};
+
+this.Button00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var nRow = this.dsLines.addRow();
+	var sId = nRow+1;
+	var sFrom = "10,10";
+	var sFromPosition = "right";
+	var sTo = "100,10";
+	var sToPosition = "left";
+	var sStartCap = "true";
+	var sEndCap = "true";
+	
+	this.dsLines.setColumn(nRow, "id", sId);
+	this.dsLines.setColumn(nRow, "from", sFrom);
+	this.dsLines.setColumn(nRow, "fromPosition", sFromPosition);
+	this.dsLines.setColumn(nRow, "to", sTo);
+	this.dsLines.setColumn(nRow, "toPosition", sToPosition);
+	this.dsLines.setColumn(nRow, "startCap", sStartCap);
+	this.dsLines.setColumn(nRow, "endCap", sEndCap);
+	
+	this.gfnDrawWorkFlow(this.Graphics00, null, true);
+};
+
+this.Button00_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var nRow = this.dsItems.addRow();
+	var sId = nRow+1;
+	var sType = "type01";
+	var sTitle = "추가샘플";
+	var sX = "10";
+	var sY = "10";
+	
+	this.dsItems.setColumn(nRow, "id", sId);
+	this.dsItems.setColumn(nRow, "type", sType);
+	this.dsItems.setColumn(nRow, "title", sTitle);
+	this.dsItems.setColumn(nRow, "x", sX);
+	this.dsItems.setColumn(nRow, "y", sY);
+	
+	this.gfnDrawWorkFlow(this.Graphics00, null, true);
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsItems">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="x" type="STRING" size="256"/>
+          <Column id="y" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsLines">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="from" type="STRING" size="256"/>
+          <Column id="fromPosition" type="STRING" size="256"/>
+          <Column id="to" type="STRING" size="256"/>
+          <Column id="toPosition" type="STRING" size="256"/>
+          <Column id="startCap" type="STRING" size="256"/>
+          <Column id="endCap" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

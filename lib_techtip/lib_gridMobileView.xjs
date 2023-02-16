@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip dataset auto filter form sample library
+*  @MenuPath   	lib_techtip > lib_gridMobileView.xjs
+*  @FileName	lib_gridMobileView.xjs 
+*  @Desction	Grid edit form open
+*******************************************************************************
+*  2020.06.25		nana			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define config object
+* @param objForm : form,
+*		 objConfig : {objGrid, divPaddingWith, divPaddingHeight, divViewName}
+* @return
+*/
+this.fnInitGridMobileView = function(obj,objConfig)
+{
+	obj.config = objConfig;
+	
+	//Row Num 자동생성(생략가능)
+	this.fnCreateRowNumber(objConfig.objGrid);
+}
+
+/**
+* @description create row number col
+* @param objGrid : grid
+* @return
+*/
+this.fnCreateRowNumber = function(objGrid)
+{
+	var sText = objGrid.getCellProperty( "Body", 0, "text" );
+	objGrid.set_enableevent(false);
+	if(sText.indexOf("currow+1")<0)
+	{
+		// No. column 추가
+		objGrid.insertContentsCol("left",0);
+		objGrid.setFormatColProperty(0,"size",50);
+		objGrid.setCellProperty( "Head", 0, "text", "No." );
+		objGrid.setCellProperty( "Body", 0, "text", "expr:currow+1" );
+	};
+	objGrid.set_enableevent(true);
+};
+
+/**
+* @description create Div form
+* @param objGrid : grid
+* @return
+*/
+this.fnCreateDivView = function(objGrid)
+{
+	var conf = objGrid.parent.config;
+	var sDivName = objGrid.parent.config.divViewName;
+	var nLeft = objGrid.getOffsetLeft() + conf.divPaddingWith;
+	var nTop = this.Grid00.getOffsetTop() + conf.divPaddingHeight;
+	var nWidth = objGrid.getOffsetWidth() - conf.divPaddingWith - conf.divPaddingWith;
+	var nRight = this.width - (nLeft+nWidth);
+	
+	//create viewForm
+	var objDiv = new Div();
+		objDiv.init(sDivName, nLeft, nTop, null, 100, nRight,null);
+		objDiv.set_cssclass("divViewForm");
+		objDiv.set_visible(false);
+		
+	this.addChild(sDivName, objDiv);
+	objDiv.show();
+	
+	return objDiv;
+}
+
+/**
+* @description create input component (Grid record)
+* @param objGrid : grid
+* @return
+*/
+this.fnCreateFormView = function(objGrid)
+{
+	//define component size
+	var nPadding	= 10;	
+	var nTitleWidth = 80;
+	var nTop		= 10;
+	var nLeft		= 10;
+	var nHeight		= 27;
+	var nRight		= 10;
+
+	//div form 생성
+	var objDiv = this.fnCreateDivView(objGrid);
+	
+	var sCompTitleId = "";
+	var sCompViewId = "";
+	var sColumnId = "";
+	var objTitleComp, objViewComp;
+	
+	var sEditType = "";
+	
+	var objDs = this.objects[objGrid.binddataset];
+	var objColumnInfo;
+	var sPropertyId = "value";
+	
+	var conf = objGrid.parent.config;
+	for(var i=0; i<objGrid.getFormatColCount(); i++)
+	{
+		sColumnId = this.fnGetBindColumnId(objGrid, i);
+		
+		if(!this.gfnIsNull(sColumnId))
+		{
+			//create title Component - Static
+			sCompTitleId = "title_" + sColumnId;
+			objTitleComp = new Static();
+			objTitleComp.init(sCompTitleId,nLeft,nTop,nTitleWidth,nHeight,null,null);
+			objTitleComp.set_cssclass("staViewTitle");
+			objTitleComp.set_text(this.fnGetFieldTitle(objGrid, i));
+			objDiv.addChild(sCompTitleId,objTitleComp);
+			objTitleComp.show();
+			
+			nLeft = objTitleComp.getOffsetRight() + nPadding;
+			
+			sEditType = this.fnGetFieldEditType(objGrid,i);
+			objColumnInfo = objDs.getColumnInfo(sColumnId);
+			
+			//create view (input) Component - Static, Edit, TextArea, Calendar, Button
+			sCompViewId = "view_" + sColumnId;			
+			objViewComp = this.fnSetCompType(sEditType,objColumnInfo);
+			objViewComp.init(sCompViewId,nLeft,nTop,null,nHeight,nRight,null);
+		
+			objDiv.addChild(sCompViewId,objViewComp);
+			objViewComp.show();
+			
+			//component bind property
+			if(objViewComp.toString() == "[object Static]" || objViewComp.toString() == "[object Button]")
+			{
+				sPropertyId = "text";				
+			}
+			else
+			{
+				sPropertyId = "value";
+			}
+			
+			this.fnSetCompProperty(objViewComp,objGrid,i);
+			
+			//objDiv.name+".form."+sCompViewId
+			//component 동적 bind 시 div.form.compid
+			this.fnSetBinditems(objDiv.name+".form."+ sCompViewId, sPropertyId, objGrid.binddataset, sColumnId,i);
+			
+			nTop = nTop + nHeight + nPadding;
+			nLeft = 10;
+			
+			if(objGrid.getOffsetHeight()-(conf.divPaddingHeight*2) > nTop)
+			{
+				objDiv.setOffsetHeight(nTop);
+			}
+		}
+	}
+	
+	objDiv.form.resetScroll();
+	
+	return objDiv;
+};
+
+/**
+* @description find component type
+* @param sEditType	: grid edittype cell property,
+		objColInfo	: col info object
+* @return
+* enumEdittype ::= 'normal' | 'none' | 'button' | 'checkbox' | 'combo' | 'date' | 'mask' | 'readonly' | 'text' | 'textarea' | 'tree'
+*/
+this.fnSetCompType = function(sEditType,objColInfo)
+{
+	var sColType = objColInfo.type;
+	var sDataType = "";
+	
+	//dataset datatype에 따라서 생성 컴포넌트가 달라짐
+	if(sColType == "INT" || sColType ==  "FLOAT" || sColType ==  "BIGDECIMAL")
+	{
+		sDataType = "number";
+	}
+	else if(sColType == "DATE" || sColType == "DATETIME")
+	{
+		sDataType = "date";
+	}
+	else
+	{
+		sDataType = "string";
+	}	
+	
+	//component init
+	var objComp;
+	if(sEditType == "normal")
+	{
+		if(sDataType == "number")
+		{
+			objComp = new MaskEdit();
+			objComp.set_type("number");
+		}
+		else if(sDataType == "date")
+		{
+			objComp = new Calendar();
+		}
+		else
+		{
+			objComp = new Edit();
+		}
+	}
+	else if(sEditType == "none")
+	{
+		objComp = new Static();
+		objComp.set_cssclass("staViewForm");
+	}
+	else if(sEditType == "button")
+	{
+		objComp = new Button();
+	}
+	else if(sEditType == "checkbox")
+	{
+		objComp = new CheckBox();
+	}
+	else if(sEditType == "combo")
+	{
+		objComp = new Combo();
+	}
+	else if(sEditType == "date")
+	{
+		objComp = new Calendar();
+	}
+	else if(sEditType == "mask")
+	{
+		objComp = new MaskEdit();
+	}
+	else if(sEditType == "readonly")
+	{
+		objComp = new Edit();
+		objComp.set_readonly(true);
+	}
+	else if(sEditType == "text")
+	{
+		if(sDataType == "number")
+		{
+			objComp = new MaskEdit();
+			objComp.set_type("number");
+		}
+		else
+		{
+			objComp = new Edit();
+		}
+	}
+	else if(sEditType == "textarea")
+	{
+		objComp = new TextArea();
+	}
+	else if(sEditType == "tree")
+	{
+		objComp = new Static();
+		objComp.set_cssclass("staViewForm");
+	}
+	
+	return objComp;
+};
+
+/**
+* @description component property update
+* @param objComp	: view form input component,
+		 objGrid	: Grid,
+		 nCell		: Grid cell num
+* @return
+*/
+this.fnSetCompProperty = function(objComp,objGrid,nCell)
+{
+	if(objComp.toString() == "[object Combo]")
+	{
+		var sInnerDataset = objGrid.getCellProperty("Body", nCell, "combodataset");
+		var sInnerCode = objGrid.getCellProperty("Body", nCell, "combocodecol");
+		var sInnerData = objGrid.getCellProperty("Body", nCell, "combodatacol");
+		
+		objComp.set_innerdataset(sInnerDataset);
+		objComp.set_codecolumn(sInnerCode);
+		objComp.set_datacolumn(sInnerData);		
+	}
+	else if(objComp.toString() == "[object MaskEdit]")
+	{
+		var sMaskFormat = objGrid.getCellProperty("Body", nCell, "maskeditformat");
+		objComp.set_format(sMaskFormat);
+	}
+};
+
+/**
+* @description add bind items 
+* @param sObj		: component name,
+		 sProperty	: bind property,
+		 sDatasetId	: Dataset id,
+		 sColumnId	: dataset column id,
+		 nNum		: binditems number
+* @return
+*/
+this.fnSetBinditems = function(sObj, sProperty, sDatasetId, sColumnId, nNum)
+{
+	var sBindId = "bindItem"+nNum;
+	var objBindItem = new BindItem();
+		objBindItem.init(sBindId, sObj, sProperty, sDatasetId, sColumnId);
+	this.addChild(sBindId, objBindItem);
+	objBindItem.bind();
+};
+
+/**
+* @description get find title text
+* @param objGrid : grid, nCell : cell num
+* @return
+*/
+this.fnGetFieldTitle = function(objGrid, nCell)
+{
+	var sText = objGrid.getCellProperty( "Head", nCell, "text");
+	return sText;
+};
+
+
+/**
+* @description get bind col id
+* @param objGrid : grid, nCell : cell num
+* @return
+*/
+this.fnGetBindColumnId = function(objGrid, nCell)
+{
+	var sText = objGrid.getCellProperty("Body", nCell, "text");
+	
+	var sColumnId = "";
+	
+	if(sText.indexOf("bind")>-1)
+	{
+		sColumnId = sText.replace("bind:","");
+	}
+	
+	return sColumnId;
+};
+
+/**
+* @description get find field edit type
+* @param objGrid : grid, nCell : cell num
+* @return
+*/
+this.fnGetFieldEditType = function(objGrid, nCell)
+{
+	var sText = objGrid.getCellProperty( "Body", nCell, "edittype");
+	return sText;
+};
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description form open button onclick event --> this.fnOpenFormClick(objButton)
+*/
+this.fnOpenFormClick = function(objButton)
+{
+	var objParent	= objButton.parent;
+	var objGrid 	= objParent.config.objGrid;
+	var sDivViewName = objParent.config.divViewName;
+	
+	var objDiv = this.components[sDivViewName];
+	
+	if(this.gfnIsNull(this.components[sDivViewName]))
+	{
+		objDiv = this.fnCreateFormView(objGrid);
+	}
+	
+	if(objDiv.visible)
+	{
+		objDiv.set_visible(false);
+		objButton.set_text("off");
+	}
+	else
+	{
+		objDiv.set_visible(true);
+		objButton.set_text("on");
+	}
+}
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param {All} val – 체크할 문자열
+* @return {boolean} Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}]]></Script>

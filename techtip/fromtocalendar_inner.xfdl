@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="fromtocalendar_inner" width="790" height="360" titletext="New Form" onload="fromtocalendar_inner_onload">
+    <Layouts>
+      <Layout height="360" mobileorientation="landscape" width="790">
+        <Calendar id="cal1" taborder="0" left="80" top="10" width="310" height="340" type="monthonly" innerdataset="dsFromToDate" datecolumn="date" backgroundcolumn="background" ondayclick="cal1_ondayclick" cssclass="temp" onlbuttonup="cal1_onlbuttonup"/>
+        <Calendar id="cal2" taborder="1" left="400" top="10" width="310" height="340" type="monthonly" innerdataset="dsFromToDate" datecolumn="date" backgroundcolumn="background" ondayclick="cal2_ondayclick" cssclass="temp"/>
+        <Button id="btnPrev" taborder="2" text="&lt;" left="10" top="70" width="60" height="230" onclick="btnPrev_onclick"/>
+        <Button id="btnNext" taborder="3" text="&gt;" left="720" top="70" width="60" height="230" onclick="btnNext_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "lib::lib_base.xjs";
+include "lib::lib_date.xjs";
+
+//시작일/종료일 저장용 Array
+this.arrFromToDate = [];
+ 
+this.fromtocalendar_inner_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	
+};
+
+this.cal1_ondayclick = function(obj:nexacro.Calendar,e:nexacro.CalendarDayClickEventInfo)
+{
+	//날짜 변경함수 호출
+	this.fnSetDate(e.date);
+};
+
+this.cal2_ondayclick = function(obj:nexacro.Calendar,e:nexacro.CalendarDayClickEventInfo)
+{
+	//날짜 변경함수 호출
+	this.fnSetDate(e.date);
+};
+
+this.btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sStartDate = this.cal1.value;
+	
+	//화면에 표현될 달력 설정 함수 호출
+	this.fnMoveMonth(sStartDate, -1);
+};
+
+this.btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sStartDate = this.cal1.value;
+	
+	//화면에 표현될 달력 설정 함수 호출
+	this.fnMoveMonth(sStartDate, 1);
+};
+
+/**
+* @description 	     : 화면에 표현될 달력 설정 함수
+* @param sTargetDate : 기준일자
+* @param nOffset   	 : 증감월 값
+* @return            : 없음
+*/
+this.fnMoveMonth = function(sTargetDate, nOffset)
+{
+	//입력된 기준일자, 증감월값으로 시작일 가져오기
+	var sStartDate = this.gfnAddMonth(sTargetDate, nOffset);
+	
+	//시작일 +1달 값 가져오기
+	var sEndDate = this.gfnAddMonth(sStartDate, 1);
+	
+	//첫번째 달력에 시작일 설정
+	this.cal1.set_value(sStartDate);
+	
+	//두번째 달력에 +1달 값 설정
+	this.cal2.set_value(sEndDate);
+}
+
+/**
+* @description 	     : 데이터 변경 함수
+* @param sFromDate   : 시작일
+* @param sToDate   	 : 종료일
+* @return            : 없음
+*/
+this.fnSetFromToDate = function (sFromDate, sToDate)
+{
+	//시작일값이 있을 경우 날짜 변경함수 호출
+	if(this.gfnIsEmpty(sFromDate)==false)this.fnSetDate(sFromDate);
+	
+	//종료일값이 있을 경우 날짜 변경함수 호출
+	if(this.gfnIsEmpty(sToDate)==false)this.fnSetDate(sToDate);
+	
+	//설정된 시작일 값이 있을 경우 
+	if(this.gfnIsEmpty(this.arrFromToDate[0])==false)
+	{
+		//시작일 값으로 화면에 표현될 달력 설정 함수 호출
+		this.fnMoveMonth(this.arrFromToDate[0], 0);
+	}
+	//설정된 시작일 값이 없을 경우 
+	else
+	{
+		//오늘날짜 가져오기
+		var objDate = new Date();
+		var sStartDate = this.gfnGetMaskFormatDateToString(objDate, "yyyyMMdd");
+		
+		//오늘 날짜로로 화면에 표현될 달력 설정 함수 호출
+		this.fnMoveMonth(sStartDate, 0);
+	}
+	
+}
+
+/**
+* @description 	     : 날짜 변경 함수
+* @param date   	 : 설정할 날짜 값
+* @return            : 없음
+*/
+this.fnSetDate = function(date)
+{
+	var i;
+	var nRow;
+	var sStartDate;
+	var sEndDate;
+	var sTargetDate;
+	var nDiffDateCount;
+	
+	//시작일 표시 BackgroundColor
+	var sStartBgColor = "#ff0000";
+	
+	//선택일자 사이에 표시할 BackgroundColor
+	var sBetweenBgColor = "#00ff00";
+	
+	//종료일 표시 BackgroundColor
+	var sEndBgColor = "#0000ff";
+	
+	//기존에 시작일, 종료일이 모두 설정되어 있을 경우
+	if(this.arrFromToDate.length==2)
+	{
+		//기존 설정 값 초기화
+		this.arrFromToDate = [];
+		
+		//신규 설정값 추가
+		this.arrFromToDate[this.arrFromToDate.length] = date;
+		
+	}
+	//기존에 시작일만 설정되어 있을 경우
+	else if(this.arrFromToDate.length==1)
+	{
+		nDiffDateCount = this.gfnGetDiffDay(this.arrFromToDate[0], date);
+		
+		//신규 값이 기존 시작일 보다 작을 경우
+		//신규 값을 시작일로 설정
+		if(nDiffDateCount<0)this.arrFromToDate[0] = date;
+		//아닐 경우 신규 설정값 추가
+		else this.arrFromToDate[this.arrFromToDate.length] = date;
+		
+	}else
+	{
+		//신규 설정 값 추가
+		this.arrFromToDate[this.arrFromToDate.length] = date;
+	}
+	
+	//성능 개선을 위해 enableevent 처리 시작
+	this.dsFromToDate.set_enableevent(false);
+	
+	//날짜 표시 데이터셋 값 초기화
+	this.dsFromToDate.clearData();
+	
+	//설정값이 시작일만 있을 경우
+	if(this.arrFromToDate.length==1)
+	{
+		//시작일에 Background Color 설정
+		nRow = this.dsFromToDate.addRow();
+		this.dsFromToDate.setColumn(nRow, "date", date);
+		this.dsFromToDate.setColumn(nRow, "background", sStartBgColor);
+		
+		//부모 Calendar 값 변경 함수 호출
+		this.fnOnChangeDate("FROM", date);
+		this.fnOnChangeDate("TO", null);
+		
+	}
+	//설정값이 시작일, 종료일 모두 있을 경우
+	else if(this.arrFromToDate.length==2)
+	{
+		sStartDate = this.arrFromToDate[0];
+		sEndDate = this.arrFromToDate[1];
+		
+		nDiffDateCount = this.gfnGetDiffDay(sStartDate, sEndDate);
+		
+		for(i=0;i<=nDiffDateCount;i++)
+		{
+			sTargetDate = this.gfnAddDate(sStartDate, i);
+			nRow = this.dsFromToDate.addRow();
+			this.dsFromToDate.setColumn(nRow, "date", sTargetDate);
+			
+			//시작일에 Background Color 설정
+			if(i==0)this.dsFromToDate.setColumn(nRow, "background", sStartBgColor);
+			
+			//선택일자 사이일 Background Color 설정
+			else if(i==nDiffDateCount)this.dsFromToDate.setColumn(nRow, "background", sEndBgColor);
+			
+			//종료일에 Background Color 설정
+			else this.dsFromToDate.setColumn(nRow, "background", sBetweenBgColor);
+		}
+		
+		//부모 Calendar 값 변경 함수 호출
+		this.fnOnChangeDate("FROM", sStartDate);
+		this.fnOnChangeDate("TO", sEndDate);
+	}
+	//설정된 값이 없을 경우
+	else
+	{
+		//부모 Calendar 값 변경 함수 호출
+		this.fnOnChangeDate("FROM", null);
+		this.fnOnChangeDate("TO", null);
+	}
+	
+	//성능 개선을 위해 enableevent 처리 끝
+	this.dsFromToDate.set_enableevent(true);
+}
+
+/**
+* @description 	     : 부모 Calendar 값 변경 함수
+* @param sGbn   	 : 적용할 값 구분
+* @param sValue   	 : 적용할 값
+* @return            : 없음
+*/
+this.fnOnChangeDate = function(sGbn, sValue)
+{
+	//Config정보 가져오기
+	var objConfig = this.parent.config;
+	
+	var objCal;
+	var sPreValue;
+	var sValue;
+	
+	//시작일 값을 변경할 경우
+	if(sGbn=="FROM")objCal = objConfig.calstart;
+	
+	//종료일 값을 변경할 경우
+	else if(sGbn=="TO")objCal = objConfig.calend;
+	
+	//이전 값 가져오기
+	sPreValue = objCal.value;
+
+	//변경된 값 Calendar 컴포넌트에 설정
+	objCal.set_value(sValue);
+
+	//변경된 값 변수에 설정
+	sValue = objCal.value;
+
+	//값 변경에 대한 Event 호출
+	//Calendar의 onchanged 이벤트 발생됨
+	objCal._on_value_change(sPreValue, sValue);
+}]]></Script>
+    <Objects>
+      <Dataset id="dsFromToDate">
+        <ColumnInfo>
+          <Column id="date" type="STRING" size="256"/>
+          <Column id="background" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

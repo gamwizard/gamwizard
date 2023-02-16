@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="fileupdownDetail" width="802" height="432" titletext="New Form" onload="fileupdownDetail_onload">
+    <Layouts>
+      <Layout height="432" mobileorientation="landscape" width="802">
+        <Button id="btnCancel" taborder="0" text="취소" top="30" height="32" right="2" width="52" visible="true"/>
+        <Button id="btnSave" taborder="1" text="저장" top="30" height="32" right="56" width="52" visible="true"/>
+        <Button id="btnDel" taborder="2" text="삭제" top="30" height="32" right="164" width="52" visible="true"/>
+        <Button id="btnModify" taborder="3" text="편집" top="30" height="32" right="218" width="52" visible="true"/>
+        <Static id="Static00" taborder="4" text="제목" left="15" top="65" width="85" height="44" textAlign="center"/>
+        <Static id="Static01" taborder="5" text="내용" left="15" top="119" width="85" height="138" textAlign="center"/>
+        <Edit id="edtTitle" taborder="6" left="110" top="65" height="44" right="2" enable="true"/>
+        <TextArea id="txtContents" taborder="7" left="110" top="119" height="138" right="2"/>
+        <Button id="btnAddFile" taborder="8" text="추가" top="265" height="32" width="52" visible="true" left="2" onclick="btnAddFile_onclick"/>
+        <Button id="btnDelFile" taborder="9" text="삭제" top="265" height="32" right="694" width="52" visible="true"/>
+        <Button id="btnFileDown" taborder="10" text="선택 다운로드" top="265" height="32" right="586" width="106" visible="true"/>
+        <Grid id="grdFileList" taborder="11" left="2" top="300" bottom="2" right="2" binddataset="dsAttachList" autofittype="col" ondrop="grdFileList_ondrop">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="25"/>
+                <Column size="403"/>
+                <Column size="120"/>
+                <Column size="174"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="name"/>
+                <Cell col="2" text="status"/>
+                <Cell col="3" text="url"/>
+                <Cell col="4" text="size"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:chk" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="bind:name"/>
+                <Cell col="2" text="bind:status"/>
+                <Cell col="3" text="bind:url"/>
+                <Cell col="4" text="bind:size"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stFileSize" taborder="12" text="첨부파일 총 용량 : &lt;fc v='red'&gt; 0KB&lt;/fc&gt; / 300 MB" top="275" height="22" textAlign="right" right="2" width="225" usedecorate="true"/>
+        <Button id="btnList" taborder="13" text="목록" top="30" height="32" right="110" width="52" visible="true"/>
+        <Static id="stTitle" taborder="14" text="작성하기" left="10" top="9" width="256" height="25"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[//첨부파일 총 용량 : <fc v='red'> 0KB</fc> / 300 MB
+
+this.fileupdownDetail_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//alert(obj.parent.parent.status);
+	this.fnButtonInfo(this.parent);
+};
+
+this.fnButtonInfo = function(objParent)
+{	
+	this.btnModify.option 	= "modify";
+	this.btnDel.option		= "remove";
+	this.btnList.option		= "list";
+	this.btnSave.option		= "save";
+	this.btnCancel.option	= "cancel";
+	this.btnAddFile.option	= "addFile";
+	this.btnDelFile.option	= "delFile";
+	this.btnFileDown.option	= "downFile";
+	
+	this.btnModify.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnDel.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnList.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnSave.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnCancel.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnAddFile.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnDelFile.addEventHandler("onclick",this.Button_onclick,this);
+	this.btnFileDown.addEventHandler("onclick",this.Button_onclick,this);
+	
+	//component define
+	var buttonList = {
+							modify	: this.btnModify,
+							remove	: this.btnDel,
+							list	: this.btnList,
+							save 	: this.btnSave,
+							cancel	: this.btnCancel,
+							addFile	: this.btnAddFile,
+							delFile	: this.btnDelFile,
+							downFile: this.btnFileDown
+					  }
+						   
+	var componentList = {
+							stTitle	: this.stTitle,
+							title	: this.edtTitle,
+							contents: this.txtContents,
+							filelist: this.grdFileList,
+							filesize: this.stFileSize
+						}
+						
+	objParent.buttonList = buttonList;
+	objParent.componentList = componentList;
+	this.fn_initButtonPosition(buttonList,objParent);
+}
+
+this.fn_initButtonPosition = function(objList,obj)
+{	
+	var objButton;
+	var nRight;
+	var nWidth = 52;
+	var nGap = 2;
+	var objWidth = obj.getOffsetWidth();
+	for(var i in objList) {
+		objButton = objList[i];
+		
+		switch(objButton.option) {
+		case "modify":	objButton.set_right(nGap*3 + nWidth*2);
+			break;
+		case "remove":	objButton.set_right(nGap*2 + nWidth*1);
+			break;
+		case "list":	objButton.set_right(nGap*1 + nWidth*0);
+			break;
+		case "save":	objButton.set_right(nGap*2 + nWidth*1);
+			break;
+		case "cancel":	objButton.set_right(nGap*1 + nWidth*0);
+			break;
+		case "addFile": objButton.set_left(nGap*1 + nWidth*0);
+			break;
+		case "delFile":	objButton.set_left(nGap*2 + nWidth*1);
+			break;
+		case "downFile":objButton.set_left(nGap*1 + nWidth*0);
+			break;
+		default:
+		}
+	}
+}
+
+this.fnSetFormStatus = function(type)
+{
+	var obj = this.parent.parent.config;
+	var objButtonList = obj.detail.buttonList;
+	var objTitleList  = obj.detail.componentList;
+	if(type == "new")
+	{
+		objTitleList["stTitle"].set_text("작성하기");
+		this.edtTitle.set_value("");
+		this.txtContents.set_value("");
+		this.edtTitle.set_enable(true);
+		this.txtContents.set_enable(true);
+		this.dsAttachList.clearData();
+		this.FileUpTransfer00.clearFileList();
+		this.FileUpTransfer00.clearPostDataList();
+	
+		this.fnSetButtonVisible(false,true);
+	}
+	else if(type == "search")
+	{
+		var objDetailinfo = obj.list.contentsInfo;
+		
+		objTitleList["stTitle"].set_text("조회");
+		this.edtTitle.set_value(objDetailinfo.title);
+		this.txtContents.set_value(objDetailinfo.contents);
+		this.edtTitle.set_enable(false);
+		this.txtContents.set_enable(false);
+		this.dsAttachList.clearData();
+		this.FileUpTransfer00.clearFileList();
+		this.FileUpTransfer00.clearPostDataList();
+		
+		this.fnSetButtonVisible(true,false);
+		//file search transaction call
+		
+	}
+	else if(type == "update")
+	{
+		objTitleList["stTitle"].set_text("수정중");		
+		this.edtTitle.set_enable(true);
+		this.txtContents.set_enable(true);
+		this.fnSetButtonVisible(false,true);
+	}
+}
+
+this.fnSetButtonVisible = function(bSearch,bUpdate)
+{
+	var objList = this.parent.parent.config.detail.buttonList;	
+	for(var i in objList) {
+		objButton = objList[i];
+		
+		switch(objButton.option) {
+		case "modify":
+		case "remove":
+		case "list":
+		case "downFile":	objButton.set_visible(bSearch);
+			break;
+		case "save":
+		case "cancel":
+		case "addFile":
+		case "delFile":		objButton.set_visible(bUpdate);
+			break;
+		default:
+		}
+	}
+}
+
+this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objConfig = this.parent.parent.config;
+	switch(obj.option) {
+	case "modify":	this.fnSetFormStatus("update");
+		break;
+	case "remove":	this.fnRemoveData(objConfig);
+		break;
+	case "save":	this.fnSaveData();
+		break;
+	case "list":
+	case "cancel":	this.parent.parent.goDetailPage("list");
+		break;
+	case "addFile": this.fnAddFile();
+		break;
+	case "delFile":	this.fnDeleteFile();
+		break;
+	case "downFile":this.fnDownloadFile();
+		break;
+	default:
+	}
+};
+
+this.fnRemoveData = function (obj)
+{
+	if(this.confirm("게시물을 삭제합니다."))
+	{
+		obj.list.form.fnRemoveList();
+	}
+	else
+	{
+		return;
+	}
+	
+};
+
+this.fnSaveData = function ()
+{
+	var rtn = obj.list.form.fnSaveList();
+};
+
+this.fnAddFile = function ()
+{
+	//file dialog open
+	this.FileDialog00.open('nexacro17', FileDialog.MULTILOAD);
+};
+
+this.fnDeleteFile = function ()
+{
+	
+};
+
+this.fnDownloadFile = function ()
+{
+	
+};
+
+this.grdFileList_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	
+};
+
+this.btnAddFile_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsAttachList">
+        <ColumnInfo>
+          <Column id="chk" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="url" type="STRING" size="256"/>
+          <Column id="depth" type="STRING" size="256"/>
+          <Column id="status" type="STRING" size="256"/>
+          <Column id="size" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDownTransfer id="FileDownTransfer00" onerror="FileDownTransfer00_onerror" onsuccess="FileDownTransfer00_onsuccess"/>
+      <FileUpTransfer id="FileUpTransfer00" onerror="FileUpTransfer00_onerror" onprogress="FileUpTransfer00_onprogress" onsuccess="FileUpTransfer00_onsuccess"/>
+      <FileDialog id="FileDialog00"/>
+    </Objects>
+  </Form>
+</FDL>

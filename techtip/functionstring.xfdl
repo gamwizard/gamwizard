@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="functionstring" width="1280" height="720" titletext="String (문자열 공통함수 include)">
+    <Layouts>
+      <Layout>
+        <Static id="Static62" taborder="134" text="24. gfnEscapeXML" left="20" top="1679" width="990" height="79" border="1px solid"/>
+        <Static id="Static51" taborder="103" text="23. gfnGetMaskFormatStrToString" left="20" top="1601" width="990" height="79" border="1px solid"/>
+        <Static id="Static60" taborder="128" text="22. gfnUtf8ToUnicode" left="20" top="1504" width="990" height="98" border="1px solid"/>
+        <Static id="Static54" taborder="110" text="21. gfnUnicodeToUtf8" left="20" top="1411" width="990" height="94" border="1px solid"/>
+        <Static id="Static59" taborder="124" text="20. gfnHexToUnicode" left="20" top="1333" width="990" height="79" border="1px solid"/>
+        <Static id="Static50" taborder="100" text="18. gfnDecimalToUnicode" left="20" top="1177" width="990" height="79" border="1px solid"/>
+        <Static id="Static56" taborder="115" text="19. gfnUnicodeToHex" left="20" top="1255" width="990" height="79" border="1px solid"/>
+        <Static id="Static47" taborder="91" text="17. gfnUnicodeToDecimal" left="20" top="1099" width="990" height="79" border="1px solid"/>
+        <Static id="Static44" taborder="84" text="16. gfnEndsWith" left="20" top="1021" width="990" height="79" border="1px solid"/>
+        <Static id="Static41" taborder="77" text="15. gfnStartsWith" left="20" top="943" width="990" height="79" border="1px solid"/>
+        <Static id="Static40" taborder="76" text="14. gfnRemoveMultibyteChar" left="20" top="904" width="990" height="40" border="1px solid"/>
+        <Static id="Static30" taborder="48" text="13. gfnReplaceInvalidFileNameChars" left="20" top="826" width="990" height="79" border="1px solid"/>
+        <Static id="Static29" taborder="47" text="12. gfnUnicodeToHanGul" left="20" top="755" width="990" height="72" border="1px solid"/>
+        <Static id="Static28" taborder="46" text="11. gfnHanGulToUnicode" left="20" top="716" width="990" height="40" border="1px solid"/>
+        <Static id="Static20" taborder="45" text="10. gfnRepeatStr" left="20" top="676" width="990" height="41" border="1px solid"/>
+        <Static id="Static18" taborder="44" text="9. gfnStrHalfToFull" left="20" top="637" width="990" height="40" border="1px solid"/>
+        <Static id="Static15" taborder="43" text="8. gfnStrFullToHalf" left="20" top="598" width="990" height="40" border="1px solid"/>
+        <Static id="Static11" taborder="42" text="7. gfnCountNonword" left="20" top="559" width="990" height="40" border="1px solid"/>
+        <Static id="Static19" taborder="5" text="6. gfnGetLength" left="20" top="442" width="990" height="118" border="1px solid"/>
+        <Static id="Static16" taborder="4" text="5. gfnRemoveStr" left="20" top="316" width="990" height="127" border="1px solid"/>
+        <Static id="Static04" taborder="3" text="4. gfnGetRightStr" left="20" top="234" width="990" height="83" border="1px solid"/>
+        <Static id="Static03" taborder="2" text="3. gfnLastIndexOfIgnoreCase" left="20" top="156" width="990" height="79" border="1px solid"/>
+        <Static id="Static02" taborder="1" text="2. gfnReplaceIgnoreCase" left="20" top="117" width="990" height="40" border="1px solid"/>
+        <Static id="Static01" taborder="0" text="1. gfnIndexOfIgnoreCase" left="20" top="39" width="990" height="79" border="1px solid"/>
+        <Static id="Static21" taborder="6" text="(string, string) ⇒ &#13;&#10;(&quot;www.domain.com&quot;, &quot;www.&quot;)" left="263" top="316" width="370" height="40"/>
+        <Static id="Static22" taborder="7" text="(string, stirng, string) ⇒&#13;&#10;(&quot;www.tobesoft.com, www.tobesoft.co.kr&quot;, &quot;.com&quot;, &quot;right&quot;)" left="263" top="355" width="370" height="88"/>
+        <Static id="Static25" taborder="8" text="(string) ⇒ (&quot;unit 문자열&quot;)" left="263" top="442" width="370" height="40"/>
+        <Static id="Static26" taborder="9" text="(string) ⇒ (&quot;unit 문자열&quot;, &quot;ascii&quot;)" left="263" top="481" width="370" height="40"/>
+        <Static id="Static27" taborder="10" text="(string) ⇒ (&quot;unit 문자열&quot;, &quot;utf8&quot;)" left="263" top="520" width="370" height="40"/>
+        <Static id="Static00" taborder="11" text="(string, string) ⇒ ( &quot;DCABCABAABAAB&quot;, &quot;ab&quot;)" left="263" top="39" width="370" height="40"/>
+        <Static id="Static09" taborder="12" text="(string, string, number) ⇒&#13;&#10;( &quot;DCABCABAABAAB&quot;, &quot;ab&quot;, 3)" left="263" top="78" width="370" height="40"/>
+        <Static id="Static10" taborder="13" text="(string, string, string) ⇒&#13;&#10;( &quot;DCABCABAABAAB&quot;, &quot;ab&quot;, &quot;x&quot;)" left="263" top="117" width="370" height="40"/>
+        <Static id="Static12" taborder="14" text="(string, number) ⇒ &#13;&#10;(&quot;myT1 and myT2 are the strings used for padding&quot;,&#13;&#10; 7)" left="263" top="234" width="370" height="83"/>
+        <Static id="Static13" taborder="15" text="(string, string, number) ⇒ &#13;&#10;(&quot;CABCDABCDABCD&quot;, &quot;abc&quot;, 8)" left="263" top="195" width="370" height="40"/>
+        <Static id="Static14" taborder="16" text="(string, string) ⇒ (&quot;CABCDABCDABCD&quot;, &quot;abc&quot;)" left="263" top="156" width="370" height="40"/>
+        <Button id="Button00" taborder="17" text="실행" left="567" top="48" width="56" height="22" onclick="Button00_onclick"/>
+        <Button id="Button01" taborder="18" text="실행" left="567" top="87" width="56" height="22" onclick="Button01_onclick"/>
+        <Button id="Button02" taborder="19" text="실행" left="567" top="126" width="56" height="22" onclick="Button02_onclick"/>
+        <Static id="st_1_result01" taborder="20" left="632" top="39" width="372" height="40"/>
+        <Static id="st_1_result02" taborder="21" left="632" top="78" width="372" height="40"/>
+        <Static id="st_2_result01" taborder="22" left="632" top="117" width="372" height="40"/>
+        <Button id="Button03" taborder="23" text="실행" left="567" top="165" width="56" height="22" onclick="Button03_onclick" wordWrap="true"/>
+        <Button id="Button04" taborder="24" text="실행" left="567" top="204" width="56" height="22" onclick="Button04_onclick" wordWrap="true"/>
+        <Static id="st_3_result01" taborder="25" left="632" top="156" width="372" height="40"/>
+        <Static id="st_3_result02" taborder="26" left="632" top="195" width="372" height="40"/>
+        <Button id="Button05" taborder="27" text="실행" left="568" top="242" width="56" height="22" onclick="Button05_onclick" wordWrap="true"/>
+        <Static id="st_4_result01" taborder="28" left="632" top="237" width="372" height="33"/>
+        <Static id="st_5_result01" taborder="29" left="632" top="316" width="372" height="40"/>
+        <Static id="st_5_result02" taborder="30" left="632" top="362" width="372" height="28"/>
+        <Static id="st_7_result01" taborder="31" left="632" top="442" width="372" height="40"/>
+        <Static id="st_7_result02" taborder="32" left="632" top="481" width="372" height="40"/>
+        <Static id="st_7_result03" taborder="33" left="632" top="520" width="372" height="40"/>
+        <Button id="Button06" taborder="34" text="실행" left="567" top="325" width="56" height="22" onclick="Button06_onclick"/>
+        <Button id="Button07" taborder="35" text="실행" left="567" top="364" width="56" height="22" onclick="Button07_onclick"/>
+        <Button id="Button11" taborder="36" text="실행" left="567" top="450" width="56" height="22" onclick="Button11_onclick" wordWrap="true"/>
+        <Button id="Button12" taborder="37" text="실행" left="567" top="490" width="56" height="22" onclick="Button12_onclick" wordWrap="true"/>
+        <Button id="Button13" taborder="38" text="실행" left="567" top="529" width="56" height="22" onclick="Button13_onclick" wordWrap="true"/>
+        <Static id="Static06" taborder="39" text="Arguments:  ( Type ) ⇒ ( Value )" left="263" top="0" width="370" height="40"/>
+        <Static id="Static07" taborder="40" text="Method" left="20" top="0" width="244" height="40"/>
+        <Static id="Static08" taborder="41" text="Result: (Type) Vaule" left="632" top="0" width="372" height="40"/>
+        <Static id="Static31" taborder="49" text="(string) ⇒ (&quot;www.투비소프트.com&quot;)" left="263" top="716" width="370" height="40"/>
+        <Static id="Static32" taborder="50" text="(string) ⇒&#13;&#10; (&quot;www.\\uD22C\\uBE44\uC18C\\uD504\\uD2B8.com&quot;)" left="263" top="755" width="370" height="72"/>
+        <Static id="Static33" taborder="51" text="(string) ⇒ (&quot;test:uploadfile.php&quot;)" left="263" top="826" width="370" height="40"/>
+        <Static id="Static34" taborder="52" text="(string) ⇒ (&quot;test-uploadfile.php&quot;)" left="263" top="865" width="370" height="40"/>
+        <Static id="Static35" taborder="53" text="(string) ⇒ (&quot;unit문자열s五ご&quot;)" left="263" top="904" width="370" height="40"/>
+        <Static id="Static36" taborder="54" text="(string) ⇒ (&quot;2011-12-27\\r\\n\\t~`&quot;)" left="263" top="559" width="370" height="40"/>
+        <Static id="Static37" taborder="55" text="(string) ⇒&#13;&#10;(&quot;０１＋ｗｏｒｌｄ투비소프트&quot;)" left="263" top="598" width="370" height="40"/>
+        <Static id="Static38" taborder="56" text="(string, number) ⇒ (&quot;0&quot;, 4)" left="263" top="676" width="370" height="41"/>
+        <Static id="Static39" taborder="57" text="(string) ⇒ (&quot;01+world투비소프트&quot;)" left="263" top="637" width="370" height="40"/>
+        <Button id="Button14" taborder="58" text="실행" left="567" top="568" width="56" height="22" onclick="Button14_onclick"/>
+        <Button id="Button15" taborder="59" text="실행" left="567" top="607" width="56" height="22" onclick="Button15_onclick"/>
+        <Static id="st_8_result01" taborder="60" left="632" top="559" width="372" height="40"/>
+        <Static id="st_9_result01" taborder="61" left="632" top="598" width="372" height="40"/>
+        <Button id="Button16" taborder="62" text="실행" left="567" top="646" width="56" height="22" onclick="Button16_onclick" wordWrap="true"/>
+        <Static id="st_10_result01" taborder="63" left="632" top="637" width="372" height="40"/>
+        <Button id="Button17" taborder="64" text="실행" left="568" top="685" width="56" height="22" onclick="Button17_onclick" wordWrap="true"/>
+        <Static id="st_11_result01" taborder="65" left="632" top="676" width="372" height="41"/>
+        <Static id="st_12_result01" taborder="66" left="632" top="716" width="372" height="40"/>
+        <Static id="st_13_result01" taborder="67" left="632" top="760" width="372" height="32"/>
+        <Static id="st_14_result01" taborder="68" left="632" top="826" width="372" height="40"/>
+        <Static id="st_14_result02" taborder="69" left="632" top="865" width="372" height="40"/>
+        <Static id="st_15_result01" taborder="70" left="632" top="904" width="372" height="40"/>
+        <Button id="Button18" taborder="71" text="실행" left="567" top="725" width="56" height="22" onclick="Button18_onclick"/>
+        <Button id="Button19" taborder="72" text="실행" left="567" top="764" width="56" height="22" onclick="Button19_onclick"/>
+        <Button id="Button20" taborder="73" text="실행" left="567" top="834" width="56" height="22" onclick="Button20_onclick" wordWrap="true"/>
+        <Button id="Button21" taborder="74" text="실행" left="567" top="874" width="56" height="22" onclick="Button21_onclick" wordWrap="true"/>
+        <Button id="Button22" taborder="75" text="실행" left="567" top="913" width="56" height="22" onclick="Button22_onclick" wordWrap="true"/>
+        <Static id="Static42" taborder="78" text="(string, string) ⇒ (&quot;Hello World!&quot;, &quot;He&quot;)" left="263" top="943" width="370" height="40"/>
+        <Static id="Static43" taborder="79" text="(string, string) ⇒ (&quot;Hello World!&quot;, &quot;hew&quot;)" left="263" top="982" width="370" height="40"/>
+        <Static id="st_16_result01" taborder="80" left="632" top="943" width="372" height="40"/>
+        <Static id="st_16_result02" taborder="81" left="632" top="982" width="372" height="40"/>
+        <Button id="Button23" taborder="82" text="실행" left="567" top="951" width="56" height="22" onclick="Button23_onclick" wordWrap="true"/>
+        <Button id="Button24" taborder="83" text="실행" left="567" top="991" width="56" height="22" onclick="Button24_onclick" wordWrap="true"/>
+        <Static id="Static45" taborder="85" text="(string, string) ⇒ (&quot;Hello World!&quot;, &quot;ld!&quot;)" left="263" top="1021" width="370" height="40"/>
+        <Static id="Static46" taborder="86" text="(string, string) ⇒ (&quot;Hello World!&quot;, &quot;Wor&quot;)" left="263" top="1060" width="370" height="40"/>
+        <Static id="st_17_result01" taborder="87" left="632" top="1021" width="372" height="40"/>
+        <Static id="st_17_result02" taborder="88" left="632" top="1060" width="372" height="40"/>
+        <Button id="Button25" taborder="89" text="실행" left="567" top="1029" width="56" height="22" onclick="Button25_onclick" wordWrap="true"/>
+        <Button id="Button26" taborder="90" text="실행" left="567" top="1069" width="56" height="22" onclick="Button26_onclick" wordWrap="true"/>
+        <Static id="Static48" taborder="92" text="(string) ⇒ " left="263" top="1099" width="370" height="79" textAlign="left" verticalAlign="top" font="8pt Consolas"/>
+        <Static id="Static49" taborder="93" text="(string) ⇒ " left="263" top="1255" width="370" height="79" textAlign="left" verticalAlign="top"/>
+        <Static id="st_18_result01" taborder="94" left="632" top="1099" width="372" height="79" padding="0px 0px 4px 14px" textAlign="left" verticalAlign="top" font="bold 11pt 굴림체"/>
+        <Static id="st_19_result01" taborder="95" left="632" top="1255" width="372" height="79"/>
+        <Button id="Button27" taborder="96" text="실행" left="567" top="1107" width="56" height="22" onclick="Button27_onclick" wordWrap="true"/>
+        <Button id="Button28" taborder="97" text="실행" left="567" top="1271" width="56" height="22" onclick="Button28_onclick" wordWrap="true"/>
+        <TextArea id="txt_18_result01" taborder="98" left="637" top="1104" width="361" height="68" wordWrap="true" font="bold 11pt 굴림체"/>
+        <TextArea id="txt_19_result01" taborder="99" lengthunit="utf8" left="637" top="1261" width="361" height="68" wordWrap="true" font="bold 11pt 굴림체"/>
+        <TextArea id="txt_18_result00" taborder="101" value="HTML, nexacro form 로딩&#13;&#10;Loading, Update 등을 전체 Page 변경 없이 처리&#13;&#10;MVC FrameWork와 연동 가능한 API 제공&#13;&#10;Drag &amp; Drop 지원&#13;&#10;TOOL : Common wizard and dialogs&#13;&#10;개인화 모듈 가능" readonly="true" left="272" top="1120" width="287" height="52" wordWrap="true" font="8pt Consolas"/>
+        <TextArea id="txt_18_result02" taborder="102" value="&amp;#72;&amp;#84;&amp;#77;&amp;#76;&amp;#44;&amp;#32;&amp;#88;&amp;#80;&amp;#76;&amp;#65;&amp;#84;&amp;#70;&amp;#79;&amp;#82;&amp;#77;&amp;#32;&amp;#102;&amp;#111;&amp;#114;&amp;#109;&amp;#32;&amp;#47196;&amp;#46377;&amp;#13;&amp;#10;&amp;#76;&amp;#111;&amp;#97;&amp;#100;&amp;#105;&amp;#110;&amp;#103;&amp;#44;&amp;#32;&amp;#85;&amp;#112;&amp;#100;&amp;#97;&amp;#116;&amp;#101;&amp;#32;&amp;#46321;&amp;#51012;&amp;#32;&amp;#51204;&amp;#52404;&amp;#32;&amp;#80;&amp;#97;&amp;#103;&amp;#101;&amp;#32;&amp;#48320;&amp;#44221;&amp;#32;&amp;#50630;&amp;#51060;&amp;#32;&amp;#52376;&amp;#47532;&amp;#13;&amp;#10;&amp;#77;&amp;#86;&amp;#67;&amp;#32;&amp;#70;&amp;#114;&amp;#97;&amp;#109;&amp;#101;&amp;#87;&amp;#111;&amp;#114;&amp;#107;&amp;#50752;&amp;#32;&amp;#50672;&amp;#46041;&amp;#32;&amp;#44032;&amp;#45733;&amp;#54620;&amp;#32;&amp;#65;&amp;#80;&amp;#73;&amp;#32;&amp;#51228;&amp;#44277;&amp;#13;&amp;#10;&amp;#68;&amp;#114;&amp;#97;&amp;#103;&amp;#32;&amp;#38;&amp;#32;&amp;#68;&amp;#114;&amp;#111;&amp;#112;&amp;#32;&amp;#51648;&amp;#50896;&amp;#13;&amp;#10;&amp;#84;&amp;#79;&amp;#79;&amp;#76;&amp;#32;&amp;#58;&amp;#32;&amp;#67;&amp;#111;&amp;#109;&amp;#109;&amp;#111;&amp;#110;&amp;#32;&amp;#119;&amp;#105;&amp;#122;&amp;#97;&amp;#114;&amp;#100;&amp;#32;&amp;#97;&amp;#110;&amp;#100;&amp;#32;&amp;#100;&amp;#105;&amp;#97;&amp;#108;&amp;#111;&amp;#103;&amp;#115;&amp;#13;&amp;#10;&amp;#44060;&amp;#51064;&amp;#54868;&amp;#32;&amp;#47784;&amp;#46280;&amp;#32;&amp;#44032;&amp;#45733;" readonly="true" left="272" top="1278" width="287" height="52" wordWrap="true" font="8pt Consolas"/>
+        <Static id="Static52" taborder="104" text="(string, string) ⇒&#13;&#10;(&quot;20060607&quot;, &quot;@@@@-@@-@@&quot;)" left="263" top="1601" width="370" height="40"/>
+        <Static id="Static53" taborder="105" text="(string, string) ⇒ &#13;&#10;(&quot;6601011234567&quot;, &quot;######-{#######}&quot;)" left="263" top="1640" width="370" height="40"/>
+        <Static id="st_24_result01" taborder="106" left="632" top="1601" width="372" height="40"/>
+        <Static id="st_24_result02" taborder="107" left="632" top="1640" width="372" height="40"/>
+        <Button id="Button33" taborder="108" text="실행" left="567" top="1609" width="56" height="22" onclick="Button33_onclick" wordWrap="true"/>
+        <Button id="Button34" taborder="109" text="실행" left="567" top="1649" width="56" height="22" onclick="Button34_onclick" wordWrap="true"/>
+        <Static id="Static55" taborder="111" text="(string) ⇒ " left="263" top="1409" width="370" height="98" textAlign="left" verticalAlign="top"/>
+        <Static id="st_22_result01" taborder="112" text="0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f" left="632" top="1411" width="372" height="96" padding="4px 0px 4px 14px" textAlign="left" verticalAlign="top" font="bold 9pt 굴림체"/>
+        <Button id="Button31" taborder="113" text="실행" left="567" top="1425" width="56" height="22" onclick="Button31_onclick" wordWrap="true"/>
+        <TextArea id="txt_22_result01" taborder="114" left="635" top="1432" width="361" height="71" wordWrap="true" font="bold 9pt 굴림체"/>
+        <Static id="Static57" taborder="116" text="(string) ⇒ " left="263" top="1177" width="370" height="79" textAlign="left" verticalAlign="top" font="8pt Consolas"/>
+        <Static id="Static58" taborder="117" text="(string) ⇒ " left="263" top="1333" width="370" height="79" textAlign="left" verticalAlign="top"/>
+        <Static id="st_20_result01" taborder="118" left="632" top="1177" width="372" height="79" padding="0px 0px 4px 14px" textAlign="left" verticalAlign="top" font="bold 11pt 굴림체"/>
+        <Static id="st_21_result01" taborder="119" left="632" top="1333" width="372" height="79"/>
+        <Button id="Button29" taborder="120" text="실행" left="567" top="1199" width="56" height="22" onclick="Button29_onclick" wordWrap="true"/>
+        <Button id="Button30" taborder="121" text="실행" left="567" top="1357" width="56" height="22" onclick="Button30_onclick" wordWrap="true"/>
+        <TextArea id="txt_20_result01" taborder="122" left="637" top="1182" width="361" height="68" wordWrap="true" font="bold 11pt 굴림체"/>
+        <TextArea id="txt_21_result01" taborder="123" left="637" top="1339" width="361" height="68" wordWrap="true" font="bold 11pt 굴림체"/>
+        <TextArea id="txt_18_result03" taborder="125" value="HTML, nexacro form 로딩&#13;&#10;Loading, Update 등을 전체 Page 변경 없이 처리&#13;&#10;MVC FrameWork와 연동 가능한 API 제공&#13;&#10;Drag &amp; Drop 지원&#13;&#10;TOOL : Common wizard and dialogs&#13;&#10;개인화 모듈 가능" readonly="true" left="272" top="1198" width="287" height="52" wordWrap="true" font="8pt Consolas"/>
+        <TextArea id="txt_18_result04" taborder="126" value="&amp;#x48;&amp;#x54;&amp;#x4D;&amp;#x4C;&amp;#x2C;&amp;#x20;&amp;#x6E;&amp;#x65;&amp;#x78;&amp;#x61;&amp;#x63;&amp;#x72;&amp;#x6F;&amp;#x20;&amp;#x66;&amp;#x6F;&amp;#x72;&amp;#x6D;&amp;#x20;&amp;#xB85C;&amp;#xB529;&amp;#xD;&amp;#xA;&amp;#x4C;&amp;#x6F;&amp;#x61;&amp;#x64;&amp;#x69;&amp;#x6E;&amp;#x67;&amp;#x2C;&amp;#x20;&amp;#x55;&amp;#x70;&amp;#x64;&amp;#x61;&amp;#x74;&amp;#x65;&amp;#x20;&amp;#xB4F1;&amp;#xC744;&amp;#x20;&amp;#xC804;&amp;#xCCB4;&amp;#x20;&amp;#x50;&amp;#x61;&amp;#x67;&amp;#x65;&amp;#x20;&amp;#xBCC0;&amp;#xACBD;&amp;#x20;&amp;#xC5C6;&amp;#xC774;&amp;#x20;&amp;#xCC98;&amp;#xB9AC;&amp;#xD;&amp;#xA;&amp;#x4D;&amp;#x56;&amp;#x43;&amp;#x20;&amp;#x46;&amp;#x72;&amp;#x61;&amp;#x6D;&amp;#x65;&amp;#x57;&amp;#x6F;&amp;#x72;&amp;#x6B;&amp;#xC640;&amp;#x20;&amp;#xC5F0;&amp;#xB3D9;&amp;#x20;&amp;#xAC00;&amp;#xB2A5;&amp;#xD55C;&amp;#x20;&amp;#x41;&amp;#x50;&amp;#x49;&amp;#x20;&amp;#xC81C;&amp;#xACF5;&amp;#xD;&amp;#xA;&amp;#x44;&amp;#x72;&amp;#x61;&amp;#x67;&amp;#x20;&amp;#x26;&amp;#x20;&amp;#x44;&amp;#x72;&amp;#x6F;&amp;#x70;&amp;#x20;&amp;#xC9C0;&amp;#xC6D0;&amp;#xD;&amp;#xA;&amp;#x54;&amp;#x4F;&amp;#x4F;&amp;#x4C;&amp;#x20;&amp;#x3A;&amp;#x20;&amp;#x43;&amp;#x6F;&amp;#x6D;&amp;#x6D;&amp;#x6F;&amp;#x6E;&amp;#x20;&amp;#x77;&amp;#x69;&amp;#x7A;&amp;#x61;&amp;#x72;&amp;#x64;&amp;#x20;&amp;#x61;&amp;#x6E;&amp;#x64;&amp;#x20;&amp;#x64;&amp;#x69;&amp;#x61;&amp;#x6C;&amp;#x6F;&amp;#x67;&amp;#x73;&amp;#xD;&amp;#xA;&amp;#xAC1C;&amp;#xC778;&amp;#xD654;&amp;#x20;&amp;#xBAA8;&amp;#xB4C8;&amp;#x20;&amp;#xAC00;&amp;#xB2A5;" readonly="true" left="272" top="1356" width="287" height="52" wordWrap="true" font="8pt Consolas"/>
+        <TextArea id="txt_18_result05" taborder="127" value="HTML, nexacro form 로딩&#13;&#10;Loading, Update 등을 전체 Page 변경 없이 처리&#13;&#10;MVC FrameWork와 연동 가능한 API 제공&#13;&#10;Drag &amp; Drop 지원&#13;&#10;TOOL : Common wizard and dialogs&#13;&#10;개인화 모듈 가능" readonly="true" left="272" top="1424" width="287" height="79" wordWrap="true" font="8pt Consolas"/>
+        <Static id="Static61" taborder="129" text="(string) ⇒ " left="263" top="1504" width="370" height="98" textAlign="left" verticalAlign="top"/>
+        <Static id="st_23_result01" taborder="130" left="632" top="1506" width="372" height="96" padding="0px 0px 4px 14px" textAlign="left" verticalAlign="top" font="bold 11pt 굴림체"/>
+        <Button id="Button32" taborder="131" text="실행" left="567" top="1520" width="56" height="22" onclick="Button32_onclick" wordWrap="true"/>
+        <TextArea id="txt_23_result01" taborder="132" left="635" top="1510" width="361" height="88" wordWrap="true" font="bold 11pt 굴림체"/>
+        <TextArea id="txt_18_result06" taborder="133" value="48 54 4D 4C 2C 20 6E 65 78 61 63 72 6F 20 66 6F 72 6D 20 EB A1 9C EB 94 A9 0D 0A 4C 6F 61 64 69 6E 67 2C 20 55 70 64 61 74 65 20 EB 93 B1 EC 9D 84 20 EC A0 84 EC B2 B4 20 50 61 67 65 20 EB B3 80 EA B2 BD 20 EC 97 86 EC 9D B4 20 EC B2 98 EB A6 AC 0D 0A 4D 56 43 20 46 72 61 6D 65 57 6F 72 6B EC 99 80 20 EC 97 B0 EB 8F 99 20 EA B0 80 EB 8A A5 ED 95 9C 20 41 50 49 20 EC A0 9C EA B3 B5 0D 0A 44 72 61 67 20 26 20 44 72 6F 70 20 EC A7 80 EC 9B 90 0D 0A 54 4F 4F 4C 20 3A 20 43 6F 6D 6D 6F 6E 20 77 69 7A 61 72 64 20 61 6E 64 20 64 69 61 6C 6F 67 73 0D 0A EA B0 9C EC 9D B8 ED 99 94 20 EB AA A8 EB 93 88 20 EA B0 80 EB 8A A5 " readonly="true" left="272" top="1519" width="287" height="79" wordWrap="true" font="8pt Consolas"/>
+        <Static id="Static63" taborder="135" text="(string) ⇒ (&quot;1 &gt; 0&quot;)" left="263" top="1679" width="370" height="40"/>
+        <Static id="st_25_result01" taborder="136" left="632" top="1679" width="372" height="40"/>
+        <Static id="st_25_result02" taborder="137" left="632" top="1718" width="372" height="40"/>
+        <Static id="Static64" taborder="138" text="(string) ⇒ (&quot;Q&amp;A&quot;)" left="263" top="1718" width="370" height="40"/>
+        <Button id="Button35" taborder="139" text="실행" left="567" top="1689" width="56" height="22" onclick="Button35_onclick" wordWrap="true"/>
+        <Button id="Button36" taborder="140" text="실행" left="567" top="1729" width="56" height="22" onclick="Button36_onclick" wordWrap="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "lib::lib_base.xjs";
+include "lib::lib_string.xjs";
+
+// 1.1 gfnIndexOfIgnoreCase api 사용 예제
+this.Button00_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "DCABCABAABAAB",findStr = "ab";
+	var idx = this.gfnIndexOfIgnoreCase(str, findStr);
+	this.st_1_result01.set_text("(number) " + idx);
+	trace(idx);
+}; 
+
+// 1.2 gfnIndexOfIgnoreCase api 사용 예제
+this.Button01_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "DCABCABAABAAB",findStr = "ab";
+	var idx = this.gfnIndexOfIgnoreCase(str, findStr, 3);
+	this.st_1_result02.set_text("(number) " + idx);
+	trace(idx);
+};
+
+// 2.1 gfnReplaceIgnoreCase api 사용 예제
+this.Button02_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "DCABCABAABAAB",findStr = "ab";
+	var str = this.gfnReplaceIgnoreCase(str, findStr, "x");
+	this.st_2_result01.set_text("(string) " + str);
+	trace(str);
+};
+
+// 3.1 gfnLastIndexOfIgnoreCase api 사용 예제
+this.Button03_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "CABCDABCDABCD",findStr = "abc";
+	var idx = this.gfnLastIndexOfIgnoreCase(str, findStr);
+	this.st_3_result01.set_text("(number) " + idx);
+	trace(idx);
+};
+
+// 3.2 gfnLastIndexOfIgnoreCase api 사용 예제
+this.Button04_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "CABCDABCDABCD",findStr = "abc";
+	var idx = this.gfnLastIndexOfIgnoreCase(str, findStr, 8);
+	this.st_3_result02.set_text("(number) " + idx);
+	trace(idx);
+};
+
+// 4.1 gfnGetRightStr api 사용 예제
+this.Button05_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "myT1 and myT2 are the strings used for padding";
+	var result = this.gfnGetRightStr(str, 7);
+	this.st_4_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 5.1 gfnRemoveStr api 사용 예제
+this.Button06_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "www.domain.com";
+	var result = this.gfnRemoveStr(str, "www.");
+	this.st_5_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 5.2 gfnRemoveStr api 사용 예제
+this.Button07_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "www.tobesoft.com, www.tobesoft.co.kr";
+	var result = this.gfnRemoveStr(str, ".com", "right");
+	this.st_5_result02.set_text("(string) " + result);
+	trace(result);
+};
+
+// 5.3 gfnRemoveStr api 사용 예제
+this.Button08_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "www.tobesoft.Com, www.tobesoft.co.kr";
+	var result = this.gfnRemoveStr(str, ".com", "right", false);
+	this.st_5_result03.set_text("(string) " + result);
+	trace(result);
+};
+
+
+
+// 6.1 gfnGetLength api 사용 예제
+this.Button11_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "unit 문자열";
+	var len = this.gfnGetLength(str);
+	this.st_7_result01.set_text("(number) " + len);
+	trace(len);
+};
+
+// 6.2 gfnGetLength api 사용 예제
+this.Button12_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "unit 문자열";
+	var len = this.gfnGetLength(str, "ascii");
+	this.st_7_result02.set_text("(number) " + len);
+	trace(len);
+};
+
+// 6.3 gfnGetLength api 사용 예제
+this.Button13_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "unit 문자열";
+	var len = this.gfnGetLength(str, "utf8");
+	this.st_7_result03.set_text("(number) " + len);
+	trace(len);
+};
+
+// 7.1 gfnCountNonword api 사용 예제
+this.Button14_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "2011-12-27\r\n\t~`";
+	var len = this.gfnCountNonword(str, str);
+	this.st_8_result01.set_text("(number) " + len);
+	trace(len);
+};
+
+// 8.1 gfnStrFullToHalf api 사용 예제
+this.Button15_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "０１＋ｗｏｒｌｄ투비소프트";
+	var result = this.gfnStrFullToHalf(str);
+	this.st_9_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 9.1 gfnStrHalfToFull api 사용 예제
+this.Button16_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "01+world투비소프트";
+	var result = this.gfnStrHalfToFull(str);
+	this.st_10_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 10.1 gfnRepeatStr api 사용 예제
+this.Button17_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "0";
+	var result = this.gfnRepeatStr(str, 4);
+	this.st_11_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 11.1 gfnHanGulToUnicode api 사용 예제
+this.Button18_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "www.투비소프트.com";
+	var result = this.gfnHanGulToUnicode(str);
+	this.st_12_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 12.1 gfnUnicodeToHanGul api 사용 예제
+this.Button19_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "www.\uD22C\uBE44\uC18C\uD504\uD2B8.com";
+	var result = this.gfnUnicodeToHanGul(str);
+	this.st_13_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 13.1 gfnReplaceInvalidFileNameChars api 사용 예제
+this.Button20_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "test:uploadfile.php";
+	var result = this.gfnReplaceInvalidFileNameChars(str);
+	this.st_14_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 13.2 gfnReplaceInvalidFileNameChars api 사용 예제
+this.Button21_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "test-uploadfile.php";
+	var result = this.gfnReplaceInvalidFileNameChars(str);
+	this.st_14_result02.set_text("(string) " + result);
+	trace(result);
+};
+
+// 14.1 gfnRemoveMultibyteChar api 사용 예제
+this.Button22_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "unit문자열s五ご";
+	var result = this.gfnRemoveMultibyteChar(str);
+	this.st_15_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 15.1 gfnStartsWith api 사용 예제
+this.Button23_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "Hello World!";
+	var result = this.gfnStartsWith(str, "He");
+	this.st_16_result01.set_text("(boolean) " + result);
+	trace(result);
+};
+
+// 15.2 gfnStartsWith api 사용 예제
+this.Button24_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "Hello World!";
+	var result = this.gfnStartsWith(str, "hew");
+	this.st_16_result02.set_text("(boolean) " + result);
+	trace(result);
+};
+
+// 16.1 gfnEndsWith api 사용 예제
+this.Button25_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "Hello World!";
+	var result = this.gfnEndsWith(str, "ld!");
+	this.st_17_result01.set_text("(boolean) " + result);
+	trace(result);
+};
+
+// 16.2 gfnEndsWith api 사용 예제
+this.Button26_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "Hello World!";
+	var result = this.gfnEndsWith(str, "Wor");
+	this.st_17_result02.set_text("(boolean) " + result);
+	trace(result);
+};
+
+// 17.1 gfnUnicodeToDecimal api 사용 예제
+this.Button27_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "HTML, nexacro form 로딩\r\n";
+
+	str += "Loading, Update 등을 전체 Page 변경 없이 처리\r\n";
+	str += "MVC FrameWork와 연동 가능한 API 제공\r\n";
+	str += "Drag & Drop 지원\r\n";
+	str += "TOOL : Common wizard and dialogs\r\n";
+	str += "개인화 모듈 가능";
+
+	// str = "연"; //#50672;
+	// str = "동"; //#46041;
+	// str = "연동"; //#46041;
+	var result = this.gfnUnicodeToDecimal(str);
+	this.txt_18_result01.set_value(result);
+	trace(result);
+	// this.st_17_result02.set_text( result );
+};
+
+// 18.1 gfnDecimalToUnicode api 사용 예제
+this.Button28_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "&#72;&#84;&#77;&#76;&#44;&#32;&#110;&#101;&#120;&#97;&#99;&#114;&#111;&#32;";
+
+	str += "&#102;&#111;&#114;&#109;&#32;&#47196;&#46377;&#13;&#10;&#76;&#111;&#97;&#100;&#105;";
+	str += "&#110;&#103;&#44;&#32;&#85;&#112;&#100;&#97;&#116;&#101;&#32;&#46321;&#51012;&#32;";
+	str += "&#51204;&#52404;&#32;&#80;&#97;&#103;&#101;&#32;&#48320;&#44221;&#32;&#50630;&#51060;";
+	str += "&#32;&#52376;&#47532;&#13;&#10;&#77;&#86;&#67;&#32;&#70;&#114;&#97;&#109;&#101;&#87;";
+	str += "&#111;&#114;&#107;&#50752;&#32;&#50672;&#46041;&#32;&#44032;&#45733;&#54620;&#32;";
+	str += "&#65;&#80;&#73;&#32;&#51228;&#44277;&#13;&#10;&#68;&#114;&#97;&#103;&#32;&#38;&#32;";
+	str += "&#68;&#114;&#111;&#112;&#32;&#51648;&#50896;&#13;&#10;&#84;&#79;&#79;&#76;&#32;&#58;";
+	str += "&#32;&#67;&#111;&#109;&#109;&#111;&#110;&#32;&#119;&#105;&#122;&#97;&#114;&#100;&#32;";
+	str += "&#97;&#110;&#100;&#32;&#100;&#105;&#97;&#108;&#111;&#103;&#115;&#13;&#10;&#44060;&#51064;";
+	str += "&#54868;&#32;&#47784;&#46280;&#32;&#44032;&#45733;";
+
+	// str = "&#50672;&#46041;";
+	var result = this.gfnDecimalToUnicode(str);
+	this.txt_19_result01.set_value(result);
+	// this.st_17_result02.set_text( result );
+	// this.Button08.set_text( result );
+	trace(result);
+};
+
+// 19.1 gfnUnicodeToHex api 사용 예제
+this.Button29_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "HTML, nexacro form 로딩\r\n";
+
+	str += "Loading, Update 등을 전체 Page 변경 없이 처리\r\n";
+	str += "MVC FrameWork와 연동 가능한 API 제공\r\n";
+	str += "Drag & Drop 지원\r\n";
+	str += "TOOL : Common wizard and dialogs\r\n";
+	str += "개인화 모듈 가능";
+
+	var result = this.gfnUnicodeToHex(str);
+	this.txt_20_result01.set_value(result);
+	trace(result);
+};
+
+// 20.1 gfnHexToUnicode api 사용 예제
+this.Button30_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "&#x48;&#x54;&#x4D;&#x4C;&#x2C;&#x20;&#x6E;&#x65;&#x78;&#x61;&#x63;&#x72;&#x6F;";
+
+	str += "&#x20;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#xB85C;&#xB529;&#xD;&#xA;&#x4C;&#x6F;&#x61;";
+	str += "&#x64;&#x69;&#x6E;&#x67;&#x2C;&#x20;&#x55;&#x70;&#x64;&#x61;&#x74;&#x65;&#x20;&#xB4F1;";
+	str += "&#xC744;&#x20;&#xC804;&#xCCB4;&#x20;&#x50;&#x61;&#x67;&#x65;&#x20;&#xBCC0;&#xACBD;&#x20;";
+	str += "&#xC5C6;&#xC774;&#x20;&#xCC98;&#xB9AC;&#xD;&#xA;&#x4D;&#x56;&#x43;&#x20;&#x46;&#x72;&#x61;";
+	str += "&#x6D;&#x65;&#x57;&#x6F;&#x72;&#x6B;&#xC640;&#x20;&#xC5F0;&#xB3D9;&#x20;&#xAC00;&#xB2A5;&#xD55C;";
+	str += "&#x20;&#x41;&#x50;&#x49;&#x20;&#xC81C;&#xACF5;&#xD;&#xA;&#x44;&#x72;&#x61;&#x67;&#x20;&#x26;&#x20;";
+	str += "&#x44;&#x72;&#x6F;&#x70;&#x20;&#xC9C0;&#xC6D0;&#xD;&#xA;&#x54;&#x4F;&#x4F;&#x4C;&#x20;&#x3A;&#x20;";
+	str += "&#x43;&#x6F;&#x6D;&#x6D;&#x6F;&#x6E;&#x20;&#x77;&#x69;&#x7A;&#x61;&#x72;&#x64;&#x20;&#x61;&#x6E;&#x64;";
+	str += "&#x20;&#x64;&#x69;&#x61;&#x6C;&#x6F;&#x67;&#x73;&#xD;&#xA;&#xAC1C;&#xC778;&#xD654;&#x20;&#xBAA8;";
+	str += "&#xB4C8;&#x20;&#xAC00;&#xB2A5;";
+
+	var result = this.gfnHexToUnicode(str);
+	this.txt_21_result01.set_value(result);
+	trace(result);
+};
+
+// 21.1 gfnUnicodeToUtf8 api 사용 예제
+this.Button31_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "HTML, nexacro form 로딩\r\n";
+
+	str += "Loading, Update 등을 전체 Page 변경 없이 처리\r\n";
+	str += "MVC FrameWork와 연동 가능한 API 제공\r\n";
+	str += "Drag & Drop 지원\r\n";
+	str += "TOOL : Common wizard and dialogs\r\n";
+	str += "개인화 모듈 가능";
+
+	var result = this.gfnUnicodeToUtf8(str);
+	this.txt_22_result01.set_value(result);
+	trace(result);
+};
+
+// 22.1 gfnUtf8ToUnicode api 사용 예제
+this.Button32_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "48 54 4D 4C 2C 20 6E 65 78 61 63 72 6F 20 66 6F 72 6D 20 ";
+
+	str += "EB A1 9C EB 94 A9 0D 0A 4C 6F 61 64 69 6E 67 2C 20 55 70 64 61 74 65 20 ";
+	str += "EB 93 B1 EC 9D 84 20 EC A0 84 EC B2 B4 20 50 61 67 65 20 EB B3 80 EA B2 ";
+	str += "BD 20 EC 97 86 EC 9D B4 20 EC B2 98 EB A6 AC 0D 0A 4D 56 43 20 46 72 61 ";
+	str += "6D 65 57 6F 72 6B EC 99 80 20 EC 97 B0 EB 8F 99 20 EA B0 80 EB 8A A5 ED ";
+	str += "95 9C 20 41 50 49 20 EC A0 9C EA B3 B5 0D 0A 44 72 61 67 20 26 20 44 72 ";
+	str += "6F 70 20 EC A7 80 EC 9B 90 0D 0A 54 4F 4F 4C 20 3A 20 43 6F 6D 6D 6F 6E ";
+	str += "20 77 69 7A 61 72 64 20 61 6E 64 20 64 69 61 6C 6F 67 73 0D 0A EA B0 9C ";
+	str += "EC 9D B8 ED 99 94 20 EB AA A8 EB 93 88 20 EA B0 80 EB 8A A5 ";
+
+	var result = this.gfnUtf8ToUnicode(str);
+	this.txt_23_result01.set_value(result);
+	trace(result);
+};
+
+// 23.1 gfnGetMaskFormatStrToString api 사용 예제
+this.Button33_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "20060607";
+	var result = this.gfnGetMaskFormatStrToString(str, "@@@@-@@-@@");
+	this.st_24_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 23.2 gfnGetMaskFormatStrToString api 사용 예제
+this.Button34_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "6601011234567";
+	var result = this.gfnGetMaskFormatStrToString(str, "######-{#######}");
+	this.st_24_result02.set_text("(string) " + result);
+	trace(result);
+};
+
+// 24.1 gfnEscapeXML api 사용 예제
+this.Button35_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "1 > 0";
+	var result = this.gfnEscapeXML(str);
+	this.st_25_result01.set_text("(string) " + result);
+	trace(result);
+};
+
+// 24.2 gfnEscapeXML api 사용 예제
+this.Button36_onclick = function (obj:Button, e:nexacro.ClickEventInfo)
+{
+	var str = "Q&A";
+	var result = this.gfnEscapeXML(str);
+	this.st_25_result02.set_text("(string) " + result);
+	trace(result);
+};]]></Script>
+  </Form>
+</FDL>

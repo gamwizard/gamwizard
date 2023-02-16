@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 		: 데이터셋 역순 검색 함수
+* @param objDs  	: 검색할 데이터셋
+* @param sStrExpr   : 검색할 조건표현식
+* @param nStartIdx 	: 검색을 시작할 Row의 인덱스
+* @param nEndIdx 	: 검색을 종료할 Row의 인덱스
+* @param arrArgs 	: 정의된 치환문에 치환될 값을 배열형태로 설정
+* @return 			: 조건에 만족하는 마지막 Row 인텍스를 반환
+                      조건에 만족하는 Row가 없을 경우 -1을 반환
+*/
+this.gfnLastFindRowExpr = function(objDs, sStrExpr, nStartIdx, nEndIdx, arrArgs)
+{
+	var nFRow;
+	
+	if(!nStartIdx)nStartIdx = 0;
+	
+	if(!nEndIdx)nEndIdx = objDs.rowcount-1;
+		
+	for(var i=nEndIdx;i>=nStartIdx;i--)
+	{
+		nFRow = this.ds_list.findRowExpr(sStrExpr, i-1, i, arrArgs);
+		
+		if(nFRow!=-1)return nFRow;
+	}
+	
+	return nFRow = -1;
+}]]></Script>

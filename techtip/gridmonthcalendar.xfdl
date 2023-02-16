@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="gridmonthcalendar" width="400" height="400" titletext="New Form" onload="gridmonthcalendar_onload">
+    <Layouts>
+      <Layout height="400" width="400">
+        <Grid id="grdMonthCalendar" taborder="0" left="10" top="10" right="10" bottom="10" binddataset="ds_month" onexpanddown="grdMonthCalendar_onexpanddown">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="월력"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0" expandshow="show" expandsize="24" displaytype="date" calendareditformat="yyyy-MM" calendardateformat="yyyy-MM" edittype="date" calendarbuttonsize="0 0"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > gridmonthcalendar
+*  techtip 월 달력 샘플(그리드버전)
+*  @FileName	gridmonthcalendar.xfdl 
+*******************************************************************************
+*  2019.08.23		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_gridmonthcalendar.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+/**
+ * @description 그리드 ondepanddown시 처리내역
+*/
+this.grdMonthCalendar_onexpanddown = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{
+	if(e.cell==0)
+	{
+		//드롭다운 리스트 호출 함수 실행
+		this.gfnShowDropMonthCalPop(obj, e);
+	}
+};]]></Script>
+    <Objects>
+      <Dataset id="ds_month">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

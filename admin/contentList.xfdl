@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="contentList" width="1450" height="600" titletext="New Form" onload="contentList_onload">
+    <Layouts>
+      <Layout height="600" mobileorientation="landscape" width="1450">
+        <Grid id="grdList" taborder="0" left="10" top="60" height="200" binddataset="dsList" autofittype="col" right="730" cellsizingtype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="200"/>
+                <Column size="300"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="No"/>
+                <Cell col="1" text="카테고리"/>
+                <Cell col="2" text="파일명"/>
+                <Cell col="3" text="콘텐츠제목"/>
+                <Cell col="4" text="생성일자"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:seq" textAlign="center"/>
+                <Cell col="1" text="bind:category" textAlign="center"/>
+                <Cell col="2" text="bind:filename"/>
+                <Cell col="3" text="bind:title"/>
+                <Cell col="4" displaytype="date" text="bind:created_on" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Grid id="grdFile" taborder="1" left="10" top="310" binddataset="dsFile" right="730" bottom="10" autofittype="col" cellsizingtype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="500"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="콘텐츠키"/>
+                <Cell col="1" text="파일명"/>
+                <Cell col="2" text="레벨"/>
+                <Cell col="3" text="파일타입"/>
+                <Cell col="4" text="생성일자"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:contents_seq" textAlign="center"/>
+                <Cell col="1" text="bind:filename"/>
+                <Cell col="2" text="bind:level" textAlign="center"/>
+                <Cell col="3" text="bind:type" textAlign="center"/>
+                <Cell col="4" displaytype="date" text="bind:created_on" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnSearch" taborder="2" text="조회" top="30" width="90" height="25" right="730" onclick="btnSearch_onclick"/>
+        <Static id="Static00" taborder="3" text="콘텐츠 리스트" left="10" top="23" width="120" height="30"/>
+        <Static id="Static00_00" taborder="4" text="콘텐츠 파일 리스트" left="10" top="273" width="120" height="30"/>
+        <Grid id="grdListUpload" taborder="5" left="grdList:10" top="60" height="200" binddataset="dsListUpload" autofittype="col" nodatatext="XFDL 파일을 Drag&amp;Drop하여 추가해 주세요" ondrop="grdListUpload_ondrop" width="710" cellsizingtype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="200"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="No"/>
+                <Cell col="1" text="카테고리"/>
+                <Cell col="2" text="파일명"/>
+                <Cell col="3" text="콘텐츠제목"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:seq"/>
+                <Cell col="1" text="bind:category"/>
+                <Cell col="2" text="bind:filename"/>
+                <Cell col="3" text="bind:title"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Grid id="grdFileUpload" taborder="6" left="grdFile:10" top="310" binddataset="dsFileUpload" bottom="10" autofittype="col" width="710" cellsizingtype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="300"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="콘텐츠키"/>
+                <Cell col="1" text="파일명"/>
+                <Cell col="2" text="레벨"/>
+                <Cell col="3" text="파일타입"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:seq"/>
+                <Cell col="1" text="bind:filename"/>
+                <Cell col="2" text="bind:level"/>
+                <Cell col="3" text="bind:type"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btnFindFile" taborder="7" text="파일찾기" top="30" width="90" height="25" right="110" onclick="btnFindFile_onclick"/>
+        <Button id="btnSave" taborder="8" text="저장" top="30" width="90" height="25" right="10" onclick="btnSave_onclick"/>
+        <CheckBox id="chkFilter" taborder="9" text="선택된 콘텐츠만 보기" left="581" top="288" width="140" height="20" onchanged="chkFilter_onchanged" value="true"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList" onrowposchanged="dsList_onrowposchanged">
+        <ColumnInfo>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="category" type="STRING" size="256"/>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="created_on" type="STRING" size="256"/>
+          <Column id="updated_on" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsFile">
+        <ColumnInfo>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="level" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="content" type="BLOB" size="256"/>
+          <Column id="created_on" type="STRING" size="256"/>
+          <Column id="updated_on" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsListUpload">
+        <ColumnInfo>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="category" type="STRING" size="256"/>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="created_on" type="STRING" size="256"/>
+          <Column id="updated_on" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsFileUpload">
+        <ColumnInfo>
+          <Column id="seq" type="STRING" size="256"/>
+          <Column id="filename" type="STRING" size="256"/>
+          <Column id="level" type="STRING" size="256"/>
+          <Column id="type" type="STRING" size="256"/>
+          <Column id="content" type="BLOB" size="256"/>
+          <Column id="created_on" type="STRING" size="256"/>
+          <Column id="updated_on" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <FileDialog id="fileDialog" onclose="fileDialog_onclose"/>
+      <VirtualFile id="vfileChkFolder" onsuccess="gfnVFile_onsuccess" async="false"/>
+      <VirtualFile id="vfileRead" onsuccess="gfnVFile_onsuccess"/>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.contentList_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	this.btnSearch.click();
+	this.vfileChkFolder.set_async(false);
+	this.vfileRead.set_async(false);
+};
+
+this.btnSearch_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sId = "SEARCH";
+	var sUrl = "dev_svr::search.jsp";
+	var sInDs = "";
+	var sOutDs = "dsList=dsList dsFile=dsFile";
+	var sParam = "";
+	var sCallback = "fnCallback";
+	this.transaction(sId, sUrl, sInDs, sOutDs, sParam, sCallback);
+};
+
+this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sId = "SAVE";
+	var sUrl = "dev_svr::save.jsp";
+	var sInDs = "dsList=dsListUpload dsFile=dsFileUpload";
+	var sOutDs = "";
+	var sParam = "";
+	var sCallback = "fnCallback";
+	this.transaction(sId, sUrl, sInDs, sOutDs, sParam, sCallback);
+};
+
+this.fnCallback = function(sId, nErrorCd, sErrorMsg)
+{	
+	if(nErrorCd<0)
+	{
+		alert("["+nErrorCd+"]"+sErrorMsg);
+	}else
+	{
+		if(sId=="SEARCH")
+		{
+			//alert("성공");
+		}else if(sId=="SAVE")
+		{
+			alert("성공");
+			this.dsListUpload.clearData();
+			this.dsFileUpload.clearData();
+			this.btnSearch.click();
+		}
+	}
+};
+
+this.btnFindFile_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fileDialog.open('nexacro17', FileDialog.LOAD);
+};
+
+this.grdListUpload_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	if(e.datatype == "file")
+	{
+		this.gfnSelectContent(e.filelist);
+	}
+};
+
+this.fileDialog_onclose = function(obj:nexacro.FileDialog,e:nexacro.FileDialogEventInfo)
+{
+	if(e.reason==1)
+	{
+		this.gfnSelectContent(e.virtualfiles);
+	}
+};
+
+this.gfnSelectContent = function(objVFileList)
+{
+	var i;
+	var nLength;
+	var objVFile;
+	nLength = objVFileList.length;
+	
+	for(i=0;i<nLength;i++)
+	{
+		objVFile = objVFileList[i];
+		this.gfnAddList(objVFile);	
+	}
+}
+
+this.gfnVFile_onsuccess = function(obj:nexacro.VirtualFile,e:nexacro.VirtualFileEventInfo)
+{
+	if(e.reason=="1")
+	{
+	
+	}else if(e.reason=="3")
+	{
+		this.textdata = e.textdata;
+		this.binarydata = e.binarydata;
+	}else if(e.reason=="8")
+	{
+		this.fileattributelist = e.fileattributelist;
+	}else if(e.reason=="10")
+	{
+		this.fileisexist = e.fileisexist;
+	}
+};
+
+this.gfnAddList = function(objVFile)
+{
+	var nRow;
+	var sFileName;
+	var sFilePath;
+	var sIdx;
+	var eIdx;
+	
+	objVFile.set_async(false);
+	objVFile.addEventHandler("onsuccess", this.gfnVFile_onsuccess, this);
+	objVFile.open(objVFile.fullpath, VirtualFile.openRead);
+	objVFile.read();
+	objVFile.close();
+	
+	sFileName = objVFile.filename;
+	sFilePath = objVFile.path;
+	
+	sIdx = sFilePath.lastIndexOf("/", sFilePath.length-2)+1;
+	eIdx = sFilePath.length-1;
+	
+	this.fv_FileName = sFileName.replace(".xfdl", "");
+	this.fv_Category = sFilePath.substring(sIdx, eIdx);
+	this.fv_RootPath = sFilePath.substring(0, sIdx);
+	
+	sIdx = this.textdata.indexOf("titletext=\"")+11;
+	eIdx = this.textdata.indexOf("\"", sIdx);
+	sTitle = this.textdata.substring(sIdx, eIdx);
+	
+	nRow = this.dsListUpload.addRow();
+	this.dsListUpload.setColumn(nRow, "seq", nRow);
+	this.dsListUpload.setColumn(nRow, "category", this.fv_Category);
+	this.dsListUpload.setColumn(nRow, "filename", sFileName);
+	this.dsListUpload.setColumn(nRow, "title", sTitle);
+	
+	this.vfileRead.open(objVFile.fullpath, VirtualFile.openRead|VirtualFile.openBinary);
+	this.vfileRead.read();
+	
+	sContents = nexacro.base64Encode(this.binarydata);	
+	
+	nRow = this.dsFileUpload.addRow();
+	this.dsFileUpload.setColumn(nRow, "seq", this.dsListUpload.rowcount-1);
+	this.dsFileUpload.setColumn(nRow, "filename", sFileName);
+	this.dsFileUpload.setColumn(nRow, "level", "1");
+	this.dsFileUpload.setColumn(nRow, "type", "xfdl");
+	this.dsFileUpload.setColumn(nRow, "content", sContents);
+	
+	this.gfnCheckFiles();
+}
+
+this.gfnCheckFiles = function()
+{
+	var sPath;
+	
+	sPath = this.fv_RootPath+this.fv_Category;
+	this.gfnSearchFiles("xfdl", sPath, ".xfdl");
+	
+	sPath = this.fv_RootPath+"lib_"+this.fv_Category;
+	this.gfnSearchFiles("lib", sPath, ".xjs");
+	
+	sPath = this.fv_RootPath+"_resource_/_xcss_";
+	this.gfnSearchFiles("css", sPath, ".xcss");
+	
+	sPath = this.fv_RootPath+"_resource_/_images_/"+this.fv_FileName;
+	this.gfnSearchFiles("image", sPath, ".*");
+	
+	sPath = this.fv_RootPath+"file/"+this.fv_FileName;
+	this.gfnSearchFiles("file", sPath, ".*");
+}
+
+this.gfnSearchFiles = function(sId, sPath, sExpr)
+{
+	var nLength;
+	
+	this.vfileChkFolder.isExist(sPath);
+	
+	if(this.fileisexist==false) return false;
+	
+	this.vfileChkFolder.getFileList(sPath, sExpr, VirtualFile.findFileOnly);
+	nLength = this.fileattributelist.length;
+	this.vfileChkFolder.close();
+	
+	if(nLength!=0)
+	{
+		this.gfnAddFiles(sId, sPath, this.fileattributelist);
+	}
+}
+
+this.gfnAddFiles = function(sId, sPath, arrFiles)
+{
+	var i;
+	var nRow;
+	var sFileName;
+	var sFilePath;
+	var objVFile;
+	var sContents;
+	var nLength = arrFiles.length;
+	var nListIdx = this.dsListUpload.rowcount-1;
+	
+	for(i=0;i<nLength;i++)
+	{
+		objVFile = arrFiles[i];
+		sFileName = objVFile.filename;
+		sFilePath = sPath + "/" +sFileName;
+		
+		if(this.gfnCheckFile(sId, sFileName)==false) continue;
+		
+		this.vfileRead.open(sFilePath, VirtualFile.openRead|VirtualFile.openBinary);
+		this.vfileRead.read();
+		sContents = nexacro.base64Encode(this.binarydata);
+		this.vfileRead.close();
+		
+		nRow = this.dsFileUpload.addRow();
+		this.dsFileUpload.setColumn(nRow, "seq", nListIdx);
+		this.dsFileUpload.setColumn(nRow, "filename", sFileName);
+		this.dsFileUpload.setColumn(nRow, "level", "2");
+		this.dsFileUpload.setColumn(nRow, "type", sId);
+		this.dsFileUpload.setColumn(nRow, "content", sContents);
+	}
+}
+
+this.gfnCheckFile = function(sId, sFileName)
+{
+	if(sId=="image")return true;
+	
+	if(sId=="xfdl")
+	{
+		if(sFileName.indexOf(this.fv_FileName+"_")==0)return true;
+		else return false;
+	}else if(sId=="lib")
+	{
+		if(sFileName.indexOf("lib_"+this.fv_FileName)==0)return true;
+		else return false;
+	}else if(sId=="css")
+	{
+		if(sFileName.indexOf(this.fv_FileName)==0)return true;
+		else return false;
+	}
+}
+
+this.chkFilter_onchanged = function(obj:nexacro.CheckBox,e:nexacro.CheckBoxChangedEventInfo)
+{
+	if(e.postvalue==true)
+	{
+		var nRow = this.dsList.rowposition;
+		var sSeq = this.dsList.getColumn(nRow, "seq");
+		
+		this.dsFile.filter("contents_seq=='"+sSeq+"'");
+	}else
+	{
+		this.dsFile.filter("");
+	}
+};
+
+
+this.dsList_onrowposchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSRowPosChangeEventInfo)
+{
+	var bChk = this.chkFilter.value;
+	
+	if(bChk==true)
+	{
+		var nRow = this.dsList.rowposition;
+		var sSeq = this.dsList.getColumn(nRow, "seq");
+		
+		this.dsFile.filter("contents_seq=='"+sSeq+"'");
+	}else
+	{
+		this.dsFile.filter("");
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   		: 그리드의 체크박스를 Dataset 없이 사용하는 함수
+* @param objDs	   		: 설정할 데이터셋
+* @param objGrd		   	: 설정할 그리드
+* @param nCheckCellIdx	: 체크박스로 사용할 그리드 Cell Index
+* @return          		: 없음
+*/
+this.gfnSetCheckBoxNoDataset = function(objDs, objGrd, nCheckCellIdx)
+{
+	//체크여부 정보를 담을 Array를 사용자 변수로 설정
+	objDs.checkarray = new Array(objDs.rowcount);
+
+	//데이터셋 온로드이벤트 추가
+	objDs.addEventHandler("onload", this.gfnDataset_onload);
+
+	//체크박스를 설정할 그리드의 Cell Index를 사용자 변수로 설정
+	objGrd.checkcell = nCheckCellIdx;
+
+	//그리드 Cell Click 이벤트 추가
+	objGrd.addEventHandler("oncellclick", this.gfnGrid_oncellclick);
+
+	//그리드 Head Click 이벤트 추가
+	objGrd.addEventHandler("onheadclick", this.gfnGrid_onheadclick);
+}
+
+/**
+* @description 	   		: 원본 Dataset에서 MoveRow 사용시 Check 값도 Move 시켜주는 함수
+* @param objGrid	   	: 설정할 그리드
+* @param nStartIdx	   	: 위치를 이동하려고 하는 Row의 현재 Index
+* @param nEndIdx		: Row가 이동할 위치의 Row Index
+* @return          		: 없음
+*/
+this.gfnMoveCheckRow = function(objGrid, nStartIdx, nEndIdx)
+{
+	//그리드에 연결된 Dataset 가져오기
+	var objDs = objGrid.getBindDataset();
+
+	//Dataset에 설정된 Check Array 가져오기
+	var arrOrign = objDs.checkarray;
+
+	//이동하려는 Array 요소 잘라내기
+	var arrMove = arrOrign.splice(nStartIdx, 1);
+	var arrNew;
+
+	//이동할 위치까지 잘라내기
+	arrNew = arrOrign.splice(0, nEndIdx);
+
+	//이동하려는 Array요소를 이동할 위치에 삽입
+	arrNew[arrNew.length] = arrMove;
+
+	//이동할 위치 이후 Array요소들을 삽입
+	arrNew = arrNew.concat(arrOrign);
+
+	//Dataset Check Array에 반영
+	objDs.checkarray = arrNew;
+
+	//그리드 Expr Redraw 실행
+	objGrid.redrawExprCell();
+}
+
+/**
+* @description 	   		: 원본 Dataset에서 ExChangeRow 사용시 Check 값도 ExChangeRow 시켜주는 함수
+* @param objGrid	   	: 설정할 그리드
+* @param nStartIdx	   	: 위치를 교환할 첫번째 Index
+* @param nEndIdx		: 위치를 교환할 두번째 Index
+* @return          		: 없음
+*/
+this.gfnExChangeCheckRow = function(objGrid, nStartIdx, nEndIdx)
+{
+	//그리드에 연결된 Dataset 가져오기
+	var objDs = objGrid.getBindDataset();
+
+	//Dataset에 설정된 Check Array 가져오기
+	var arrOrign = objDs.checkarray;
+
+	var arrNew;
+	var nIdx1;
+	var nIdx2;
+	var arrMove1;
+	var arrMove2;
+
+	//Index값이 큰 요소를 먼저 처리할 수 있도록 변수에 담기
+	if(nStartIdx>nEndIdx)
+	{
+		nIdx1 = nStartIdx;
+		nIdx2 = nEndIdx;
+	}
+	else
+	{
+		nIdx1 = nEndIdx;
+		nIdx2 = nStartIdx;
+	}
+
+	//첫번째 요소 잘라내기
+	arrMove1 = arrOrign.splice(nIdx1, 1);
+
+	//두번째 요소 잘라내기
+	arrMove2 = arrOrign.splice(nIdx2, 1);
+
+	//두번째 요소 위치에 첫번째 요소 넣기
+	arrNew1 = arrOrign.splice(0, nIdx2);
+	arrNew1[arrNew1.length] = arrMove1;
+	arrNew1 = arrNew1.concat(arrOrign);
+
+	//첫번째 요소 위치에 두번째 요소 넣기
+	arrNew2 = arrNew1.splice(0, nIdx1);
+	arrNew2[arrNew2.length] = arrMove2;
+	arrNew2 = arrNew2.concat(arrNew1);
+
+	//Dataset Check Array에 반영
+	objDs.checkarray = arrNew2;
+
+	//그리드 Expr Redraw 실행
+	objGrid.redrawExprCell();
+}
+
+/**************************************************************************
+* 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+
+/**
+* @description 	   : 데이터셋 onload 이벤트
+*/
+this.gfnDataset_onload = function(obj,e)
+{
+	if(e.reason==0)
+	{
+		//데이터셋이 로드되면 checkarray 초기화
+		objDs.checkarray = new Array(obj.rowcount);
+	}
+};
+
+/**
+* @description 	   : 그리드 oncellclick 이벤트
+*/
+this.gfnGrid_oncellclick = function(obj,e)
+{
+	var objDs;
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell)
+	{
+		objDs = obj.getBindDataset();
+
+		if(objDs.checkarray[e.row]==1)
+		{
+			//체크 해제
+			objDs.checkarray[e.row] = 0;
+		}else
+		{
+			//체크 설정
+			objDs.checkarray[e.row] = 1;
+		}
+
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell();
+	}
+};
+
+/**
+* @description 	   : 그리드 onheadclick 이벤트
+*/
+this.gfnGrid_onheadclick = function(obj,e)
+{
+	var i;
+	var objDs;
+	var nChkVal;
+
+	//클릭된 cell이 checkcell이면
+	if(e.cell==obj.checkcell)
+	{
+		objDs = obj.getBindDataset();
+		nChkVal = obj.getCellText(-1, e.cell);
+
+		if(nChkVal==1)nChkVal = 0;
+		else nChkVal = 1;
+
+		//Head의 체크 상태 변경
+		obj.setCellProperty("head", e.cell, "text", nChkVal);
+
+		//Body의 체크 상태 변경
+		for(i=0;i<objDs.rowcount;i++)
+		{
+			objDs.checkarray[i] = nChkVal;
+		}
+
+		//Expr이 바로 반영되도록 실행
+		obj.redrawExprCell();
+	}
+};
+
+this.dsList_onrowsetchanged = function(obj,e)
+{
+	var arrOrign;
+	var arrNew;
+
+	//Row 추가/삽입 시
+	if(e.reason==12)
+	{
+		//추가된 위치에 Array요소 삽입
+		arrOrign = obj.checkarray;
+		arrNew = arrOrign.splice(0, e.row);
+		arrNew[arrNew.length] = null;
+		arrNew = arrNew.concat(arrOrign);
+		obj.checkarray = arrNew;
+	}
+	//Row 삭제 시
+	else if(e.reason==20)
+	{
+		//삭제된 위치의 Array 요소 잘라내기
+		obj.checkarray.splice(e.row, 1);
+	}
+	//Delete All/ClearData/Clear
+	else if(e.reason==22||e.reason==23||e.reason==24)
+	{
+		//Check Array 초기화
+		obj.checkarray = new Array(obj.rowcount);
+	}
+};
+]]></Script>

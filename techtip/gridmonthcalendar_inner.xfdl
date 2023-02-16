@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="monthcalendar_inner" width="210" height="200" titletext="New Form">
+    <Layouts>
+      <Layout height="200" mobileorientation="landscape" width="210">
+        <Button id="btnPrev" taborder="1" text="&lt;" left="10" top="10" width="30" height="30"/>
+        <Static id="stYear" taborder="0" text="Static00" left="btnPrev:10" top="10" height="30" width="110" textAlign="center"/>
+        <Button id="btnNext" taborder="2" text="&gt;" top="10" width="30" height="30" left="170"/>
+        <Button id="btn1" taborder="3" text="1" left="10" top="50" width="40" height="40"/>
+        <Button id="btn2" taborder="4" text="2" left="60" top="50" width="40" height="40"/>
+        <Button id="btn3" taborder="5" text="3" left="110" top="50" width="40" height="40"/>
+        <Button id="btn4" taborder="6" text="4" top="50" width="40" height="40" left="160"/>
+        <Button id="btn5" taborder="7" text="5" left="10" top="100" width="40" height="40"/>
+        <Button id="btn6" taborder="8" text="6" left="60" top="100" width="40" height="40"/>
+        <Button id="btn7" taborder="9" text="7" left="110" top="100" width="40" height="40"/>
+        <Button id="btn8" taborder="10" text="8" top="100" width="40" height="40" left="160"/>
+        <Button id="btn9" taborder="11" text="9" left="10" width="40" height="40" top="150"/>
+        <Button id="btn10" taborder="12" text="10" left="60" width="40" height="40" top="150"/>
+        <Button id="btn11" taborder="13" text="11" left="110" width="40" height="40" top="150"/>
+        <Button id="btn12" taborder="14" text="12" width="40" height="40" top="150" left="160"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.monthcalendar_inner_onclick = function(obj:nexacro.Form,e:nexacro.ClickEventInfo)
+{
+	trace(e.fromobject.name);
+};
+
+this.btn3_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+};
+]]></Script>
+  </Form>
+</FDL>

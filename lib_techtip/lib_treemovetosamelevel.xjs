@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	    	: 트리 동일 레벨 이동 함수
+* @param objDs  		: 이동시킬 데이터셋
+* @param nOldRow   		: 이동시킬 Row Index
+* @param nNewRow   		: 이동 될 Row Index
+* @return           	: 없음
+*/
+this.gfnMoveToSameLevelTree = function(objDs, nOldRow, nNewRow)
+{
+	//이동시킬 Row의 Tree Level 정보 가져오기
+	var nOldLvl = nexacro.toNumber(objDs.getColumn(nOldRow, "MENU_LVL"));
+	
+	var nOldLastRow;
+	var nNewStartRow;
+	var nNewStartLvl;
+	var nNewLastRow;
+	var nCnt;
+	
+	//위에있는Row를 밑으로 이동시킬 경우
+	//Drop된 위치 다음으로 이동시킴
+	if(nOldRow<nNewRow)
+	{
+		//Drag한 그룹의 마지막 Row 찾기
+		nOldLastRow = objDs.findRowExpr("nexacro.toNumber(MENU_LVL)<="+nOldLvl, nOldRow+1);
+		
+		//마지막 Row가 없을 경우 데이터셋의 마지막 Row로 설정
+		if(nOldLastRow==-1)nOldLastRow = objDs.rowcount-1;
+		
+		//Drag한 그룹의 Row갯수 구하기
+		nCnt = nOldLastRow - nOldRow;
+		
+		//Drop한 Row 기준으로 같은 레벨의 Row 찾기 함수 호출
+		nNewStartRow = this.gfnFindRowReverse(objDs, nOldLvl, nNewRow);
+		
+		//찾은 Row의 MENU_LVL 구하기
+		nNewStartLvl = objDs.getColumn(nNewStartRow, "MENU_LVL");
+		
+		//레벨이 다를경우 이동 X
+		if(nOldLvl!=nNewStartLvl)
+		{
+			trace("이동불가");
+			return false;
+		}
+		
+		//Drop할 그룹의 마지막 Row 찾기
+		nNewLastRow = objDs.findRowExpr("nexacro.toNumber(MENU_LVL)<="+nOldLvl, nNewRow+1);
+		
+		//마지막Row가 없을 경우 데이터셋의 마지막 Row로 설정
+		if(nNewLastRow==-1)nNewLastRow = objDs.rowcount-1;
+		
+		//findRowExpr의 조건식이 마지막 Row의 다음 Row를 찾는 로직이므로
+		//-1로 보정
+		else nNewLastRow = nNewLastRow-1;
+		
+		//Move Row 실행
+		for(var i=0;i<nCnt;i++)
+		{
+			objDs.moveRow(nOldRow, nNewLastRow);
+		}
+	}
+	//밑에 있는 Row를 위로 이동시킬 경우
+	//Drop된 위치 위로 이동시킴
+	else
+	{
+		//Drag한 그룹의 마지막 Row 찾기
+		nOldLastRow = objDs.findRowExpr("nexacro.toNumber(MENU_LVL)<="+nOldLvl, nOldRow+1);
+		
+		//마지막 Row가 없을 경우 데이터셋의 마지막 Row로 설정
+		if(nOldLastRow==-1)nOldLastRow = objDs.rowcount;
+		
+		//Drag한 그룹의 Row갯수 구하기
+		nCnt = nOldLastRow - nOldRow;
+		
+		//Drop한 Row 기준으로 같은 레벨의 Row 찾기 함수 호출
+		nNewStartRow = this.gfnFindRowReverse(objDs, nOldLvl, nNewRow);
+		
+		//찾은 Row의 MENU_LVL 구하기
+		nNewStartLvl = objDs.getColumn(nNewStartRow, "MENU_LVL");
+		
+		//레벨이 다를경우 이동 X
+		if(nOldLvl!=nNewStartLvl)
+		{
+			trace("이동불가");
+			return false;
+		}
+		
+		//이동할 위치가 없을 경우 마지막으로 이동되도록 보정
+		if(nNewStartRow==-1)nNewStartRow = objDs.rowcount-1;
+		else nNewStartRow = nNewStartRow;
+		
+		//Move Row 실행
+		for(var i=0;i<nCnt;i++)
+		{
+			objDs.moveRow(nOldRow+i, nNewStartRow+i);
+		}
+	}
+}
+
+/**
+* @description 	    	: 기준Row로 부터 같은 레벨을 역순으로 찾는 함수
+* @param objDs  		: 데이터를 찾을 데이터셋
+* @param nLvl   		: 찾을 레벨
+* @param nRow   		: 찾기 시작할 Row Index
+* @return           	: 없음
+*/
+this.gfnFindRowReverse = function(objDs, nLvl, nRow)
+{
+	for(var i=nRow;i>=0;i--)
+	{
+		if(nexacro.toNumber(objDs.getColumn(i, "MENU_LVL"))<=nLvl)return i;
+	}
+	
+	return -1;
+}
+
+/**
+* @description 	    	: Drag 이미지 생성 함수
+* @param nTreeStatus  	: Tree Row 상태 값(0:collapse, 0:expand, default : item)
+* @param sText   		: Tree Row 텍스트 값
+* @return           	: 이미지 오브젝트
+*/
+this.gfnMakeDragMoveImg = function(nTreeStatus, sText)
+{
+	//Drag 이미지 가져오기
+	var objDragImg = this.components["imgDrag"];
+	
+	//이미 존재할 경우 삭제
+	if(objDragImg)
+	{
+		this.removeChild("imgDrag");
+	}
+	
+	//이미지 오브젝트 만들기
+	objDragImg = new ImageViewer("imgDrag", 0, 0, 200, 16, null, null);
+	this.addChild("imgDrag", objDragImg); 
+	objDragImg.set_visible(false);
+	
+	//Tree Row 상태에 따라 이미지 변경
+	if(nTreeStatus==0)objDragImg.set_image("theme://images/img_WF_Treecollapse.png");
+	else if(nTreeStatus==1)objDragImg.set_image("theme://images/img_WF_Treeexpand.png");
+	else objDragImg.set_image("theme://images/img_WF_Treeitem.png");
+	
+	//이미지 오브젝트 스타일 설정
+	objDragImg.set_imagealign("left middle");
+	objDragImg.set_text(sText);
+	objDragImg.set_border("0px none");
+	objDragImg.show(); 
+	
+	//이미지 오브젝트 리턴
+	return objDragImg;
+}]]></Script>

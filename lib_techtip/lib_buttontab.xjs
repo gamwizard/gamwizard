@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 		: Button Tab 초기화 함수
+* @param objConfig  : Button Tab을 만들기 위한 설정정보
+* @param objTab     : Tab Button 영역을 만들 Div 정보
+* @param objTabPage : Tab Page 영역을 만들 Div 정보
+* @return 			: 없음
+*/
+this.gfnInitButtonTab = function(objConfig, objTab, objTabPage)
+{
+	//설정정보를 Tab Button Div에 사용자 속성으로 등록
+	objTab.config = objConfig;
+	
+	//Tab Page Div 정보를 Button Div에 사용자 속성으로 등록
+	objTab.tabpage = objTabPage;
+	
+	//화면에 표시될 TabButton의 시작 Index 값 초기화
+	objTab.starttabidx = 0;
+	
+	//화면에 표시될 TabButton의 마지막 Index 값 초기화
+	objTab.endtabidx = 0;
+	
+	//생성된 Tab의 Id List 속성 값 초기화
+	objTab.tablist = [];
+	
+	//리사이즈시 발생할 이벤트 설정
+	objTab.addEventHandler("onsize", this.gfnButtonTab_onsize, this);
+	
+	//기본 필요한 컴포넌트 생성 함수 호출
+	//이전/다음/삭제 버튼
+	this.gfnCreateCommonButtonTab(objTab);
+}
+
+/**
+* @description 		: Button Tab 기본 필요한 컴포넌트 생성 함수
+* @param objTab     : Tab Button 영역을 만들 Div 정보
+* @return 			: 없음
+*/
+this.gfnCreateCommonButtonTab = function(objTab)
+{
+	//이전버튼 설정정보 가져오기
+	var prevbutton = objTab.config.size.prevbutton;
+	
+	//다음버튼 설정정보 가져오기
+	var nextbutton = objTab.config.size.nextbutton;
+	
+	//전체닫기버튼 설정정보 가져오기
+	var closeallbutton = objTab.config.size.closeallbutton;
+	
+	var nLeft;
+	var nTop;
+	var nWidth;
+	var nHeight;
+	var nRight = 0;
+	
+	//전체 닫기 버튼 생성
+	nLeft = closeallbutton.left;
+	nTop = closeallbutton.top;
+	nWidth = closeallbutton.width;
+	nHeight = closeallbutton.height;
+	
+	objBtn = new Button("btnCloseAll", null, nTop, nWidth, nHeight, nRight, null);
+	objTab.form.addChild(objBtn.name, objBtn);
+	objBtn.set_text("C");
+	objBtn.addEventHandler("onclick", this.gfnButtonTab_closeallonclick, this);
+	objBtn.show();
+	
+	//다음 버튼 생성
+	nRight = nRight + nWidth;
+	nTop = nextbutton.top;
+	nWidth = nextbutton.width;
+	nHeight = nextbutton.height;
+	
+	objBtn = new Button("btnNext", null, nTop, nWidth, nHeight, nRight, null);
+	objTab.form.addChild(objBtn.name, objBtn);
+	objBtn.set_text(">");
+	objBtn.addEventHandler("onclick", this.gfnButtonTab_nextonclick, this);
+	objBtn.show();
+	
+	//이전 버튼 생성
+	nRight = nRight + nWidth;
+	nTop = nextbutton.top;
+	nWidth = nextbutton.width;
+	nHeight = nextbutton.height;
+	
+	objBtn = new Button("btnPrev", null, nTop, nWidth, nHeight, nRight, null);
+	objTab.form.addChild(objBtn.name, objBtn);
+	objBtn.set_text("<");
+	objBtn.addEventHandler("onclick", this.gfnButtonTab_prevonclick, this);
+	objBtn.show();
+}
+
+/**
+* @description 		: Button Tab TabPage 추가 생성 함수
+* @param sId     	: 추가할 TabPage의 ID
+* @param objTab     : TabPage를 추가할 Button Tab의 정보
+* @param sName     	: 추가할 TabPage Button에 표시될 텍스트
+* @param sPageUrl   : 추가할 TabPage에 연결할 URL 정보
+* @return 			: 없음
+*/
+this.gfnAddButtonTab = function(sId, objTab, sName, sPageUrl)
+{
+	//탭버튼 설정정보 가져오기
+	var tabbutton = objTab.config.size.tabbutton;
+	
+	//닫기버튼 설정정보 가져오기
+	var extrabutton = objTab.config.size.extrabutton;
+	
+	var objBtn;
+	var objExtraBtn;
+	var objPageDiv;
+		
+	var nLeft = tabbutton.left;
+	var nTop = tabbutton.top;
+	var nWidth = tabbutton.width;
+	var nHeight = tabbutton.height;
+	
+	var nExtBtnLeft = extrabutton.left;
+	var nExtBtnTop = extrabutton.top;
+	var nExtBtnWidth = extrabutton.width;
+	var nExtBtnHeight = extrabutton.height;
+	
+	//생성된 Tab의 Id List 가져오기
+	var objTabList = objTab.tablist;
+	
+	//생성된 Tab의 TabPage Div 정보 가져오기
+	var objTabPage = objTab.tabpage;
+	
+	//이미 추가된 Id가 있을 경우
+	if(this.gfnGetArrayIndex(objTabList, sId)!=-1)
+	{
+		//해당 TabPage 활성화 함수 호출
+		this.gfnActiveButtonTab(sId, objTab);
+	}else
+	{
+		//Tab Id List에 신규 Id 추가
+		objTab.tablist[objTab.tablist.length] = sId;
+		
+		//탭 버튼 생성
+		objBtn = new Button("btn_" + sId, nLeft, nTop, nWidth, nHeight, null, null);
+		
+		objTab.form.addChild(objBtn.name, objBtn);
+		objBtn.set_enable(true);
+		objBtn.set_visible(true);
+		objBtn.set_text(sName);
+		objBtn.addEventHandler("onclick", this.gfnButtonTab_buttononclick, this);
+		objBtn.show();
+		
+		//닫기 버튼 생성
+		objExtraBtn = new Button("extBtn_" + sId, nExtBtnLeft, nExtBtnTop, nExtBtnWidth, nExtBtnHeight, null, null);
+		objTab.form.addChild(objExtraBtn.name, objExtraBtn);
+		objExtraBtn.set_visible(true);
+		objExtraBtn.set_text("X");
+		objExtraBtn.addEventHandler("onclick", this.gfnButtonTab_extrabuttononclick, this);
+		objExtraBtn.show();
+		objExtraBtn.bringToFront();
+		
+		//TabPage 생성
+		objPageDiv = new Div("divPage_" + sId, 0, 0, null, null, 0, 0);
+		objTabPage.form.addChild(objPageDiv.name, objPageDiv);
+		
+		//TabPage에 연결될 URL정보를 사용자변수에 설정
+		//생성될 때 set_url을 할 경우 여러 페이지를 동시에 추가시 성능 저하가 발생할 수 있으므로
+		//set_url은 gfnActiveButtonTab() 함수에서 설정하도록 함
+		//필요에 따라 수정 가능
+		//objPageDiv.set_url(sPageUrl);
+		objPageDiv.pageurl = sPageUrl;
+		objPageDiv.show();
+		
+		//현재 추가된 TabPage를 Active 상태로 설정하기 위해
+		//targetid로 설정
+		objTab.targetid = sId;
+		
+		//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+		this.gfnCalcButtonTab("ADD", objTab);
+	}
+}
+
+/**
+* @description 		: 화면에 표현될 Tab의 정보를 계산하기 위한 함수
+* @param calcType   : Tab 정보를 계산할 타입 정보
+                      (추가, 이전, 다음, 리사이즈, 활성화)
+* @param objDiv     : Tab의 정보를 계산할 Button Tab의 정보
+* @return 			: 없음
+*/
+this.gfnCalcButtonTab = function(calcType, objDiv)
+{
+	//생성된 Tab의 Id List 가져오기
+	var objTableList = objDiv.tablist;
+	
+	//생성된 Tab의 갯수
+	var nCount = objTableList.length;
+	
+	//버튼들의 설정정보 가져오기
+	var tabbutton = objDiv.config.size.tabbutton;
+	var extrabutton = objDiv.config.size.extrabutton;
+	var prevbutton = objDiv.config.size.prevbutton;
+	var nextbutton = objDiv.config.size.nextbutton;
+	var closeallbutton = objDiv.config.size.closeallbutton;
+	
+	var objBtn;
+	var objExtraBtn;
+	
+	var nLeft = tabbutton.left;
+	var nTop = tabbutton.top;
+	var nWidth = tabbutton.width;
+	var nHeight = tabbutton.height;
+	
+	var nExtBtnLeft = extrabutton.left;
+	var nExtBtnTop = extrabutton.top;
+	var nExtBtnWidth = extrabutton.width;
+	var nExtBtnHeight = extrabutton.height;
+	
+	//탭버튼을 표현할 수 있는 Width 값 구하기
+	//Tab Button 영역 사이즈 - 이전버튼 사이즈 - 다음버튼 사이즈 - 닫기버튼 사이즈
+	var nCommonWidth = objDiv.getOffsetWidth() - prevbutton.width - nextbutton.width - closeallbutton.width;
+	
+	//활성화로 설정된 탭버튼 가져오기
+	var objTargetBtn = objDiv.form.components["btn_" + objDiv.targetid];
+	
+	//활정화로 설정된 TabPage 가져오기
+	var objTargetDiv = objDiv.tabpage.form.components["divPage_" + objDiv.targetid];
+	
+	//현재화면에 표현 가능한 탭버튼의 갯수 구하기
+	objDiv.maxtabcount = nexacro.floor(nCommonWidth/nWidth);
+	
+	//활성화로 설정된 탭버튼의 Index 가져오기
+	nIdx = this.gfnGetArrayIndex(objTableList, objDiv.targetid);
+	
+	//TabPage 추가 시
+	if(calcType == "ADD") {
+		objDiv.endtabidx = nCount - 1;
+		objDiv.starttabidx = objDiv.endtabidx - objDiv.maxtabcount + 1;
+		if(objDiv.starttabidx < 0) { objDiv.starttabidx = 0; }
+	} 
+	//다음 버튼 클릭 시
+	else if(calcType == "NEXT") {
+		objDiv.endtabidx += 1;
+		objDiv.starttabidx = objDiv.endtabidx - objDiv.maxtabcount + 1;
+		if(objDiv.starttabidx < 0) { objDiv.starttabidx = 0; }
+	} 
+	//이전 버튼 클릭 시
+	else if(calcType == "PREV") {
+		objDiv.starttabidx -= 1;
+		objDiv.endtabidx = objDiv.starttabidx + objDiv.maxtabcount - 1;
+		if(objDiv.endtabidx >= nCount) objDiv.endtabidx = nCount - 1;
+	} 
+	//화면 사이즈 변경 및 재계산 필요시
+	else if(calcType == "RESIZE") {
+		var nIdx = -1;
+		if(nCount <= objDiv.maxtabcount) {
+			objDiv.starttabidx = 0;
+			objDiv.endtabidx = objDiv.starttabidx + objDiv.maxtabcount - 1;
+			if(objDiv.endtabidx >= nCount) objDiv.endtabidx = nCount - 1;
+		} else {
+			if(((nIdx + 1) - objDiv.maxtabcount) >= 0) {
+				objDiv.endtabidx = nIdx;
+				objDiv.starttabidx = objDiv.endtabidx - objDiv.maxtabcount + 1;
+			} else {
+				objDiv.starttabidx = 0;
+				objDiv.endtabidx = objDiv.starttabidx + objDiv.maxtabcount - 1;
+				if(objDiv.endtabidx >= nCount) objDiv.endtabidx = nCount - 1;
+			}
+		}
+	}
+	//화면 활성화 시
+	else if(calcType == "ACTIVE")
+	{
+		if(nIdx < objDiv.starttabidx) {
+		objDiv.starttabidx = nIdx;
+		objDiv.endtabidx = objDiv.starttabidx + objDiv.maxtabcount - 1;
+		if(objDiv.endtabidx == nCount) objDiv.endtabidx = nCount - 1;
+		} else if(nIdx > objDiv.endtabidx) {
+			objDiv.endtabidx = nIdx;
+			objDiv.starttabidx = objDiv.endtabidx - objDiv.maxtabcount + 1;
+			if(objDiv.starttabidx < 0) { objDiv.starttabidx = 0; }
+		}
+	}
+	
+	//기존 활성화 정보를 초기화 하기 위한 함수 호출
+	this.gfnVisibleButtonTab(objDiv);
+	
+	//현재 화면에 표현 가능한 탭버튼/닫기버튼의 위치/Visible 속성 설정
+	for(i=objDiv.starttabidx; i<=objDiv.endtabidx; i++) {
+		objBtn 		= objDiv.form.components["btn_" + objTableList[i]];
+		objExBtn 	= objDiv.form.components["extBtn_" + objTableList[i]];
+		
+		objBtn.move(nLeft, nTop);
+		objBtn.set_visible(true);
+		objExBtn.move(nLeft+nExtBtnLeft, nTop+nExtBtnTop);
+		objExBtn.set_visible(true);
+		
+		nLeft += nWidth-1;
+	}
+	
+	//시작 위치가 처음일 경우 이전버튼 비활성화
+	if(objDiv.starttabidx <= 0) { objDiv.form.btnPrev.set_enable(false); }
+		
+	//시작 위치가 처음이 아닐경우 이전버튼 활성화	
+	else                   { objDiv.form.btnPrev.set_enable(true); }
+	
+	//마지막 위치가 탭버튼의 갯수와 같을 경우 다음버튼 비활성화
+	if((objDiv.endtabidx + 1) == nCount) { objDiv.form.btnNext.set_enable(false); }
+	
+	//마지막 위치가 탭버튼의 갯수와 다를 경우 다음버튼 비활성화
+	else                              { objDiv.form.btnNext.set_enable(true); }
+	
+	//TabPage가 존재할 경우 전체닫기 버튼 활성화
+	if(nCount > 0) { objDiv.form.btnCloseAll.set_enable(true); } 
+	
+	//TabPage가 존재하지 않을 경우 전체닫기 버튼 비활성화
+	else { objDiv.form.btnCloseAll.set_enable(false); }
+	
+	//활성화 할 TabPage가 존재할 경우 
+	//탭버튼 Enalbe false
+	//TabPage visible true
+	if(objTargetBtn != null) {
+		objTargetBtn.set_enable(false);
+		objTargetDiv.set_visible(true);
+	}
+	
+	//스크롤 갱신
+	objDiv.form.resetScroll();
+}
+
+/**
+* @description 		: 기존 활성화 정보를 초기화 하기 위한 함수
+* @param objDiv     : Tab의 정보를 계산할 Button Tab의 정보
+* @return 			: 없음
+*/
+this.gfnVisibleButtonTab = function(objDiv)
+{
+	//초기화 값 설정
+	var bVisible = false;
+	
+	//Tab Button 영역의 컴포넌트 가져오기
+	var objComps = objDiv.form.components;
+	
+	//Tab Button 영역의 컴포넌트 갯수 가져오기
+	var nCount = objComps.length;
+	
+	//탭버튼/닫기버튼 visible false
+	for(var i=0; i<nCount; i++) {
+		if(objComps[i] instanceof Button && objComps[i].name.indexOf("btn_")>=0) {
+			objComps[i].set_enable(true);
+			objComps[i].set_visible(bVisible);
+		} else if(!bVisible && objComps[i] instanceof Button && objComps[i].name.indexOf("extBtn_")>=0) {
+			objComps[i].set_visible(bVisible);
+		}
+	}
+	
+	//Tab Page 영역의 컴포넌트 가져오기
+	objComps = objDiv.tabpage.form.components;
+	
+	//Tab Page 영역의 컴포넌트 갯수 가져오기
+	nCount = objComps.length;
+	
+	//TabPage visible false
+	for(var i=0; i<nCount; i++) {
+		if(objComps[i] instanceof Div && objComps[i].name.indexOf("divPage_")>=0) {
+			objComps[i].set_visible(bVisible);
+		} 
+	}
+}
+
+/**
+* @description 		: TabPage를 활성화 처리하는 함수
+* @param sId     	: 활성화할 TabPage Id 정보
+* @param objTab     : Button Tab의 정보
+* @return 			: 없음
+*/
+this.gfnActiveButtonTab = function(sId, objTab)
+{
+	//생성된 Tab의 Id List 가져오기
+	var objTabList = objTab.tablist;
+	
+	//활성화할 탭버튼의 Index 가져오기
+	var nIdx = this.gfnGetArrayIndex(objTabList, sId);
+	
+	var objPageDiv;
+	
+	//해당 TabPage를 Active 상태로 설정하기 위해 targetid로 설정
+	objTab.targetid = sId;
+	
+	//해당 TabPage 가져오기
+	objPageDiv = objTab.tabpage.form.components["divPage_" + sId];
+	
+	//해당 TabPage의 연결될 url 설정
+	objPageDiv.set_url(objPageDiv.pageurl);
+	
+	//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+	this.gfnCalcButtonTab("ACTIVE", objTab);
+}
+
+/**
+* @description 		: TabPage를 삭제 처리하는 함수
+* @param sId     	: 삭제할 TabPage Id 정보
+* @param objTab     : Button Tab의 정보
+* @return 			: 없음
+*/
+this.gfnDeleteButtonTab = function(sId, objTab)
+{
+	var objBtn
+	var objExtraBtn;
+	
+	//생성된 Tab의 Id List 가져오기
+	var objTabList = objTab.tablist;
+	
+	//Tab Page 영역 정보 가져오기
+	var objTabPage = objTab.tabpage;
+	
+	var sPrevId;
+	
+	//삭제할 TabPage의 Index 정보 가져오기
+	var nIdx = this.gfnGetArrayIndex(objTabList, sId);
+	
+	//삭제할 TabPage가 없을 경우 Return
+	if(nIdx < 0) {
+		return;
+	}
+	
+	//탭버튼 정보 가져오기
+	objBtn 			= objTab.form.components["btn_" + sId];
+	
+	//닫기버튼 정보 가져오기
+	objBtnEx 		= objTab.form.components["extBtn_" + sId];
+	
+	//TabPage 정보 가져오기
+	objPageDiv 		= objTabPage.form.components["divPage_" + sId];
+	
+	//탭버튼 삭제
+	objTab.form.removeChild(objBtn.name);
+	objBtn.destroy();
+	objBtn = null;
+	
+	//닫기버튼 삭제
+	objTab.form.removeChild(objBtnEx.name);
+	objBtnEx.destroy();
+	objBtnEx = null;
+	
+	//TabPage 삭제
+	objTabPage.form.removeChild(objPageDiv.name);
+	objPageDiv.destroy();
+	objPageDiv = null;
+	
+	//Tab의 Id List에서 해당 Id 제거
+	objTabList.splice(nIdx, 1);
+	
+	//재계산을 위해 endtabidx를 -1로 초기화
+	objTab.endtabidx = -1;
+	
+	//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+	this.gfnCalcButtonTab("RESIZE", objTab);
+	
+	//TabPage가 없으면 Return
+	if(objTabList.length==0)return;
+	
+	//삭제된 TabPage의 이전 페이지를 활성화로 설정
+	//이전페이지가 없을 경우 0번째 Index 페이지를 활성화
+	if(nIdx<=0)sPrevId = objTabList[0];
+	else sPrevId = objTabList[nIdx-1];
+	
+	//TabPage를 활성화 처리하는 함수 호출
+	this.gfnActiveButtonTab(sPrevId, objTab);
+}
+
+/**
+* @description 		: 전체 TabPage를 삭제 처리하는 함수
+* @param objTab     : Button Tab의 정보
+* @return 			: 없음
+*/
+this.gfnDeleteAllButtonTab = function(objTab)
+{
+	var i;
+	
+	//생성된 Tab의 Id List 가져오기
+	var objTabList = objTab.tablist;
+	
+	//생성된 Tab의 갯수 가져오기
+	var nCount = objTabList.length;
+	
+	for(i=nCount-1;i>=0;i--)
+	{
+		//TabPage를 삭제 처리하는 함수 호출
+		this.gfnDeleteButtonTab(objTabList[i], objTab);
+	}
+}
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+ 
+/**
+* @description 	   : Button Tab 사이즈 변경 이벤트
+*/
+this.gfnButtonTab_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+	this.gfnCalcButtonTab("RESIZE", obj);
+};
+
+/**
+* @description 	   : 탭버튼 클릭 이벤트
+*/
+this.gfnButtonTab_buttononclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	var sId = obj.name.replace("btn_", "");
+	var objTab = obj.parent.parent;
+	
+	//해당 TabPage 활성화 함수 호출
+	this.gfnActiveButtonTab(sId, objTab);
+}
+
+/**
+* @description 	   : 닫기버튼 클릭 이벤트
+*/
+this.gfnButtonTab_extrabuttononclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	var sId = obj.name.replace("extBtn_", "");
+	var objTab = obj.parent.parent;
+	
+	//TabPage를 삭제 처리하는 함수 호출
+	this.gfnDeleteButtonTab(sId, objTab);
+}
+
+/**
+* @description 	   : 이전버튼 클릭 이벤트
+*/
+this.gfnButtonTab_prevonclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	var objTab = obj.parent.parent;
+	
+	//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+	this.gfnCalcButtonTab("PREV", objTab);
+}
+
+/**
+* @description 	   : 다음버튼 클릭 이벤트
+*/
+this.gfnButtonTab_nextonclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	var objTab = obj.parent.parent;
+	
+	//화면에 표현될 Tab의 정보를 계산하기 위한 함수 호출
+	this.gfnCalcButtonTab("NEXT", objTab);
+}
+
+/**
+* @description 	   : 전체닫기버튼 클릭 이벤트
+*/
+this.gfnButtonTab_closeallonclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	var objTab = obj.parent.parent;
+	
+	//전체 TabPage를 삭제 처리하는 함수 호출
+	this.gfnDeleteAllButtonTab(objTab);
+}]]></Script>

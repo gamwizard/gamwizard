@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+*  techtip dataset search form sample library
+*  @MenuPath	lib_techtip > lib_datasetsearch
+*  @FileName	lib_datasetsearch.xjs 
+*  @Desction	dataset find data and change decorate info
+*******************************************************************************
+*  2019.06.21		nana			최초 생성
+*  2020.03.02		nana			수정
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+/**
+* @description form onload --> define config object and addEventHandler
+* @param objForm : form,
+*		 objConfig : {objGrid, columns, color}
+* @return
+*/
+this.fnInitDatasetSearch = function (objForm,objConfig)
+{
+	objConfig.objDs		= objForm.objects[objConfig.objGrid.binddataset];
+	objConfig.objCopyDs = this.fnCreateCopyDataset(objForm,objConfig.objDs);
+	
+	objForm.config = objConfig;
+	
+	this.fnSetGridStatus(objConfig.objGrid,objConfig.columns);
+};
+
+/**
+* @description create dataset (copy dataset)
+* @param obj : form, objDs:objDataset
+* @return objTempDs : dataset 'dsTemp'
+*/
+this.fnCreateCopyDataset = function(obj, objDs)
+{
+	//create dataset name ('dsCopy' + random 4 number)
+	var sDatasetId = "dsCopy" + nexacro.floor(Math.random(),4) * 10000;	// 0 ~ 9999
+	
+	//create dataset
+	var objTempDs = new Dataset;
+	objTempDs.set_name(sDatasetId);
+	//obj.addChild(sDatasetId, objTempDs);
+	
+	objTempDs.set_enableevent(false);
+	objTempDs.copyData(objDs);
+	objTempDs.set_enableevent(true);
+	
+	return objTempDs;
+}
+
+/**
+* @description grid cell set_displytype("decoratetext")
+* @param objForm : form,
+*		 objColumns : columns list
+* @return
+*/
+this.fnSetGridStatus = function (objGrid, objColumns)
+{
+	var nCellCnt = objGrid.getCellCount("body");
+	
+	var sBindId = "";
+	for(var i=0; i<nCellCnt; i++)
+	{
+		sBindId = objGrid.getCellProperty( "body", i, "text" );
+		sBindId = sBindId.replace("bind:","");
+		
+		if(objColumns.hasOwnProperty(sBindId))
+		{
+			objGrid.setCellProperty( "body", i, "displaytype", "decoratetext" );
+		}
+	}
+};
+
+/**
+* @description dataset set_column(add decorate info)
+* @param obj : form,
+*		 strSearch : search value
+* @return
+*/
+this.fnSetDecorate = function (obj, strSearch)
+{
+	var orgDs  = obj.config.objDs;
+	var copyDs = obj.config.objCopyDs;
+	var sType   = "find";
+	
+	var sRegExpress  = eval("/("+strSearch+")/gi");	//Regular Expression
+	var sChangeColor = "<fc v='"+obj.config.color+"'>" + "$&" + "</fc>";
+	
+	if(this.gfnIsNull(strSearch))
+	{
+		sType = "init";
+	}
+	
+	orgDs.set_enableevent(false);
+	orgDs.set_filterstr("");
+	
+	orgDs.clearData();
+	orgDs.copyData(copyDs);
+	
+	var strOrg, strChg;
+	
+	for(var i=0; i<orgDs.getRowCount(); i++)
+	{
+		
+		for(var k=0; k<orgDs.getColCount(); k++)
+		{
+			strOrg = orgDs.getColumn(i,k);
+		
+			if(sType == "init")
+			{
+				strChg = strOrg;
+			}
+			else if(sType == "find")
+			{
+				if(typeof(strOrg) == "string")
+				{
+					strChg = strOrg.replace(sRegExpress,sChangeColor);
+				}
+				else
+				{
+					strChg = strOrg;
+				}
+			}			
+			orgDs.setColumn(i,k,strChg);
+		}
+	}	
+	orgDs.set_enableevent(true);
+};
+
+/**************************************************************************
+*  공통 함수 처리 영역
+   해당 함수의 경우 프로젝트 사용 시 프로젝트 공통함수로 전환을 권장 드립니다.
+**************************************************************************/
+/**
+* @description 파리미터 값이 Null 인지 체크하는 함수
+* @param {All} val – 체크할 문자열
+* @return {boolean} Val이 undefined, null, NaN, "", Array.length=0 인 경우 = true 
+															  이 외의 경우 = false
+*/
+this.gfnIsNull = function (Val)
+{
+	if (new String(Val).valueOf() == "undefined") return true;
+	if (Val == null) return true;
+	if (("x" + Val == "xNaN") && (new String(Val.length).valueOf() == "undefined")) return true;
+	if (Val.length == 0) return true;
+
+	return false;
+}]]></Script>

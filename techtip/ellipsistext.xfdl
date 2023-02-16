@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="ellipsistext" width="400" height="200" titletext="New Form" onload="ellipsistext_onload">
+    <Layouts>
+      <Layout height="200" width="400">
+        <Static id="stEllipsisText" taborder="0" text="가나다라 aaaa --- ;;;가나다라 aaaa --- ;;;가나다라 aaaa --- ;;;가나다라 aaaa --- ;;;가나다라 aaaa --- ;;;" left="10" top="10" height="60" border="1px solid #000000" right="10" onsize="stEllipsisText_onsize"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > ellipsistext
+*  techtip Ellipsis Text (Static 컴포넌트 사이즈에 맞춰 말줄임표 표시)
+*  @FileName	ellipsistext.xfdl 
+*******************************************************************************
+*  2022.09.14		투비대원			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+**************************************************************************/
+include "lib_techtip::lib_ellipsistext.xjs";
+
+ /**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+/**
+ * @description Form onload 이벤트 처리
+*/
+this.ellipsistext_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//Ellipsis 초기화 함수 호출
+	this.fnInitEllipsisText(this.stEllipsisText);
+};
+
+/**
+ * @description Static 컴포넌트 onsize 이벤트 처리
+*/
+this.stEllipsisText_onsize = function(obj:nexacro.Static,e:nexacro.SizeEventInfo)
+{
+	//Ellipsis 설정 함수
+	var sConvertText = this.fnSetEllipsisText(obj);
+	
+	//Ellipsis 설정된 Text로 설정
+	obj.set_text(sConvertText);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+]]></Script>
+  </Form>
+</FDL>

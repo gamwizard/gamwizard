@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[this.gfnInitWindowCalendar = function(objCal, objBtn)
+{
+	//윈도우달력 드롭다운 팝업 만들기 함수 호출
+	var objWindowCalPop = this.gfnCreateWindowCalPop(objCal);
+
+	//Calendar 컴포넌트에 드롭다운 버튼을 사용자 변수에 설정
+	objCal.targetbtn = objBtn;
+
+	//Calendar 컴포넌트에 드룹다운 팝업을 사용자 변수에 설정
+	objCal.targetpop = objWindowCalPop;
+
+	//드롭다운 버튼 동작시 실행될 Calendar 컴포넌트를 사용자 변수에 설정
+	objBtn.targetcal = objCal;
+
+	//윈도우달력 팝업 동작시 실행될 Calendar 컴포넌트를 사용자 변수에 설정
+	objWindowCalPop.targetcal = objCal;
+
+	//기본 드롭다운 버튼 숨기기
+	objCal.set_buttonsize("0");
+
+	//드롭다운 버튼 클릭 이벤트 생성
+	objBtn.addEventHandler("onclick", this.gfnWindowCalendarDropButton_onclick, this);
+}
+
+/**
+* @description 	     : 윈도우 달력 드롭다운 팝업 만들기 함수
+* @param objEdit     : 월력 설정 할 Calendar 컴포넌트
+* @return            : 없음
+*/
+this.gfnCreateWindowCalPop = function(objCal)
+{
+	var i;
+	var rtn;
+	var objWindowCalPop;
+	var sWindowCalPopId = objCal.id+"_calendarpop";
+	
+	//기존에 생성된 팝업이 있을 경우 가져오기
+	if(this.gfnIsNull(this.components[sWindowCalPopId])==false)
+	{
+		//기존에 생성된 팝업을 리턴값으로 설정
+		rtn = this.components[sWindowCalPopId];
+	}
+	//기존에 생성된 팝업이 없을 경우 만들기
+	else
+	{
+		//드롭다운 팝업용 PopupDiv 생성
+		objWindowCalPop = new PopupDiv(sWindowCalPopId, 0, 0, 0, 0);
+		this.addChild(objWindowCalPop.name, objWindowCalPop);
+
+		//프로젝트 디자인에 맞게 설정 필요
+		objWindowCalPop.set_background("#ffffff");
+		objWindowCalPop.set_border("1px solid #000000");
+
+		objWindowCalPop.show();
+
+		//url연결 후 후속 처리를 위해 sync로 변경
+		objWindowCalPop.set_async(false);
+		objWindowCalPop.set_url("techtip::windowcalendar_inner.xfdl");
+		
+		//생성된 드롭다운 팝업을 리턴값으로 설정
+		rtn = objWindowCalPop;
+	}
+
+	//드롭다운 팝업 리턴
+	return rtn;
+};
+
+/**
+* @description 	   : 윈도우 달력 드롭다운 버튼 onclick 이벤트
+*/
+this.gfnWindowCalendarDropButton_onclick = function(obj,e)
+{
+	var objtargetcal = obj.targetcal;
+
+	//드롭다운 리스트 호출 함수 실행
+	this.gfnShowDropWindowCalPop(objtargetcal);
+};
+
+/**
+* @description 	 : 드롭다운 팝업 호출 함수
+* @param obj     : 윈도우 달력으로 설정 할 Calendar 컴포넌트
+* @return        : 없음
+*/
+this.gfnShowDropWindowCalPop = function(obj)
+{
+	var nLeft;
+	var nTop;
+	var objDropButton = obj.targetbtn;
+	var objTargetMonthCalPop = obj.targetpop;
+	var sValue = obj.value;
+
+	//드롭다운 팝업 데이터 변경 함수 호출
+	objTargetMonthCalPop.form.fnChangeWindowCalPopValue(sValue);
+
+	//표현될 드롭다운리스트의 사이즈 계산
+	nLeft = 0;
+	nTop = objDropButton.getOffsetHeight();
+	nWidth = 350;
+	nHeight = 350;
+
+	//드롭다운리스트 호출
+	objTargetMonthCalPop.trackPopupByComponent(obj, nLeft, nTop, nWidth, nHeight);
+};
+]]></Script>

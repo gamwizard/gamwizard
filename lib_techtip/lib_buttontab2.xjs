@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+/**
+ * @description Tab 버튼 클릭 시
+*/
+this.btn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//버튼 리스트 오브젝트 가져오기
+	var objTargetDiv = obj.parent.parent;
+	
+	//버튼 컴포넌트의 Id에서 버튼 Id 추출
+	var sId = obj.id.replace("btn_", "");
+	
+	//버튼 선택 함수 실행
+	this.gfnSelectBtn(objTargetDiv, sId);
+	
+};
+
+/**
+ * @description Tab Extra 버튼 클릭 시
+*/
+this.btn_extra_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//버튼 리스트 오브젝트 가져오기
+	var objTargetDiv = obj.parent.parent;
+	
+	//닫기 버튼 컴포넌트 Id에서 버튼 Id 추출
+	var sId = obj.id.replace("btn_", "");
+		sId = sId.replace("_extra", "");
+	
+	//버튼 삭제 함수 실행
+	this.gfnDelBtn(objTargetDiv, sId);
+};
+
+/**
+ * @description 버튼리스트 Div 리사이즈 시
+*/
+this.divMdi_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	//위치 계산 함수 실행
+	this.gfnRePositionBtn(obj, "resize");
+};
+
+/**
+* @description 		: Tab 버튼 초기화 함수
+* @param objDiv  	: Tab 버튼 리스트를 생성할 Div 오브젝트
+* @param objConfig  : Tab 버튼 구성에 필요한 설정정보
+* @return 			: 없음
+*/
+this.gfnInitButtonTab2 = function(objDiv, objConfig)
+{
+	objDiv.btninfo = objConfig;
+	
+	objDiv.addEventHandler("onsize", this.divMdi_onsize, this);
+}
+
+/**
+* @description 		: Tab 버튼 추가 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @param sId  		: Tab 버튼 Id
+* @param sBtnText   : Tab 버튼 Text
+* @return 			: 없음
+*/
+this.gfnAddBtn = function(objDiv, sId, sBtnText)
+{
+	//버튼 리스트에 버튼 정보 추가
+	var nLength = objDiv.btninfo.btnlist.push({"id":sId, "text":sBtnText});
+	
+	//index, position이 추가된 버튼으로 Focus되도록 설정
+	objDiv.btninfo.index = nLength-1;
+	objDiv.btninfo.position = nLength-1;
+	
+	//버튼 리스트 갱신 함수 실행
+	this.gfnRedrawBtn(objDiv);
+}
+
+/**
+* @description 		: Tab 버튼 삭제 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @param sId  		: Tab 버튼 Id
+* @return 			: 없음
+*/
+this.gfnDelBtn = function(objDiv, sId)
+{
+	//삭제할 버튼의 Index 찾기
+	var nIdx = this.gfnFindIndex(objDiv.btninfo.btnlist, sId);
+	 
+	//버튼 삭제 시 다음으로 포커스될 컴포넌트 계산
+	if(objDiv.btninfo.index>nIdx)objDiv.btninfo.index--;
+	else if(objDiv.btninfo.btnlist.length-1==nIdx)objDiv.btninfo.index--;
+	
+	if(objDiv.btninfo.index<0)objDiv.btninfo.index = 0;
+	
+	//버튼리스트에서 버튼 정보 삭제
+	objDiv.btninfo.btnlist.splice(nIdx, 1);
+	
+	//버튼 리스트 갱신 함수 실행
+	this.gfnRedrawBtn(objDiv);
+}
+
+/**
+* @description 		: Tab 버튼 선택 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @param sId  		: Tab 버튼 Id
+* @return 			: 없음
+*/
+this.gfnSelectBtn = function(objDiv, sId)
+{
+	//선택할 버튼의 Index 찾기
+	var nIdx = this.gfnFindIndex(objDiv.btninfo.btnlist, sId);
+	
+	//버튼리스트의 index 값 변경
+	objDiv.btninfo.index = nIdx;
+	
+	//버튼 리스트 갱신 함수 실행
+	this.gfnRedrawBtn(objDiv);
+}
+
+/**
+* @description 		: 이전 버튼 선택 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @return 			: 없음
+*/
+this.gfnSelectPrev = function(objDiv)
+{
+	//위치 계산 함수 실행
+	this.gfnRePositionBtn(objDiv, "prev");
+}
+
+/**
+* @description 		: 다음 버튼 선택 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @return 			: 없음
+*/
+this.gfnSelectNext = function(objDiv)
+{
+	//위치 계산 함수 실행
+	this.gfnRePositionBtn(objDiv, "next");
+}
+
+/**
+* @description 		: Tab 버튼 리스트 갱신 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @return 			: 없음
+*/
+this.gfnRedrawBtn = function(objDiv)
+{
+	//버튼의 기본 좌표값
+	var nLeft = 0;
+	var nTop = 0;
+	var nWidth = 0;
+	var nHeight = 30;
+	
+	//Extra 버튼의 기본 좌표값
+	var nExtraTop = 5;
+	var nExtraWidth = 20;
+	var nExtraHeight = 20;
+	
+	//버튼정보 오브젝트에서 필요한 정보 가져오기
+	var nSelectIdx = objDiv.btninfo.index;
+	var nGap = objDiv.btninfo.btngap;
+	var arrBtnList = objDiv.btninfo.btnlist;
+	var nBtnCnt = arrBtnList.length;
+	
+	var sBeforBtn;
+	var objBeforBtn;
+	
+	var objBtn;
+	var objBtnExtra;
+	
+	var sId;
+	var sText;
+	
+	//버튼 리스트용 Div.InnerForm 오브젝트 변수로 가져오기
+	var objTargetForm = objDiv.form;
+	
+	//버튼 리스트 초기화
+	for(var i=objTargetForm.components.length-1;i>=0;i--)
+	{
+		sId = objTargetForm.components[i].id;
+		objBtn = objTargetForm.removeChild(sId);
+		objBtn.destroy();
+		objBtn = null;
+	}
+	
+	//버튼의 갯수만큼 Loop
+	for(var i=0;i<nBtnCnt;i++)
+	{
+		//첫번째 버튼이 아닐 경우
+		//버튼이 생성될 Left 좌표값을 계산
+		if(i!=0)
+		{
+			sId = arrBtnList[i-1].id;
+			sBeforBtn = "btn_"+sId;
+			objBeforBtn = objTargetForm.components[sBeforBtn];
+			nLeft = objBeforBtn.getOffsetLeft() + objBeforBtn.getOffsetWidth() + nGap;
+		}
+		
+		//버튼 컴포넌트 Id 및 텍스트 만들기
+		sId = "btn_"+arrBtnList[i].id;
+		sText = arrBtnList[i].text;
+		
+		//버튼 컴포넌트 생성
+		objBtn = new Button(sId, nLeft, nTop, nWidth, nHeight, null, null);
+		objTargetForm.addChild(objBtn.id, objBtn);
+		objBtn.set_fittocontents("width");
+		objBtn.set_text(sText);
+		objBtn.set_padding("0px 35px 0px 10px");
+		objBtn.show();
+		objTargetForm.resetScroll();
+		
+		//현재 버튼이 Focus되어야할 버튼일 경우 
+		//선택상태로 변경
+		if(i==nSelectIdx)objBtn.setSelectStatus(true);
+		
+		//Extra 버튼 컴포넌트 생성
+		objBtnExtra = new Button(sId+"_extra", sId+":"+(-nExtraWidth-5)+"px", nExtraTop, nExtraWidth, nExtraHeight, null, null);
+		objTargetForm.addChild(objBtnExtra.id, objBtnExtra);
+		objBtnExtra.set_text("X");
+		objBtnExtra.show();
+		
+		//버튼 이벤트 핸들러 등록
+		objBtn.addEventHandler("onclick", this.btn_onclick, this);
+		objBtnExtra.addEventHandler("onclick", this.btn_extra_onclick, this);
+	}
+	
+	//위치 계산 함수 실행
+	this.gfnRePositionBtn(objDiv, "resize");
+}
+
+/**
+* @description 		: Tab 버튼 위치 계산 함수
+* @param objDiv  	: Tab 버튼 리스트 Div 오브젝트
+* @param sType  	: 리사이즈에 의한 위치 계산인지 여부
+* @return 			: 없음
+*/
+this.gfnRePositionBtn = function(objDiv, sType)
+{
+	var nLeft = 0;
+	
+	//버튼정보에서 필요한 정보 가져오기
+	var nPosition;
+	var nGap = objDiv.btninfo.btngap;
+	var arrBtnList = objDiv.btninfo.btnlist;
+	var nCnt = arrBtnList.length;
+	var bShowAllBtn = objDiv.btninfo.showallbutton;
+	
+	//모든 버튼을 합친 Width 값
+	var nFullSize = 0;
+	
+	//Left 값이 0보다 작은 버튼을 합친 Width 값
+	var nBeforSize = 0;
+	
+	//현재 Div에 보이는 버튼을 합친 Width 값
+	var nSelectSize = 0;
+	
+	//Div의 Width 값
+	var nParentSize = objDiv.getOffsetWidth();
+	var nBtnSize;
+	
+	//시작 위치에 표현될 버튼의 Index
+	var nStartIdx;
+	
+	//마지막 위치에 표현될 버튼의 Index
+	var nLastIdx = 0;
+	
+	//버튼 리스트를 표현할 Div.InnerForm 변수로 가져오기
+	var objTargetForm = objDiv.form;
+	
+	var sBtnId;
+	var objBtn;
+	
+	if(sType=="prev")
+	{
+		//첫번째 위치의 버튼이 보이는 영역에 포함되어 있을 경우
+		//prev 실행 X
+		if(objDiv.btninfo.position==0)return;
+		
+		objDiv.btninfo.position--;
+		nPosition = objDiv.btninfo.position
+	}
+	else if(sType=="next")
+	{
+		sBtnId = "btn_"+[arrBtnList[nCnt-1].id];
+		objBtn = objTargetForm.components[sBtnId];
+		
+		//마지막 위치의 버튼이 보이는 영역에 포함되어 있을 경우 
+		//next 실행 X
+		if(bShowAllBtn==true&&objBtn.bvisible==true)return;
+		
+		if(bShowAllBtn==false&&objBtn.visible==true)return;
+		
+		objDiv.btninfo.position++;
+		nPosition = objDiv.btninfo.position
+	}else
+	{
+		nPosition = objDiv.btninfo.position
+	}
+	
+	//position 값이 0보다 작을 경우 0으로 보정
+	if(nPosition<0)
+	{	
+		nPosition = 0;
+		objDiv.btninfo.position = nPosition;
+	}
+	
+	nStartIdx = nPosition;
+	
+	//버튼의 갯수만큼 Loop
+	//nFullSize, nBeforSize, nSelectSize를 구하기
+	for(var i=0;i<nCnt;i++)
+	{
+		sBtnId = "btn_"+[arrBtnList[i].id];
+		objBtn = objTargetForm.components[sBtnId];
+		nBtnSize = objBtn.getOffsetWidth();
+		
+		nFullSize += nBtnSize+nGap;
+		
+		if(nPosition>i)
+		{
+			nBeforSize +=nBtnSize+nGap;
+		}
+	}
+	
+	for(var i=nPosition;i<nCnt;i++)
+	{
+		sBtnId = "btn_"+[arrBtnList[i].id];
+		objBtn = objTargetForm.components[sBtnId];
+		nBtnSize = objBtn.getOffsetWidth();
+		
+		if(nParentSize>(nSelectSize+nBtnSize+nGap))
+		{
+			nLastIdx = i;
+			nSelectSize += nBtnSize+nGap;
+		}else
+		{
+			break;
+		}
+	}
+	
+	//버튼 리스트의 사이즈보다 전체 버튼의 사이즈가 작을경우
+	//모든 버튼이 버튼리스트에 표현이 가능할 경우
+	//position 등을 0으로 초기화
+	if(nParentSize>nFullSize)
+	{
+		objDiv.btninfo.position = 0;
+		nBeforSize = 0;
+	}else
+	{
+		//버튼을 표현할 시작위치가 0이 아닐 경우
+		//sType이 resize일 경우
+		//첫번째 Loop에서 계산한 값보다 더 많은 버튼이 표현 가능할 경우 보정
+		//이전/다음 이동시에도 보정할 경우 원하는 버튼이 표현되지 않을 수 있으므로 예외처리
+		if(nPosition!=0&&sType=="resize")
+		{
+			//현재 position보다 앞에 위치한 버튼의 갯수만큼 Loop
+			for(var i=nPosition-1;i>=0;i--)
+			{
+				sBtnId = "btn_"+[arrBtnList[i].id];
+				objBtn = objTargetForm.components[sBtnId];
+				nBtnSize = objBtn.getOffsetWidth();
+				
+				//현재 보일수 있는 버튼의 사이즈 + 버튼 사이즈를 추가해도 
+				//Div Width를 초과하지 않을 경우
+				if(nParentSize>(nSelectSize+nBtnSize+nGap))
+				{
+					nStartIdx = i;
+					nSelectSize += nBtnSize + nGap;
+					nBeforSize -= nBtnSize + nGap;
+				}else
+				{
+					break;
+				}
+			}
+			
+			//보정된 값이 있을 경우 
+			//버튼 정보 오브젝트의 position 값 갱신
+			if(objDiv.btninfo.position!=nStartIdx)objDiv.btninfo.position = nStartIdx;
+		}
+	}
+	
+	//첫번째 컴포넌트가 위치할 Left값 설정
+	nLeft = -nBeforSize;
+	
+	//버튼의 갯수만큼 Loop
+	for(var i=0;i<nCnt;i++)
+	{
+		//버튼의 위치 변경
+		sBtnId = "btn_"+[arrBtnList[i].id];
+		objBtn = objTargetForm.components[sBtnId];
+		objBtnExtra = objTargetForm.components[sBtnId+"_extra"];
+		nBtnSize = objBtn.getOffsetWidth();
+		
+		objBtn.setOffsetLeft(nLeft);
+		nLeft += nBtnSize + nGap;
+		
+		//현재 표현될수 있는 버튼의 Index에  포함되지 않을 경우에 대한 처리
+		if(i<objDiv.btninfo.position||i>nLastIdx)
+		{
+			//표현할 경우
+			if(bShowAllBtn==true)
+			{
+				objBtn.bvisible = false;
+			}
+			//표현하지 않을 경우
+			else
+			{
+				objBtn.set_visible(false);
+				objBtnExtra.set_visible(false);
+			}
+		}else
+		{
+			//표현할 경우
+			if(bShowAllBtn==true)
+			{
+				objBtn.bvisible = false;
+			}
+			//표현하지 않을 경우
+			else
+			{
+				objBtn.set_visible(false);
+				objBtnExtra.set_visible(false);
+			}
+		}
+	}
+	
+	//위치 갱신을 위해 resetScroll
+	objTargetForm.resetScroll();
+}
+
+//Array에서 Id로 Index 찾기 함수
+this.gfnFindIndex = function(arrData, sId)
+{
+	var nIdx = -1;
+	
+	for(var i=0;i<arrData.length;i++)
+	{
+		if(arrData[i].id == sId)
+		{
+			return i;
+		}
+	}
+	
+	return nIdx;
+}]]></Script>

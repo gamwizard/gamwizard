@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="functiontransaction" width="1280" height="720" titletext="Transaction (통신 공통함수 include)">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Static id="Static01" taborder="0" text="1. gfnTransaction" left="20" top="39" width="990" height="229" border="1px solid"/>
+        <Static id="Static00" taborder="1" text="(string, string, string, string, string, string, boolean)&#13;&#10;⇒ ( &#13;&#10;      &quot;search&quot;, &#13;&#10;      &quot;http://서비스URL&quot;, &#13;&#10;      &quot;dsInput=dsInput &quot;, &#13;&#10;      &quot;dsOutput=dsOutput &quot;, &#13;&#10;      &quot;arg1=&quot; + nexacro.wrapQuote(&quot;인자값1&quot;), &#13;&#10;      &quot;fnCallback&quot;, &#13;&#10;      true&#13;&#10;)" left="231" top="39" width="299" height="220"/>
+        <Button id="Button01" taborder="2" text="실행" left="535" top="138" width="56" height="22" onclick="Button00_onclick"/>
+        <Static id="st_1_result01" taborder="3" left="600" top="39" width="404" height="220" text="(function) fnCallback.call(&#13;&#10;                                             &quot;search&quot;,        //svcID&#13;&#10;                                             0,                     //errorCode&#13;&#10;                                             &quot;SUCCESS&quot;     //errorMsg&#13;&#10;                                            )"/>
+        <Static id="Static06" taborder="4" text="Arguments:  ( Type ) ⇒ ( Value )" left="231" top="0" width="370" height="40"/>
+        <Static id="Static07" taborder="5" text="Method" left="20" top="0" width="212" height="40"/>
+        <Static id="Static08" taborder="6" text="Result: (Type) Vaule" left="600" top="0" width="404" height="40"/>
+        <TextArea id="TextArea00" taborder="7" left="21" top="280" width="987" height="426"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "lib::lib_base.xjs";
+include "lib::lib_transaction.xjs";
+
+// 1 gfnTransaction  사용 예제
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+ 	var strSvcId    = "search";
+	var strSvcUrl   = "http://서비스URL";
+	var inData      = "dsInput=dsInput ";
+	var outData     = "dsOutput=dsOutput ";
+	var strArg      = "arg1=" + nexacro.wrapQuote("인자값1");
+	var callBackFnc = "fnCallback";
+	var isAsync   	= true;
+	
+	this.gfnTransaction(strSvcId , 		// transaction을 구분하기 위한 svc id값
+						strSvcUrl , 	// trabsaction을 요청할 주소
+						inData , 		// 입력값으로 보낼 dataset id , a=b형태로 실제이름과 입력이름을 매칭
+						outData , 		// 처리결과값으로 받을 dataset id, a=b형태로 실제이름과 입력이름을 매칭
+						strArg, 		// 입력값으로 보낼 arguments, strFormData="20190101"
+						callBackFnc, 	// transaction의 결과를 받을 Function 이름
+						isAsync); 		// 비동기통신 여부 [생략가능]
+};
+
+//사용자 콜백함수
+this.fnCallback = function(svcID,errorCode,errorMsg)
+{
+	// 에러 시 화면 처리 내역
+	if(errorCode != 0)
+	{
+		return;
+	}
+	
+	switch(svcID)
+	{
+		case "search":
+			this.TextArea00.set_value(this.dsOutput.saveXML());			
+			break;
+	}
+};]]></Script>
+    <Objects>
+      <Dataset id="dsInput">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column0">command1</Col>
+            <Col id="Column1">1</Col>
+          </Row>
+          <Row>
+            <Col id="Column0">command2</Col>
+            <Col id="Column1">2</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsOutput"/>
+    </Objects>
+  </Form>
+</FDL>

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MetaInfo version="2.0">
+  <Object id="checkcombo">
+    <ObjectInfo inheritance="nexacro.CompositeComponent" classname="nexacro.checkcombo" shorttypename="checkcombo" csstypename="checkcombo" csscontrolname="checkcomboControl" group="Component" subgroup="Component ( default )" csspseudo="true" container="true" composit="" tabstop="true" cssstyle="true" contents="false" formats="false" contentseditor="" defaultwidth="150" defaultheight="20" registration="allow" edittype="" useinitvalue="true" popup="false" edittypecomponent="" dblclickevent="onclick" requirement="IE8,IE9,IE10,IE11,Edge,Chrome,Safari,Firefox,Opera,Windows nexacro Browser,macOS nexacro Browser,Android nexacro Browser,iOS nexacro Browser,Android Default Web Browser,iOS Default Web Browser" description="CheckBox를 이용해 멀티선택이 가능한 Combo"/>
+    <PropertyInfo>
+      <Property name="value" edittype="String" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Action" normalpropertyname=""/>
+      <Property name="text" edittype="String" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Action"/>
+      <Property name="checkdataset" edittype="DatasetID" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Binding"/>
+      <Property name="codecolumn" edittype="ColumnID" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Binding"/>
+      <Property name="valuecolumn" edittype="ColumnID" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Binding"/>
+      <Property name="checkcolumn" edittype="ColumnID" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Binding"/>
+      <Property name="buttonsize" edittype="String" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Appearance"/>
+      <Property name="itemheight" edittype="String" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Appearance"/>
+      <Property name="displayrowcount" edittype="String" defaultvalue="" unused="false" readonly="false" initonly="false" hidden="false" control="false" style="false" expr="false" bind="false" deprecated="false" mandatory="false" group="Appearance"/>
+    </PropertyInfo>
+    <CSSInfo>
+      <PropertyInfo/>
+    </CSSInfo>
+    <StatusInfo/>
+    <MethodInfo>
+      <Method name="getComboEditor" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="getComboEditor()">
+          <Return type="Object" description="Check Combo의 Edit 컴포넌트를 리턴한다"/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+      <Method name="getComboDropButton" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="getComboDropButton()">
+          <Return type="Object" description="Check Combo의 DropDownButton 컴포넌트를 리턴한다"/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+      <Method name="getComboList" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="getComboList()">
+          <Return type="Object" description="Check Combo의 Combo List 컴포넌트를 리턴한다"/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+      <Method name="getComgoListGrid" unused="false" async="false" usecontextmenu="false" deprecated="false">
+        <Syntax text="getComgoListGrid()">
+          <Return type="Object" description="Check Combo의 List Grid 컴포넌트를 리턴한다"/>
+          <Arguments/>
+        </Syntax>
+      </Method>
+    </MethodInfo>
+    <EventHandlerInfo>
+      <EventHandler name="canchange" group="Event" unused="false" deprecated="false" description="value 속성값이 변경될 때 발생하는 이벤트">
+        <Syntax text="canchange(obj:nexacro.checkcombo, e:nexacro.ChangeEventInfo)">
+          <Return type="Boolean" description=""/>
+          <Arguments>
+            <Argument name="obj" type="nexacro.checkcombo" in="true" out="false" option="false" variable="false" description=""/>
+            <Argument name="e" type="nexacro.ChangeEventInfo" in="true" out="false" option="false" variable="false" description=""/>
+          </Arguments>
+        </Syntax>
+      </EventHandler>
+      <EventHandler name="onchanged" group="Event" unused="false" deprecated="false" description="value 속성값이 변경된 후 발생하는 이벤트">
+        <Syntax text="onchanged(obj:nexacro.checkcombo, e:nexacro.ChangeEventInfo)">
+          <Return type="" description=""/>
+          <Arguments>
+            <Argument name="obj" type="nexacro.checkcombo" in="true" out="false" option="false" variable="false" description=""/>
+            <Argument name="e" type="nexacro.ChangeEventInfo" in="true" out="false" option="false" variable="false" description=""/>
+          </Arguments>
+        </Syntax>
+      </EventHandler>
+    </EventHandlerInfo>
+  </Object>
+</MetaInfo>

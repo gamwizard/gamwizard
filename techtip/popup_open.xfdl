@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popup_open" width="400" height="250" titletext="popup open" onload="popup_open_onload" onclose="popup_open_onclose">
+    <Layouts>
+      <Layout height="250" mobileorientation="landscape" width="400">
+        <GroupBox id="GroupBox03" text="popup open" taborder="0" enableevent="false" left="10" top="10" height="230" right="10"/>
+        <TextArea id="popupTextArea" taborder="1" left="20" top="35" height="155" right="20"/>
+        <Button id="btnSend" taborder="2" text="send" left="92" width="90" height="30" onclick="btnSend_onclick" bottom="21"/>
+        <Button id="btnCall" taborder="3" text="Call Method" left="190" width="90" height="30" onclick="btnCall_onclick" bottom="21"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  techtip modeless window form sample 
+*  @MenuPath    techtip > popup_open
+*  @FileName	popup_open.xfdl 
+*  @Desction	modeless window form sample
+*******************************************************************************
+*  2019.07.18		nana			최초 생성
+*******************************************************************************
+*/
+this.popup_open_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//trace(this.opener.name);
+	
+	//get arguments
+	if (this.parent.objArguments != null) 
+	{
+		var objTextArea = this.parent.objArguments;
+		this.popupTextArea.set_value(objTextArea.text);
+	}
+};
+
+this.popup_open_onclose = function(obj:nexacro.Form,e:nexacro.CloseEventInfo)
+{
+	//form close
+};
+
+this.btnSend_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.opener.ParentTextarea.set_value(this.modalTextarea.value);
+	this.opener.config.objTextArea.set_value(this.popupTextArea.value);
+};
+
+this.btnCall_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//this.opener.getMethod_parent();
+	this.opener.config.objFunction.call();
+};
+
+this.sendMethod_child = function(strText)
+{
+	this.popupTextArea.set_value(strText);
+};
+]]></Script>
+  </Form>
+</FDL>

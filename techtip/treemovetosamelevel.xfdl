@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="treemovetosamelevel" width="400" height="600" titletext="New Form" onload="treemovetosamelevel_onload" ondragmove="treemovetosamelevel_ondragmove">
+    <Layouts>
+      <Layout height="600" mobileorientation="landscape" width="400">
+        <Grid id="grdTree" taborder="0" left="10" top="10" binddataset="dsTree" autofittype="col" treeusecheckbox="false" bottom="10" right="10" onlbuttondown="grdTree_onlbuttondown" onlbuttonup="grdTree_onlbuttonup" treeinitstatus="expand,null" ontreestatuschanged="grdTree_ontreestatuschanged" ondrag="grdTree_ondrag" ondrop="grdTree_ondrop">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24"/>
+              </Rows>
+              <Band id="body">
+                <Cell text="bind:MENU_NM" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:MENU_LVL" treestate="bind:TREE_STATUS"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsTree" firefirstcount="0" firenextcount="0">
+        <ColumnInfo>
+          <Column id="MENU_GRP" type="STRING" size="256"/>
+          <Column id="MENU_NM" type="STRING" size="256"/>
+          <Column id="MENU_ID" type="STRING" size="256"/>
+          <Column id="MENU_LVL" type="STRING" size="256"/>
+          <Column id="TREE_STATUS" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="MENU_GRP">00</Col>
+            <Col id="MENU_NM">투비소프트</Col>
+            <Col id="MENU_ID">1100</Col>
+            <Col id="MENU_LVL">0</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">POC</Col>
+            <Col id="MENU_NM">경영전략본부</Col>
+            <Col id="MENU_ID">1110</Col>
+            <Col id="MENU_LVL">1</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">POC</Col>
+            <Col id="MENU_NM">사업본부</Col>
+            <Col id="MENU_ID">1120</Col>
+            <Col id="MENU_LVL">1</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">POC</Col>
+            <Col id="MENU_NM">사업그룹</Col>
+            <Col id="MENU_ID">1130</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">POC</Col>
+            <Col id="MENU_NM">사업1팀</Col>
+            <Col id="MENU_ID">1140</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">POC</Col>
+            <Col id="MENU_NM">사업2팀</Col>
+            <Col id="MENU_ID">1150</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">사업3팀</Col>
+            <Col id="MENU_ID">1200</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">사업4팀</Col>
+            <Col id="MENU_ID">1210</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">기술융합그룹</Col>
+            <Col id="MENU_ID">1211</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">프리세일즈팀</Col>
+            <Col id="MENU_ID">1212</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">마케팅팀</Col>
+            <Col id="MENU_ID">1213</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">교육서비스팀</Col>
+            <Col id="MENU_ID">1220</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_ID">1221</Col>
+            <Col id="MENU_NM">기술융합팀</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_ID">1222</Col>
+            <Col id="MENU_NM">사업전략팀</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">SAMPLE</Col>
+            <Col id="MENU_NM">사업지원팀</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_ID">1223</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">기술지원본부</Col>
+            <Col id="MENU_LVL">1</Col>
+            <Col id="MENU_GRP">CS</Col>
+            <Col id="MENU_ID">0100</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_NM">제품컨설팅그룹</Col>
+            <Col id="MENU_GRP">CS</Col>
+            <Col id="MENU_ID">0110</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">사업관리팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CS</Col>
+            <Col id="MENU_ID">0111</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">제품컨설팅1팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CM</Col>
+            <Col id="MENU_ID">0200</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">제품컨설팅2팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CM</Col>
+            <Col id="MENU_ID">0210</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CM</Col>
+            <Col id="MENU_NM">제품컨설팅3팀</Col>
+            <Col id="MENU_ID">0211</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">UX디자인팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">GL</Col>
+            <Col id="MENU_ID">0300</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_NM">기술지원그룹</Col>
+            <Col id="MENU_GRP">GL</Col>
+            <Col id="MENU_ID">0310</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">고객지원팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_ID">0400</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">테크솔루션팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_ID">0410</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_NM">일본사업지원팀</Col>
+            <Col id="MENU_ID">0411</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_NM">기술지원팀</Col>
+            <Col id="MENU_ID">0412</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_NM">솔루션사업본부</Col>
+            <Col id="MENU_ID">0420</Col>
+            <Col id="MENU_LVL">1</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_ID">0430</Col>
+            <Col id="MENU_NM">솔루션사업그룹</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">솔루션사업팀</Col>
+            <Col id="MENU_ID">0440</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">WS개발팀</Col>
+            <Col id="MENU_ID">0450</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">오픈소스사업그룹</Col>
+            <Col id="MENU_ID">0460</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">솔루션사업지원팀</Col>
+            <Col id="MENU_ID">0480</Col>
+            <Col id="MENU_GRP">DP</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="TREE_STATUS"></Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">연구개발본부</Col>
+            <Col id="MENU_LVL">1</Col>
+            <Col id="MENU_GRP">FX</Col>
+            <Col id="MENU_ID">0500</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">제품구현1그룹</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_GRP">FX</Col>
+            <Col id="MENU_ID">0510</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">nx17팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">EI</Col>
+            <Col id="MENU_ID">0600</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">nx14팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">EI</Col>
+            <Col id="MENU_ID">0610</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">제품구현2그룹</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_GRP">DL</Col>
+            <Col id="MENU_ID">0700</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">런타임팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">DL</Col>
+            <Col id="MENU_ID">0710</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">개발환경팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CI</Col>
+            <Col id="MENU_ID">0800</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">제품구현3그룹</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_GRP">CI</Col>
+            <Col id="MENU_ID">0810</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">융합기술개발팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">TF</Col>
+            <Col id="MENU_ID">0900</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">융합기술기획팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">TF</Col>
+            <Col id="MENU_ID">0910</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">품질보증그룹</Col>
+            <Col id="MENU_LVL">2</Col>
+            <Col id="MENU_GRP">CL</Col>
+            <Col id="MENU_ID">1000</Col>
+          </Row>
+          <Row>
+            <Col id="MENU_NM">품질보증팀</Col>
+            <Col id="MENU_LVL">3</Col>
+            <Col id="MENU_GRP">CL</Col>
+            <Col id="MENU_ID">1010</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > treemovetosamelevel
+*  techtip  Tree move to same Level (트리 동일 레벨 이동)
+
+*  @FileName	treemovetosamelevel.xfdl 
+*******************************************************************************
+*  2021.08.11		투비대원		최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+ include "lib_techtip::lib_treemovetosamelevel.xjs";
+ 
+ /**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+ /**
+ * @description 그리드 ondrag 시 처리내역
+*/
+this.grdTree_ondrag = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	//Drag & Drop시 필요한 데이터 오브젝트 만들기
+	var objUesrData = {
+							"targetGrid" : obj,
+							"targetRow" : e.row,
+							"dragImg" : null
+					  };
+	
+	//Tree Row 가져오기
+	var nTreeRow = obj.getTreeRow(e.row);
+	
+	//Tree Row Text 가져오기
+	var sTreeText = obj.getCellText(e.row, 0);
+	
+	//Tree 상태 정보 가져오기
+	var nTreeStatus = obj.getTreeStatus(nTreeRow);
+	
+	//Drag 이미지 생성 함수 호출
+	var objDragImg = this.gfnMakeDragMoveImg(nTreeStatus, sTreeText);
+	
+	//Drag 이미지를 Drag & Drop 오브젝트에 설정
+	objUesrData.dragImg = objDragImg;
+	
+	//Drag & Drop 오브젝트를 userdata에 설정
+	e.userdata = objUesrData;
+	
+	return true;
+};
+
+/**
+ * @description 폼 ondragmove 시 처리내역
+*/
+this.treemovetosamelevel_ondragmove = function(obj:nexacro.Form,e:nexacro.DragEventInfo)
+{
+	//Drag 이미지 가져오기
+	var objDragImg = e.userdata.dragImg;
+	
+	//Drag 이미지가 있을 경우
+	if(objDragImg)
+	{
+		//Drag 이미지 표현
+		objDragImg.set_visible(true);
+		objDragImg.move(e.clientx + 15, e.clienty + 15);
+	}
+};
+
+/**
+ * @description 그리드 ondrop 시 처리내역
+*/
+this.grdTree_ondrop = function(obj:nexacro.Grid,e:nexacro.GridDragEventInfo)
+{
+	var nDragRow;
+	var nDropRow;
+	var objGrid;
+	var objDs;
+	
+	//Drag한 Row Index 가져오기
+	nDragRow = e.userdata.targetRow;
+	
+	//Drop한 Row Index 가져오기
+	nDropRow = e.row;
+	
+	//Drag & Drop이 발생한 그리드 가져오기
+	objGrid = e.userdata.targetGrid;
+	
+	//그리드에 연결된 데이터셋 가져오기
+	objDs = objGrid.getBindDataset();
+		
+	//트리 동일 레벨 이동 함수 호출
+	this.gfnMoveToSameLevelTree(objDs, nDragRow, nDropRow);
+};
+
+/**
+ * @description 그리드 onlbuttonup 시 처리내역
+*/
+this.grdTree_onlbuttonup = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{
+	//Drag 이미지 가져오기
+	var objDragImg = this.components["imgDrag"];
+	
+	//Drag 이미지가 있을 경우
+	if(objDragImg)
+	{
+		//Drag 이미지 오브젝트 제거
+		this.removeChild("imgDrag");
+		objDragImg = null;
+	}
+};
+
+/**
+ * @description 그리드 ontreestatuschanged 시 처리내역
+*/
+this.grdTree_ontreestatuschanged = function(obj:nexacro.Grid,e:nexacro.GridTreeStatusEventInfo)
+{
+	//그리드에 연결된 데이터셋 가져오기
+	var objDs = obj.getBindDataset();
+	
+	//변경된 Tree상태에 맞춰 TREE_STATUS 값 변경
+	objDs.setColumn(e.realrow, "TREE_STATUS", e.reason);
+};
+]]></Script>
+  </Form>
+</FDL>

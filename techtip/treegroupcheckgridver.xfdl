@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Work" width="800" height="600" titletext="Form_Work">
+    <Layouts>
+      <Layout width="800" height="600" screenid="Desktop_screen">
+        <Grid id="grdList" taborder="0" left="10" top="10" width="780" height="580" binddataset="dsList" autofittype="col" treeinitstatus="expand,all">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="240"/>
+                <Column size="170"/>
+                <Column size="170"/>
+                <Column size="170"/>
+              </Columns>
+              <Rows>
+                <Row size="30" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="행정구역"/>
+                <Cell col="1" text="지역번호"/>
+                <Cell col="2" text="인구"/>
+                <Cell col="3" text="면적"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="treeitemcontrol" edittype="tree" treelevel="bind:레벨" treecheck="bind:체크" text="bind:명칭"/>
+                <Cell col="1" text="bind:지역번호" displaytype="number" textAlign="right"/>
+                <Cell col="2" text="bind:인구" displaytype="mask" maskeditpostfixtext=" (명)" maskeditformat="###,####,###"/>
+                <Cell col="3" text="bind:면적" displaytype="mask" maskeditpostfixtext=" (km²) " maskeditformat="###,###"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList" oncolumnchanged="dsList_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="체크" type="STRING" size="256"/>
+          <Column id="레벨" type="INT" size="256"/>
+          <Column id="명칭" type="STRING" size="256"/>
+          <Column id="지역번호" type="STRING" size="256"/>
+          <Column id="인구" type="STRING" size="256"/>
+          <Column id="면적" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="레벨">0</Col>
+            <Col id="지역번호"/>
+            <Col id="명칭">행정구역</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">1</Col>
+            <Col id="지역번호"/>
+            <Col id="명칭">특별시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">02</Col>
+            <Col id="인구"> 9,496,887</Col>
+            <Col id="면적">605</Col>
+            <Col id="명칭">서울특별시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">1</Col>
+            <Col id="지역번호"/>
+            <Col id="명칭">광역시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">051</Col>
+            <Col id="인구"> 3,338,167</Col>
+            <Col id="면적">770</Col>
+            <Col id="명칭">부산광역시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">053</Col>
+            <Col id="면적">883</Col>
+            <Col id="명칭">대구광역시</Col>
+            <Col id="인구"> 2,376,676</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">032</Col>
+            <Col id="인구"> 2,955,167</Col>
+            <Col id="면적">1,065</Col>
+            <Col id="명칭">인천광역시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">062</Col>
+            <Col id="인구"> 1,436,012</Col>
+            <Col id="면적">501</Col>
+            <Col id="명칭">광주광역시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">042</Col>
+            <Col id="인구"> 1,448,933</Col>
+            <Col id="면적">540</Col>
+            <Col id="명칭">대전광역시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">052</Col>
+            <Col id="인구"> 1,116,482</Col>
+            <Col id="면적">1,062</Col>
+            <Col id="명칭">울산광역시</Col>
+          </Row>
+          <Row>
+            <Col id="지역번호"/>
+            <Col id="인구"/>
+            <Col id="면적"/>
+            <Col id="레벨">1</Col>
+            <Col id="명칭">특별자치시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">044</Col>
+            <Col id="인구"> 379,340</Col>
+            <Col id="면적">465</Col>
+            <Col id="명칭">세종특별자치시</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">1</Col>
+            <Col id="지역번호"/>
+            <Col id="명칭">도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">031</Col>
+            <Col id="인구"> 13,581,496</Col>
+            <Col id="면적">10,195</Col>
+            <Col id="명칭">경기도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">03</Col>
+            <Col id="인구"> 1,539,005</Col>
+            <Col id="면적">16,830</Col>
+            <Col id="명칭">강원도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">043</Col>
+            <Col id="인구"> 1,597,033</Col>
+            <Col id="면적">7,407</Col>
+            <Col id="명칭">충청북도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">041</Col>
+            <Col id="인구"> 2,119,661</Col>
+            <Col id="면적">8,246</Col>
+            <Col id="명칭">충청남도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">063</Col>
+            <Col id="인구"> 1,779,230</Col>
+            <Col id="면적">8,070</Col>
+            <Col id="명칭">전라북도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">061</Col>
+            <Col id="인구"> 1,827,674</Col>
+            <Col id="면적">12,348</Col>
+            <Col id="명칭">전라남도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">054</Col>
+            <Col id="인구"> 2,616,177</Col>
+            <Col id="면적">19,034</Col>
+            <Col id="명칭">경상북도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">055</Col>
+            <Col id="인구"> 3,298,016</Col>
+            <Col id="면적">10,541</Col>
+            <Col id="명칭">경상남도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">1</Col>
+            <Col id="지역번호"/>
+            <Col id="명칭">특별자치도</Col>
+          </Row>
+          <Row>
+            <Col id="레벨">2</Col>
+            <Col id="지역번호">064</Col>
+            <Col id="인구"> 677,76</Col>
+            <Col id="면적">1,850</Col>
+            <Col id="명칭">제주특별자치도</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > treecheckbox
+*  techtip Tree Group Check Grid Version (트리 그룹 전체 체크/체크해제 그리드 버전)
+*  @FileName	treegroupcheckgridver.xfdl 
+*******************************************************************************
+*  2022.07.21		hayoung			최초 생성
+******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_treegroupcheckgridver.xjs";
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+ 
+ /**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+ **************************************************************************/
+ /**
+ * @description 데이터셋 oncolumnchanged 시 처리내역
+*/
+this.dsList_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	if (e.columnid == "체크")
+	{
+		obj.set_enableevent(false);
+		
+		//하위 트리들 체크하여 체크하기 함수 호출
+		this.fnSetTreeChildCheck(this.grdList, e.row, e.newvalue);
+		
+		obj.set_enableevent(true);
+	}
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/]]></Script>
+  </Form>
+</FDL>

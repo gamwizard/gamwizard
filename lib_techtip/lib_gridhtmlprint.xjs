@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+// windows 표준 DPI
+this.DPI = 96;
+
+// 인쇄 페이지 설정 기본 여백 (단위:mm)
+// 브라우저 인쇄 페이지 설정의 머릿글/바닥글 등을 제외했을 경우 적용될 값이다.
+this.PAPER_MARGIN = {
+	"left" : 5,
+	"top" : 10,
+	"right" : 5,
+	"bottom" : 10
+};
+
+// A열 (A0 ~ A10) 용지규격 (단위:mm)
+this.PAPER_SIZE_TYPE_A = [[841, 1189],
+						 [594, 841],
+						 [420, 594],
+						 [297, 420],
+						 [210, 297],
+						 [148, 210],
+						 [105, 148],
+						 [74, 105],
+						 [52, 74],
+						 [37, 52],
+						 [26, 37]];
+
+// B열 (B0 ~ B10) 용지규격 (단위:mm)
+this.PAPER_SIZE_TYPE_B = [[1030, 1456],
+						 [728, 1030],
+						 [515, 728],
+						 [364, 515],
+						 [257, 364],
+						 [182, 257],
+						 [128, 182],
+						 [91, 128],
+						 [64, 91],
+						 [46, 64],
+						 [32, 45]];
+
+
+/**
+* @description 	   : 그리드를 HTML로 출력하는 함수
+* @param objGrid	   : 출력할 그리드
+* @param objWb		   : HTML을 처리할 웹브라우저
+* @param sPaper		   : 용지타입
+* @param sOrientation  : 출력방향
+* @return          : 없음
+*/
+this.gfnPrintHTML = function(objGrid, objWb, sPaper, sOrientation)
+{
+	//용지타입 값이 없을 경우 A4로 설정
+	sPaper = this.gfnIsNull(sPaper) ? "A4" : sPaper;
+
+	//출력방향 값이 없을 경우 portrait로 설정
+	sOrientation = this.gfnIsNull(sOrientation) ? "portrait" : sOrientation;
+
+	//출력 용지의 Pixel값 가져오기 함수 호출
+	var arrPrintSize = this.getAvailPixelSize(sPaper, sOrientation);
+
+	//arrPrintSize 값이 없을 경우 예외처리
+	if ( this.gfnIsNull(arrPrintSize) )
+	{
+		alert("입력 사이즈 ["+sPaper+"] : 용지 사이즈를 확인하시기 바랍니다.");
+		return false;
+	}
+
+	//그리드의 전체 Width값 구하기(Scrollbar 영역 포함)
+	var nMaxWidth = objGrid.getOffsetWidth() + objGrid.hscrollbar.max;
+
+	//용지사이즈([px)에 표현될 그리드의 zoom값 구하기
+	// (용지사이즈 - Left Margin - Right Margin) / 그리드 전체 Width
+	var nMaxWidthPer = ((arrPrintSize[0]-this.gfnMmToPixel(this.PAPER_MARGIN.left)-this.gfnMmToPixel(this.PAPER_MARGIN.right))/nMaxWidth)*100;
+	var nCellWidthPer = "";
+
+	//Zoom 값이 60% 이하일 경우 웹브라우저가 Zoom처리를 못하므로
+	//60%이하면 모자르는 값 만큼 Cell의 Width를 조절하기 위해
+	//조절해야할 %값 구하기
+	if(nMaxWidthPer<60)
+	{
+		//조절해야하는 % = 100% - (60%에서 모자른 값);
+		//Ex Zoom값이 50%일 경우 Cell의 사이즈를 원본사이즈의 90%로 조절
+		nCellWidthPer = (95 - (60 - nMaxWidthPer))/100;
+	}else
+	{
+		nCellWidthPer = 1;
+	}
+
+	//용지사이즈 가져오기(mm)
+	var arrPaperSize = this["PAPER_SIZE_TYPE_" + sPaper.charAt(0)][parseInt(sPaper.charAt(1))];
+
+	var objDoc = objWb.getProperty("document");
+
+	var sHTML = '<!doctype html>';
+		sHTML += '<html>';
+		sHTML += '<head>';
+		sHTML += '<meta charset="utf-8">';
+		sHTML += '<style>';
+		sHTML += '@page\n';
+		sHTML += '{\n';
+
+		//용지사이즈 설정(mm)
+		if(sOrientation=="portrait")sHTML += '	size: ' + arrPaperSize[0] + 'mm ' + arrPaperSize[1] + 'mm;\n';
+		else sHTML += '	size: ' + arrPaperSize[1] + 'mm ' + arrPaperSize[0] + 'mm;\n';
+
+		//여백 설정mm)
+		sHTML += '	margin-left: '+this.PAPER_MARGIN.left+'mm;\n';
+		sHTML += '	margin-top: '+this.PAPER_MARGIN.top+'mm;\n';
+		sHTML += '	margin-right: '+this.PAPER_MARGIN.right+'mm;\n';
+		sHTML += '	margin-bottom: '+this.PAPER_MARGIN.bottom+'mm;\n';
+		sHTML += '}\n';
+
+		//전체 폰트 사이즈 설정
+		sHTML += '	body{font-size:12px;width:auto;}';
+
+		//Table의 기본 디자인 설정
+		sHTML += '	table{border-collapse:collapse;}';
+
+		//Head 영역 CSS 적용
+		sHTML += '	th.head{padding: 2px 2px; border-top:1px solid #034ea2; border-left:1px solid #b1bdc2; border-right:1px solid #b1bdc2; border-bottom:1px solid #b1bdc2; background:#eff0f0;color:#2f2f2f;}';
+
+		//Head 영역의 Align설정을 위한 CSS적용
+		sHTML += '	th.textAlignLeft{text-align: left;}';
+		sHTML += '	th.textAlignCenter{text-align: center;}';
+		sHTML += '	th.textAlignRight{text-align: right;}';
+
+		//Summ 영역 CSS 적용
+		sHTML += '	th.summ{padding: 2px 2px; border:1px solid #b1bdc2;background:#fdfbe5;color:#333333;}';
+
+		//Body 영역 CSS 적용
+		sHTML += '	td{padding: 2px 2px; border:1px solid #b1bdc2;}';
+
+		//Body 영역의 Align설정을 위한 CSS적용
+		sHTML += '	td.textAlignLeft{text-align: left;}';
+		sHTML += '	td.textAlignCenter{text-align: center;}';
+		sHTML += '	td.textAlignRight{text-align: right;}';
+
+		//별도의 Cell CssClass 적용 예시
+		sHTML += '	td.grd_WF_cellBlueC{color:#0078ff;}';
+
+		sHTML += '</style>';
+		sHTML += '<title>출력</title>';
+
+		//페이지 출력 함수
+		//별도의 팝업으로 출력화면 호출을 위한 처리
+		sHTML += '	<script type="text/javascript">\n';
+		sHTML += '	function fn_printPage()\n';
+		sHTML += '	{\n';
+		sHTML += '		self.setTimeout(function(){self.print(); self.close();}, 0)\n';
+		sHTML += '	}\n';
+		sHTML += '	</script>\n';
+
+		sHTML += '</head>';
+		sHTML += '<body leftmargin="0" topmargin="0" onload="fn_printPage()">';
+		sHTML += '<div class="">';
+
+		sHTML += '    <table cellpadding="0" cellspacing="0" border="1" width="'+nexacro.round(nMaxWidth*nCellWidthPer)+'">';
+
+		//Head HTML Tag만들기
+		sHTML += '        <thead>';
+		sHTML += this.gfnMakeHead(objGrid, nCellWidthPer);
+		sHTML += '        </thead>';
+
+		//Body HTML Tag만들기
+		sHTML += '        <tbody>';
+		sHTML += this.gfnMakeBody(objGrid);
+		sHTML += '        </tbody>';
+
+		//Summ HTML Tag만들기
+		sHTML += '        <tfoot>';
+		sHTML += this.gfnMakeSumm(objGrid);
+		sHTML += '        </tfoot>';
+
+		sHTML += '    </table>';
+		sHTML += '</div>';
+		sHTML += '</body>';
+		sHTML += '</html>';
+
+	//크롬일 경우 미리보기 기능이 있으므로 바로 출력기능 실행
+	if ( nexacro.Browser == "Chrome" )
+	{
+		objDoc.callMethod("open");
+		objDoc.callMethod("write", sHTML);
+		objDoc.callMethod("close");
+	}
+
+	// 미리보기가 안되는 브라우저(런타임포함)는 팝업으로
+	// 생성된 html 을 보여주고 인쇄(window.print())를 실행한다.
+	else
+	{
+		//팝업화면 사이즈 지정
+		var l = system.clientToScreenX(nexacro.getApplication().mainframe, 0);
+		var t = system.clientToScreenY(nexacro.getApplication().mainframe, 0);
+		var w = 800;
+		var h = 600;
+
+		//팝업 호출 함수
+		var sPopHtml = '<script type="text/javascript">\n';
+		sPopHtml += 'function printPreview(html)\n';
+		sPopHtml += '{\n';
+		sPopHtml += '	var printWin = window.open("", "printPreviewPop", "left='+l+', top='+t+', width='+w+', height='+h+'");\n';
+		sPopHtml += '	printWin.document.open();\n';
+		sPopHtml += '	printWin.document.write(html);\n';
+		sPopHtml += '	printWin.document.close();\n';
+		sPopHtml += '}\n';
+		sPopHtml += '</script>\n';
+
+		objDoc.callMethod("open");
+		objDoc.callMethod("write", sPopHtml);
+		objDoc.callMethod("close");
+
+		objWb.callMethod("printPreview", sHTML);
+	}
+}
+
+/**
+* @description 	   		: Head HTML 만드는 함수
+* @param objGrid	   	: 출력할 그리드
+* @param nCellWidthPer	: Cell Width를 보정하기 위한 %값
+* @return          		: Head로 설정할 HTML 텍스트
+*/
+this.gfnMakeHead = function(objGrid, nCellWidthPer)
+{
+	var i;
+	var j;
+	var sHTML = "";
+	var sText;
+	var nColWidth;
+	var arrAlign;
+	var sTextAlign;
+	var nCol;
+	var nRow;
+	var nRow_prev = -1;
+	var nColSpan;
+	var nRowSpan;
+	var sCssClass = "head";
+	//Head Cell 갯수
+	var nHeadCellCount = objGrid.getCellCount("head");
+
+	for(i=0;i<nHeadCellCount;i++)
+	{
+		sCssClass = "head";
+
+		nCol = objGrid.getCellProperty("head", i, "col");
+		nRow = objGrid.getCellProperty("head", i, "row");
+		nColSpan = objGrid.getCellProperty("head", i, "colspan");
+		nRowSpan = objGrid.getCellProperty("head", i, "rowspan");
+
+		//Grid의 Cell Align정보 가져오기
+		arrAlign = objGrid._getCellStyleInfo(i, "align", -1).split(",");
+		sTextAlign = arrAlign[0];
+
+		nColWidth = 0;
+
+		//TextAlign 설정
+		if(sTextAlign=="left")
+		{
+			sCssClass += " textAlignLeft";
+		}else if(sTextAlign=="right")
+		{
+			sCssClass += " textAlignRight";
+		}else if(sTextAlign=="center")
+		{
+			sCssClass += " textAlignCenter";
+		}
+
+		//표현할 Text 가져오기
+		sText = objGrid.getCellText(-1, i);
+
+		//해당 Cell의 Width 값 구하기
+		for(j=nCol;j<nCol+nColSpan;j++)
+		{
+			nColWidth += objGrid.getRealColSize(j);
+		}
+
+		//해당 Cell의 Width 보정값 적용
+		nColWidth = nColWidth * nCellWidthPer;
+
+		//Row가 변경되었을 경우 tr태그 추가
+		if(nRow_prev!=-1&&nRow!=nRow_prev)sHTML += '        </tr>\n';
+		if(nRow!=nRow_prev)sHTML += '        <tr>\n';
+
+		//해당 Cell의 HTML 태그 생성
+		sHTML += '            <th class="'+sCssClass+'" width="'+nColWidth+'px" colspan="'+nColSpan+'" rowspan="'+nRowSpan+'">'+this.gfnIsNullText(sText, "")+'</th>\n';
+
+		//이전 Cell의 Row 값을 비교하기 위해 설정
+		nRow_prev = nRow;
+	}
+	sHTML += '        </tr>\n'
+
+	return sHTML;
+}
+
+/**
+* @description 	   		: Body HTML 만드는 함수
+* @param objGrid	   	: 출력할 그리드
+* @return          		: Body 설정할 HTML 텍스트
+*/
+this.gfnMakeBody = function(objGrid)
+{
+	var i, j;
+	var sHTML = "";
+	var sText;
+	var arrAlign;
+	var sTextAlign;
+	var sCssClass = "";
+	var objDs = objGrid.getBindDataset();
+	var nBodyRowCount = objDs.rowcount;
+	var nBodyCellCount = objGrid.getCellCount("body");
+
+	for(i=0;i<nBodyRowCount;i++)
+	{
+		sHTML += '        <tr>';
+		for(j=0;j<nBodyCellCount;j++)
+		{
+			sCssClass = "";
+
+			//Grid의 Cell Align정보 가져오기
+			arrAlign = objGrid._getCellStyleInfo(j, "align", i).split(",");
+			sTextAlign = arrAlign[0];
+
+			//TextAlign 설정
+			if(sTextAlign=="left")
+			{
+				sCssClass += " textAlignLeft";
+			}else if(sTextAlign=="right")
+			{
+				sCssClass += " textAlignRight";
+			}else if(sTextAlign=="center")
+			{
+				sCssClass += " textAlignCenter";
+			}
+
+			//표현할 Text 가져오기
+			sText = this.gfnIsNullText(objGrid.getCellText(i, j), "");
+
+			//적용된 cssclass가 있을 경우 가져오기
+			sCssClass += " " + this.gfnIsNullText(objGrid.getCellPropertyValue(i, j, "cssclass"), "");
+
+			//해당 Cell의 HTML 태그 생성
+			sHTML += '        	<td class="'+sCssClass+'">'+sText+'</td>';
+		}
+		sHTML += '        </tr>';
+	}
+
+	return sHTML;
+}
+
+/**
+* @description 	   		: Summ HTML 만드는 함수
+* @param objGrid	   	: 출력할 그리드
+* @return          		: Summ 설정할 HTML 텍스트
+*/
+this.gfnMakeSumm = function(objGrid)
+{
+	var i;
+	var sHTML = "";
+	var sText;
+	var arrAlign;
+	var sTextAlign;
+	var nSummCellCount = objGrid.getCellCount("summ");
+	var sCssClass = "summ";
+
+	sHTML += '        <tr>';
+	for(i=0;i<nSummCellCount;i++)
+	{
+		sCssClass = "summ";
+
+		//Grid의 Cell Align정보 가져오기
+		arrAlign = objGrid._getCellStyleInfo(i, "align", -2).split(",");
+		sTextAlign = arrAlign[0];
+
+		//TextAlign 설정
+		if(sTextAlign=="left")
+		{
+			sCssClass += " textAlignLeft";
+		}else if(sTextAlign=="right")
+		{
+			sCssClass += " textAlignRight";
+		}else if(sTextAlign=="center")
+		{
+			sCssClass += " textAlignCenter";
+		}
+
+		//표현할 Text 가져오기
+		sText = this.gfnIsNullText(objGrid.getCellText(-2, i), "");
+
+		//해당 Cell의 HTML 태그 생성
+		sHTML += '            <th class="'+sCssClass+'">'+sText+'</td>';
+	}
+	sHTML += '        </tr>';
+
+	return sHTML;
+}
+
+/**
+* @description 	   		: 지정된 용지크기와 방향에 유효한 픽셀 사이즈 구하기 함수
+* @param sPaper	   		: 용지타입
+* @param sOrientation	: 출력방향
+* @return          		: 출력 가능한 픽셀 사이즈
+*/
+this.getAvailPixelSize = function(sPpaper, sOrientation)
+{
+	var sPaperType = sPpaper.charAt(0);
+	var sPaperSize = parseInt(sPpaper.charAt(1));
+	var arrSize;
+
+	if ( !this.gfnIsNumber(sPaperSize) || (sPaperSize < -1 || sPaperSize > 10) )
+	{
+		return null;
+	}
+
+
+	if ( sPaperType == "A" )
+	{
+		arrSize = this.PAPER_SIZE_TYPE_A[sPaperSize];
+	}
+	else if ( sPaperType == "B" )
+	{
+		arrSize = this.PAPER_SIZE_TYPE_B[sPaperSize];
+	}
+	else
+	{
+		return null;
+	}
+
+	var nWidth = this.gfnMmToPixel(arrSize[0]);
+	var nHeight = this.gfnMmToPixel(arrSize[1]);
+	var nMarginWidth = this.gfnMmToPixel(this.PAPER_MARGIN.left)
+					+ this.gfnMmToPixel(this.PAPER_MARGIN.right)
+					+ this.gfnMmToPixel(2);
+	var nMarginHeight = this.gfnMmToPixel(this.PAPER_MARGIN.top)
+					 + this.gfnMmToPixel(this.PAPER_MARGIN.bottom)
+					 + this.gfnMmToPixel(2);
+
+	if ( sOrientation == "portrait" )
+	{
+		nWidth = nWidth - nMarginWidth;
+		nHeight = nHeight - nMarginHeight;
+	}
+	else if ( sOrientation == "landscape" )
+	{
+		nWidth = nHeight - nMarginWidth;
+		nHeight = nWidth - nMarginHeight;
+	}
+	else
+	{
+		return null;
+	}
+
+	return [nWidth, nHeight];
+}
+
+ /**
+* @description 	   		:  millimeter 를 pixel 단위로 변환하는 함수
+* @param nMm	   		: mm 값
+* @return          		: px 값
+*/
+this.gfnMmToPixel = function(nMm)
+{
+	return Math.round((this.DPI/25.4)*nMm);
+}
+]]></Script>

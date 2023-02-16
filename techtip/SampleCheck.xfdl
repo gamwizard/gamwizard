@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="SampleCheck" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Grid id="datagrid00" taborder="0" left="188" top="203" width="375" height="270" binddataset="Dataset00" onlbuttonup="datagrid00_onlbuttonup">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="Column1"/>
+                <Cell col="2" text="Column2"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:Column0" displaytype="checkboxcontrol" edittype="checkbox"/>
+                <Cell col="1" text="bind:Column1"/>
+                <Cell col="2" text="bind:Column2"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="Dataset00" firefirstcount="0" firenextcount="0" useclientlayout="false" updatecontrol="true" enableevent="true" loadkeymode="keep" loadfiltermode="keep" reversesubsum="false">
+        <ColumnInfo>
+          <Column id="Column0" type="STRING" size="256"/>
+          <Column id="Column1" type="STRING" size="256"/>
+          <Column id="Column2" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+          <Row>
+            <Col id="Column1">BB</Col>
+            <Col id="Column2">CC</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.datagrid00_onlbuttonup = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{
+	if (e.shiftkey && obj.getCellProperty("body", e.cell, "edittype") == "checkbox")
+	{
+		var objDs = obj.getBindDataset();
+		var sBindCellId = this.gfn_getBindCellId(obj, "body", e.cell);	
+		objDs.setColumn(e.row, sBindCellId, 1);
+		
+		var nStartRow;
+		var nEndRow = e.row;
+					
+		for (var i=0; i<objDs.rowcount; i++)
+		{
+			if (objDs.getColumn(i, sBindCellId) == "1")
+			{
+				nStartRow = i;
+				break;
+			}
+		}
+		
+		if (nStartRow == nEndRow)
+		{
+			for (var i=objDs.rowcount; i>=0; i--)
+			{
+				if (objDs.getColumn(i, sBindCellId) == "1")
+				{
+					nEndRow = i;
+					break;
+				}
+			}
+		}
+		
+		objDs.set_enableevent(false);			
+		obj.set_enableredraw(false);
+		for(var i=nStartRow; i<nEndRow; i++)
+		{		
+			objDs.setColumn(i, sBindCellId, "1");
+		}
+		obj.set_enableredraw(true);
+		objDs.set_enableevent(true);
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="datasetinfo" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Grid id="Grid00" taborder="0" left="30" top="39" width="637" height="361" binddataset="dsList" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="30"/>
+                <Column size="50"/>
+                <Column size="50"/>
+                <Column size="60"/>
+                <Column size="100"/>
+                <Column size="80"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="25" band="head"/>
+                <Row size="25"/>
+              </Rows>
+              <Band id="head">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" style="background: ;" checkboxsize="17"/>
+                <Cell col="1" style="background: ;" text="성명"/>
+                <Cell col="2" style="background: ;" text="시대"/>
+                <Cell col="3" text="업적"/>
+                <Cell col="4" text="금액"/>
+                <Cell col="5" text="날짜"/>
+                <Cell col="6" text="주소"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="checkboxcontrol" edittype="checkbox" text="bind:chk" checkboxsize="17"/>
+                <Cell col="1" text="bind:name" displaytype="decoratetext"/>
+                <Cell col="2" text="bind:times" displaytype="decoratetext"/>
+                <Cell col="3" text="bind:job" displaytype="decoratetext"/>
+                <Cell col="4" text="bind:num1"/>
+                <Cell col="5" text="bind:date"/>
+                <Cell col="6" text="bind:address"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsList" firefirstcount="0" firenextcount="0" useclientlayout="false" updatecontrol="true" enableevent="true" loadkeymode="keep" loadfiltermode="keep" reversesubsum="false" keystring="G:times,job">
+        <ColumnInfo>
+          <Column id="chk" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+          <Column id="address" type="STRING" size="256" sumtext="address" prop="TEXT"/>
+          <Column id="num1" type="BIGDECIMAL" size="256" prop="AVG"/>
+          <Column id="date" type="DATE" size="256" sumtext="" prop="MAX"/>
+          <Column id="times" type="STRING" size="256"/>
+          <Column id="job" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="num1">321458</Col>
+            <Col id="date">20170101</Col>
+            <Col id="name">강감찬</Col>
+            <Col id="address">서울특별시 중구 세종대로 40</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">명장</Col>
+          </Row>
+          <Row>
+            <Col id="num1">425862</Col>
+            <Col id="date">20170201</Col>
+            <Col id="name">김부식</Col>
+            <Col id="address">경상북도 경주시 불국로 873-243</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="num1">57786</Col>
+            <Col id="date">20170601</Col>
+            <Col id="name">정몽주</Col>
+            <Col id="address">경기도 수원시 장안구 연무동 190</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="num1">51651</Col>
+            <Col id="date">20170931</Col>
+            <Col id="name">김유신</Col>
+            <Col id="address">경상북도 영주시 부석사로 345</Col>
+            <Col id="chk"/>
+            <Col id="times">신라</Col>
+            <Col id="job">장군</Col>
+          </Row>
+          <Row>
+            <Col id="num1">216548</Col>
+            <Col id="date">20171005</Col>
+            <Col id="name">최무선</Col>
+            <Col id="address">충청남도 부여군 정림로 83</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">발명가</Col>
+          </Row>
+          <Row>
+            <Col id="num1">216218</Col>
+            <Col id="date">20171111</Col>
+            <Col id="name">정중부</Col>
+            <Col id="address">경기도 여주시 북내면 상교리 411-1</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">무신</Col>
+          </Row>
+          <Row>
+            <Col id="num1">954561</Col>
+            <Col id="date">20170101</Col>
+            <Col id="name">김부식</Col>
+            <Col id="address">서울특별시 종로구 종로 99</Col>
+            <Col id="chk"/>
+            <Col id="times">고려</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="num1">2121684</Col>
+            <Col id="date">20170201</Col>
+            <Col id="name">안중근</Col>
+            <Col id="address">경상북도 경주시 대경로 4859</Col>
+            <Col id="chk"/>
+            <Col id="times">한말</Col>
+            <Col id="job">운동가</Col>
+          </Row>
+          <Row>
+            <Col id="num1">6549845</Col>
+            <Col id="date">20170601</Col>
+            <Col id="name">안창호</Col>
+            <Col id="address">경기도 이천시 관고동 501-7</Col>
+            <Col id="chk"/>
+            <Col id="times">한말</Col>
+            <Col id="job">운동가</Col>
+          </Row>
+          <Row>
+            <Col id="num1">65150</Col>
+            <Col id="date">20170931</Col>
+            <Col id="name">유관순</Col>
+            <Col id="address">충청남도 부여군 부여읍 동남리 산16-9</Col>
+            <Col id="chk"/>
+            <Col id="times">한말</Col>
+            <Col id="job">운동가</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">이종무</Col>
+            <Col id="address">전라북도 익산시 금마면 동고도리 1086</Col>
+            <Col id="num1">158886</Col>
+            <Col id="date">20170429</Col>
+            <Col id="times">고려</Col>
+            <Col id="job">무신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">한명회</Col>
+            <Col id="address">부산광역시 연제구 경기장로 28</Col>
+            <Col id="num1">258624</Col>
+            <Col id="date">20170111</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">정몽주</Col>
+            <Col id="address">제주특별자치도 제주시 일주동로 17</Col>
+            <Col id="num1">4569985</Col>
+            <Col id="date">20170829</Col>
+            <Col id="times">고려</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">문익점</Col>
+            <Col id="address">경상남도 합천군 가야면 해인사길 122</Col>
+            <Col id="num1">1245568</Col>
+            <Col id="date">20170605</Col>
+            <Col id="times">고려</Col>
+            <Col id="job">학자</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">최영</Col>
+            <Col id="address">서울특별시 종로구 훈정동 1</Col>
+            <Col id="num1">336985</Col>
+            <Col id="date">20170614</Col>
+            <Col id="times">고려</Col>
+            <Col id="job">무신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">장영실</Col>
+            <Col id="address">전라북도 남원시 산내면 대정리 975</Col>
+            <Col id="num1">578962</Col>
+            <Col id="date">20170231</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">과학자</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">곽재우</Col>
+            <Col id="address">전라남도 구례군 마산면 화엄사로 539</Col>
+            <Col id="num1">11235</Col>
+            <Col id="date">20170723</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">의병장</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">김시민</Col>
+            <Col id="address">경상북도 안동시 서후면 봉정사길 222</Col>
+            <Col id="num1">569875</Col>
+            <Col id="date">20170406</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">무신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">정양용</Col>
+            <Col id="address">경상북도 영천시 청통면 거조길 400-67</Col>
+            <Col id="num1">5588966</Col>
+            <Col id="date">20170308</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">학자</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">윤동주</Col>
+            <Col id="address">전라북도 익산시 금마면 기양리 97번지</Col>
+            <Col id="num1">639996</Col>
+            <Col id="date">20171205</Col>
+            <Col id="job">시인</Col>
+            <Col id="times">조선</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">이중섭</Col>
+            <Col id="address">충청남도 보령시 성주면 성주리 80-4</Col>
+            <Col id="num1">859648</Col>
+            <Col id="date">20170925</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">화가</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">박문수</Col>
+            <Col id="address">충청남도 천안시 서북구 성환읍 대홍리 319-8</Col>
+            <Col id="num1">15698</Col>
+            <Col id="date">20170722</Col>
+            <Col id="job">문신</Col>
+            <Col id="times">조선</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">황진이</Col>
+            <Col id="address">서울특별시 종로구 율곡로 99</Col>
+            <Col id="num1">75489</Col>
+            <Col id="date">20170614</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">시인</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">김정호</Col>
+            <Col id="address">충청북도 충주시 중앙탑면 탑평리 11</Col>
+            <Col id="num1">63963</Col>
+            <Col id="date">20170416</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">학자</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">홍길동</Col>
+            <Col id="address">서울특별시 용산구 서빙고로 137</Col>
+            <Col id="num1">668955</Col>
+            <Col id="date">20170814</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">신숙주</Col>
+            <Col id="address">인천광역시 강화군 길상면 전등사로 37-41</Col>
+            <Col id="num1">754896</Col>
+            <Col id="date">20170517</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">문신</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">한석봉</Col>
+            <Col id="address">경기도 안양시 만안구 예술공원로103번길 4</Col>
+            <Col id="num1">1258963</Col>
+            <Col id="date">20170318</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">서예가</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">전봉준</Col>
+            <Col id="address">경상북도 봉화군 춘양면 서원촌길 8-14</Col>
+            <Col id="num1">458962</Col>
+            <Col id="date">20170704</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">운동가</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">김대건</Col>
+            <Col id="address">경기도 여주시 북내면 상교리 419-3번지</Col>
+            <Col id="num1">15756</Col>
+            <Col id="date">20170114</Col>
+            <Col id="times">조선</Col>
+            <Col id="job">신부</Col>
+          </Row>
+          <Row>
+            <Col id="chk"/>
+            <Col id="name">방정환</Col>
+            <Col id="address">대구광역시 수성구 청호로 321</Col>
+            <Col id="num1">25896</Col>
+            <Col id="date">20170326</Col>
+            <Col id="job">문신</Col>
+            <Col id="times">조선</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[]]></Script>
+  </Form>
+</FDL>

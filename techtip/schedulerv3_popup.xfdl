@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="scheduler_popup" width="421" height="374" titletext="일정 등록" onload="scheduler_popup_onload">
+    <Layouts>
+      <Layout height="374" width="421">
+        <Static id="Static00" taborder="0" text="제목" left="20" top="20" width="60" height="28" cssclass="static_WF_title"/>
+        <Edit id="edtTitle" taborder="1" left="99" top="20" width="300" height="28"/>
+        <Static id="Static00_00" taborder="2" text="일정구분" left="20" top="146" width="60" height="28" cssclass="static_WF_title"/>
+        <Static id="Static00_00_00" taborder="3" text="내용" left="20" top="194" width="60" height="28" cssclass="static_WF_title"/>
+        <TextArea id="teaContent" taborder="4" left="99" top="194" width="300" height="90"/>
+        <Calendar id="calSDate" taborder="5" left="99" top="98" width="130" height="28"/>
+        <Calendar id="calEDate" taborder="6" left="269" top="98" width="130" height="28"/>
+        <Static id="Static00_00_01" taborder="7" text="일자" left="20" top="98" width="60" height="28" cssclass="static_WF_title"/>
+        <Static id="stType_01" taborder="8" text="공지" left="99" top="56" width="40" height="22" cssclass="static_WF_label1" onclick="Static_onclick"/>
+        <Static id="stType_02" taborder="9" text="내부일정" left="144" top="56" width="65" height="22" cssclass="static_WF_label2" onclick="Static_onclick"/>
+        <Static id="stType_03" taborder="10" text="외부일정" left="214" top="56" width="65" height="22" cssclass="static_WF_label3" onclick="Static_onclick"/>
+        <Static id="stType_04" taborder="11" text="개인일정" left="284" top="56" width="65" height="22" cssclass="static_WF_label4" onclick="Static_onclick"/>
+        <Static id="stType_05" taborder="12" text="교육" left="354" top="56" width="40" height="22" cssclass="static_WF_label5" onclick="Static_onclick"/>
+        <Button id="btnCancle" taborder="13" text="취소" left="285" top="324" width="54" height="28" cssclass="btn_WF_cancel" onclick="btnCancle_onclick"/>
+        <Button id="btnOk" taborder="14" text="저장" left="345" top="324" width="54" height="28" cssclass="btn_WF_save" onclick="btnOk_onclick"/>
+        <Combo id="cmbType" taborder="15" text="Combo00" left="99" top="146" width="300" height="28" innerdataset="dsType" codecolumn="code" datacolumn="value"/>
+        <Static id="Static00_00_01_00" taborder="16" text="~" left="245" top="103" width="10" height="18" cssclass="static_WF_title"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.scheduler_popup_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	var objFrame = this.getOwnerFrame();
+	
+	this.popuptype = objFrame.popuptype;
+	
+	if(this.popuptype=="modify")
+	{
+		this.scheduleId = objFrame.scheduleid;
+		this.edtTitle.set_value(objFrame.title);
+		this.calSDate.set_value(objFrame.sdate);
+		this.calEDate.set_value(objFrame.edate);
+		this.cmbType.set_value(objFrame.type);
+		this.teaContent.set_value(objFrame.content);
+	}else if(this.popuptype=="new")
+	{
+		if(objFrame.sdate)
+		{
+			this.calSDate.set_value(objFrame.sdate);
+			this.calEDate.set_value(objFrame.sdate);
+		}
+	}
+};
+
+this.Static_onclick = function(obj:nexacro.Static,e:nexacro.ClickEventInfo)
+{
+	var arrType = obj.name.split("_");
+	var sType = arrType[1];
+	
+	this.cmbType.set_value(sType);
+};
+
+this.btnOk_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var objReturn;
+	
+	objReturn = {
+			"popuptype" : this.popuptype,
+			"id" : this.scheduleId,
+			"sdate" : this.calSDate.value,
+			"edate" : this.calEDate.value,
+			"type" : this.cmbType.value,
+			"title" : this.edtTitle.value,
+			"content" : this.teaContent.value
+			};
+			
+	this.close(JSON.stringify(objReturn, null, "\t"));
+};
+
+this.btnCancle_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+
+]]></Script>
+    <Objects>
+      <Dataset id="dsType">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">01</Col>
+            <Col id="value">공지</Col>
+          </Row>
+          <Row>
+            <Col id="code">02</Col>
+            <Col id="value">내부일정</Col>
+          </Row>
+          <Row>
+            <Col id="code">03</Col>
+            <Col id="value">외부일정</Col>
+          </Row>
+          <Row>
+            <Col id="code">04</Col>
+            <Col id="value">개인일정</Col>
+          </Row>
+          <Row>
+            <Col id="code">05</Col>
+            <Col id="value">교육</Col>
+          </Row>
+          <Row>
+            <Col id="code">99</Col>
+            <Col id="value">공휴일</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

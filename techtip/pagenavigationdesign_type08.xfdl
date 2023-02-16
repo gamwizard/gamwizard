@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="pagenavigationdesign_type08" width="340" height="25" titletext="New Form">
+    <Layouts>
+      <Layout height="25" width="340">
+        <Button id="btnFirst" taborder="0" left="0" top="0" width="15" onclick="Button_onclick" visible="true" cssclass="btn_WF_first8" height="25"/>
+        <Button id="btnPrev" taborder="1" left="25" top="0" width="15" onclick="Button_onclick" visible="true" cssclass="btn_WF_pre8" height="25"/>
+        <Button id="btn0" taborder="2" text="1" left="50" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn1" taborder="3" text="2" left="75" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn2" taborder="4" text="3" left="100" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn3" taborder="5" text="4" left="125" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn4" taborder="6" text="5" left="150" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn5" taborder="7" text="6" left="175" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn6" taborder="8" text="7" left="200" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn7" taborder="9" text="8" left="225" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn8" taborder="10" text="9" left="250" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btn9" taborder="11" text="10" left="275" top="0" width="15" onclick="BtnNum_onclick" visible="true" cssclass="btn_WF_pagination8" height="25"/>
+        <Button id="btnNext" taborder="12" left="300" top="0" width="15" onclick="Button_onclick" visible="true" cssclass="btn_WF_next8" height="25"/>
+        <Button id="btnLast" taborder="13" top="0" width="15" onclick="Button_onclick" visible="true" cssclass="btn_WF_last8" height="25" left="325"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "lib_techtip::lib_pagenavigationdesign.xjs";
+
+this.Button_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//클릭된 버튼의 구분 값 가져오기(First, Prev, Next, Last)
+	var sPage = obj.name.replace("btn", "");
+	
+	//페이지 이동 함수 호출
+	this.setPage(sPage);
+};
+
+this.BtnNum_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//클릭된 버튼의 페이지 번호 가져오기
+	var sPage = obj.text;
+	
+	//페이지 이동 함수 호출
+	this.setPage(sPage);
+};]]></Script>
+  </Form>
+</FDL>

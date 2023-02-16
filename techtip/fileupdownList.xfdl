@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="fileupdownList" width="802" height="432" titletext="New Form" onload="fileupdownDetail_onload">
+    <Layouts>
+      <Layout height="432" mobileorientation="landscape" width="802">
+        <Button id="Button00" taborder="0" text="글쓰기" top="9" height="32" right="2" width="80" onclick="newList_onclick"/>
+        <Grid id="Grid00" taborder="1" left="2" top="51" right="2" bottom="2" binddataset="dsList" autofittype="col" oncelldblclick="grdList_oncelldblclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="266"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="번호"/>
+                <Cell col="1" text="제목"/>
+                <Cell col="2" text="날짜"/>
+                <Cell col="3" text="첨부"/>
+                <Cell col="4" text="크기"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:list_no"/>
+                <Cell col="1" text="bind:list_title"/>
+                <Cell col="2" text="bind:list_date"/>
+                <Cell col="3" text="bind:attach_include"/>
+                <Cell col="4" text="bind:attach_allsize"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stTitle" taborder="2" text="업로드 리스트" left="10" top="9" width="256" height="25"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[this.fileupdownDetail_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//alert(obj.parent.parent.status);
+	
+};
+
+this.newList_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.parent.contentsInfo = null;
+	this.parent.parent.goDetailPage("new");
+};
+
+this.grdList_oncelldblclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	var objContents = {
+							no		 : this.dsList.getColumn(e.row,"list_no"),
+							date	 : this.dsList.getColumn(e.row,"list_date"),
+							title	 : this.dsList.getColumn(e.row,"list_title"),
+							contents : this.dsList.getColumn(e.row,"list_contents"),
+							path	 : this.dsList.getColumn(e.row,"attach_path"),
+							fileSize : this.dsList.getColumn(e.row,"attach_allsize"),
+							fileList : this.dsList.getColumn(e.row,"attach_include")
+						}
+	
+	this.parent.contentsInfo = objContents;
+	this.parent.parent.goDetailPage("search");
+};
+
+this.fnRemoveList = function ()
+{	
+	if(!this.parent.parent.gfnIsNull(this.parent.contentsInfo.no))
+	{
+		var nRow = this.dsList.findRow("list_no",this.parent.contentsInfo.no);
+		this.dsList.deleteRow(nRow);
+		alert("삭제완료");	// -- > transaction
+		this.parent.parent.goDetailPage("list");
+	}
+};
+
+this.fnSaveList = function ()
+{
+	
+};]]></Script>
+    <Objects>
+      <Dataset id="dsList">
+        <ColumnInfo>
+          <Column id="list_no" type="STRING" size="256"/>
+          <Column id="list_title" type="STRING" size="256"/>
+          <Column id="list_contents" type="STRING" size="256"/>
+          <Column id="list_date" type="STRING" size="256"/>
+          <Column id="attach_include" type="STRING" size="256"/>
+          <Column id="attach_allsize" type="STRING" size="256"/>
+          <Column id="attach_path" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="list_no">10</Col>
+            <Col id="list_title">test10</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20190524</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">9</Col>
+            <Col id="list_title">test9</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20190524</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">8</Col>
+            <Col id="list_title">test8</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20190520</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">7</Col>
+            <Col id="list_title">test7</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180422</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">6</Col>
+            <Col id="list_title">test6</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180422</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">5</Col>
+            <Col id="list_title">test5</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180311</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">4</Col>
+            <Col id="list_title">test4</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180101</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">3</Col>
+            <Col id="list_title">test3</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180101</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">2</Col>
+            <Col id="list_title">test2</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180101</Col>
+          </Row>
+          <Row>
+            <Col id="list_no">1</Col>
+            <Col id="list_title">test1</Col>
+            <Col id="list_contents">샘플페이지입니다.</Col>
+            <Col id="list_date">20180101</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

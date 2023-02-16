@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[
+.Static.st_test
+{
+	background : #f63ba8;
+	color : #ffffff;
+	font : bold 15px "Nanum Gothic";
+	border-radius : 2px;
+	-nexa-border : 0px none;
+	-nexa-text-align : center;
+}
+
+.Grid .body .row .cell.expr1
+{
+	color : #52dfee;
+}
+.Grid .body .row .cell.expr2
+{
+	color : #ee52ec;
+}
+.Grid .body .row .cell.expr3
+{
+	color : #f88948;
+}
+
+.Calendar .datepicker .body .weekitem
+{
+}
+.Calendar .datepicker .body .weekitem[userstatus=saturday]
+{
+}
+.Calendar .datepicker .body .weekitem[userstatus=sunday]
+{
+}
+.Calendar .datepicker .body .dayitem[userstatus=saturday]
+{
+}
+.Calendar .datepicker .body .dayitem[userstatus=sunday]
+{
+
+}
+.Calendar .datepicker .body .dayitem[userstatus=selected]
+{
+	color : "#ffff00";
+}
+]]></XCSS>

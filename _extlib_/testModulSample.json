@@ -1,0 +1,28 @@
+﻿{
+	"name": "testModulSample",
+	"moduletype": "component",
+	"version": "0",
+	"minnexacroversion": "",
+	"description": "",
+	"license": "",
+	"objInfo": [	
+    "testModulSample/_metainfo_/workflow.info"
+	],
+	"scripts": [
+    "testModulSample/workflow.xcdl.js"
+	],
+	"designscripts": [
+    "testModulSample/Designworkflow.js"
+	],
+	"help": "",	
+	"xcss": "testModulSample/_xcss_/testModulSample.xcss",
+	"images": "",	
+	"licensefiles": "",
+	"icons": "",
+	"userfolder": [
+
+	],
+	"contentseditor": [
+
+	]
+}

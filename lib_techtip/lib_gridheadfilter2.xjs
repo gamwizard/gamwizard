@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+ * @description 그리드 onexpandup 시 처리내역
+*/
+this.gfnFilterGridOnExpandUp = function(obj:nexacro.Grid,e:nexacro.GridMouseEventInfo)
+{
+	//Expand 버튼이 포함된 Cell 오브젝트 가져오기
+	var objParent = e.fromobject.parent;
+	
+	//필터 설정정보 가져오기
+	var objConfig = obj.config;
+	
+	//필터 팝업 컴포넌트 가져오기
+	var objPopup = objConfig.filterpop;
+	
+	//팝업 사이즈 설정
+	var objRect = obj.getCellRect(-1, e.cell);
+	var nWidth = objParent.getOffsetWidth()+24;
+	var nHeight = 200;
+	var nLeft = objRect.left;
+	var nTop = objRect.top + objRect.height;
+	
+	//oncloseup시 필요한 정보를 사용자 속성으로 등록
+	objPopup.targetGrid = obj;
+	
+	//팝업을 호출한 Col Index
+	objPopup.colidx = e.col;
+	
+	//팝업을 호출한 Cell Index
+	objPopup.cellidx = e.cell;
+	
+	//Cols정보를 다시 만드는 함수 호출
+	this.gfnReMakeCols(obj);
+	
+	//필터 리스트 데이터셋 생성 함수 호출
+	objPopup.form.fnMakeFilterDataset(obj, e.col, objConfig);
+	
+	//필터 팝업 오픈
+	objPopup.trackPopupByComponent(obj, nLeft, nTop, nWidth, nHeight, "gfnCloseFilterPopup");
+};
+
+/**
+* @description 	      		: 필터 팝업 콜백 함수
+* @param sId	  	  		: 콜백 Id
+* @param objRtn	  	  		: 리턴 오브젝트
+* @param objRtn.targetObj	: 팝업 컴포넌트
+* @param objRtn.rtnValue	: 리턴 값 - apply : 설정, cancel : cnlth
+* @return             		: 없음
+*/
+this.gfnCloseFilterPopup = function(sId, objRtn)
+{
+	var objPopDiv = objRtn.targetObj;
+	var strRtnValue = objRtn.rtnValue;
+		
+	if(strRtnValue=="apply")
+	{
+		//팝업을 호출한 Col Index
+		var nCol = objPopDiv.colidx;
+		
+		//팝업을 호출한 Cell Index
+		var nCell = objPopDiv.cellidx;
+		
+		//팝업을 호출한 Grid 컴포넌트
+		var objGrid = objPopDiv.targetGrid;
+		
+		//필터 설정 정보
+		var objConfig = objGrid.config;
+		
+		//필터 문자열 만드는 함수 호출
+		var sFilterValue = this.gfnGetFilterValue(objPopDiv);
+		
+		//필터 문자열이 있는지 여부에 따라
+		//expand버튼 이미지 변경(이미지 변경 필요!!)
+		if(sFilterValue.length>0)
+		{
+			objGrid.setCellProperty("head", nCell, "expandimage", "theme://images/chk_WF_Popupmenu_O.png");
+		}
+		else 
+		{
+			objGrid.setCellProperty("head", nCell, "expandimage", "theme://images/btn_WF_Grdexpand.png");
+		}
+		
+		//해당 Cell 설정정보에 필터 문자열 저장
+		objConfig.cols[nCol].value = sFilterValue;
+		
+		//필터 실행 함수 호출
+		this.gfnApplyFilter(objGrid);
+	}
+}
+
+/**
+* @description 	      : 필터 생성 함수
+* @param objGrid	  : 필터 적용할 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnAddHeadFilter = function(objGrid)
+{
+	var i;
+	var nHeadRowStart;
+	var nHeadRowSpan;
+	var nHeadRowEnd;
+	var nHeadCol;
+	var sText;
+	var sBindColumn;
+	var sPopupId = "popFilter";
+	var objPopup;
+	var objParent = objGrid.parent;
+	
+	//필터 PopupDiv가 존재하는 경우 가져오기
+	if(objParent[sPopupId])
+	{
+		objPopup = objParent[sPopupId];
+		objPopup.move(0, 0, 0, 0);
+	}
+	//필더 PopupDiv가 없는 경우 만들기
+	else
+	{
+		objPopup = new PopupDiv(sPopupId, 0, 0, 0, 0, null, null);
+		objPopup.set_url("techtip::gridheadfilter2_popup.xfdl");
+		objParent.addChild(sPopupId, objPopup);
+		objPopup.show();
+	}
+	
+	//필터 설정 정보 만들기
+	objGrid.config = {
+						"cols" : [], 					//Col별 필터 정보를 관리할 Array
+						"filterpop" : objPopup 			//필터 선택용 PopupDiv
+					};
+	
+	//그리드 Row의 갯수 가져오기
+	var nRowCnt = objGrid.getFormatRowCount();
+	
+	//그리드 Head Row의 갯수를 구하기 위한 변수
+	var nHeadRowCnt = 0;
+	
+	//그리드 Head Row 갯수 구하기
+	for(i=0;i<nRowCnt;i++)
+	{
+		if(objGrid.getFormatRowProperty(i, "band")=="head")nHeadRowCnt++;
+	}
+	
+	//Head의 Cell 갯수 가져오기
+	var nHeadCellCnt = objGrid.getCellCount("head");
+		
+	for(i=0;i<nHeadCellCnt;i++)
+	{
+		//현재 Cell의 시작 Row Index
+		nHeadRowStart = objGrid.getCellProperty("head", i, "row");
+		
+		//현재 Cell의 Row Sapn 
+		nHeadRowSpan = objGrid.getCellProperty("head", i, "rowspan");
+		
+		//현재 Cell의 마지막 Row Index
+		nHeadRowEnd = nHeadRowStart + nHeadRowSpan -1;
+		
+		//Head 마지막 Row에 해당하는 Cell에 Filter 기능 추가
+		if (nHeadRowEnd==nHeadRowCnt-1)
+		{
+			//Head의 Col Index로 Body의 Index 찾기
+			nHeadCol = objGrid.getCellProperty("head", i, "col");
+			sText = objGrid.getCellProperty("body", nHeadCol, "text");
+			
+			//Bind된 Cell일 경우 Col별 필터 정보 입력
+			if(sText && sText.indexOf("bind:")>-1)
+			{
+				sBindColumn = sText.replace("bind:", "");
+				objGrid.config.cols[nHeadCol] = {
+										"bind" : sBindColumn,	//바인드된 컬럼명
+										"value" : null          //Filter 문자열
+									};
+				
+				//expand버튼이 보이도록 설정
+				objGrid.setCellProperty("head", i, "expandshow", "show");
+			}			
+		}
+	}
+	
+	//필터에 필요한 이벤트 추가
+	objGrid.addEventHandler("onexpandup", this.gfnFilterGridOnExpandUp, this);
+}
+
+/**
+* @description 	      : Cols정보를 다시 만드는 함수
+* @param objGrid	  : 필터 적용된 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnReMakeCols = function(objGrid)
+{
+	var i, j;
+	var nHeadRowStart;
+	var nHeadRowSpan;
+	var nHeadRowEnd;
+	var nHeadCol;
+	var sText;
+	var sBindColumn;
+	var sValue;
+		
+	var objConfig = objGrid.config;
+	var objColsOrg = objConfig.cols;
+	var objCols = [];
+	var nColCnt = objColsOrg.length;
+	
+	//그리드 Row의 갯수 가져오기
+	var nRowCnt = objGrid.getFormatRowCount();
+	
+	//그리드 Head Row의 갯수를 구하기 위한 변수
+	var nHeadRowCnt = 0;
+	
+	//그리드 Head Row 갯수 구하기
+	for(i=0;i<nRowCnt;i++)
+	{
+		if(objGrid.getFormatRowProperty(i, "band")=="head")nHeadRowCnt++;
+	}
+	
+	//Head의 Cell 갯수 가져오기
+	var nHeadCellCnt = objGrid.getCellCount("head");
+	
+	for(i=0;i<nHeadCellCnt;i++)
+	{
+		//현재 Cell의 시작 Row Index
+		nHeadRowStart = objGrid.getCellProperty("head", i, "row");
+		
+		//현재 Cell의 Row Sapn 
+		nHeadRowSpan = objGrid.getCellProperty("head", i, "rowspan");
+		
+		//현재 Cell의 마지막 Row Index
+		nHeadRowEnd = nHeadRowStart + nHeadRowSpan -1;
+		
+		//Head 마지막 Row에 해당하는 Cell에 Filter 기능 추가
+		if (nHeadRowEnd==nHeadRowCnt-1)
+		{
+			//Head의 Col Index로 Body의 Index 찾기
+			nHeadCol = objGrid.getCellProperty("head", i, "col");
+			sText = objGrid.getCellProperty("body", nHeadCol, "text");
+			
+			//Bind된 Cell일 경우
+			if(sText && sText.indexOf("bind:")>-1)
+			{
+				//bind정보 찾기
+				sBindColumn = sText.replace("bind:", "");
+				sValue = null;
+				
+				//기존 cols에 등록된 value정보 가져오기
+				for(j=0;j<nColCnt;j++)
+				{
+					if(objColsOrg[j] && sBindColumn==objColsOrg[j].bind)
+					{
+						sValue = objColsOrg[j].value;
+						break;
+					}
+				}
+				
+				//신규 cols정보에 저장
+				objCols[nHeadCol] = {
+										"bind" : sBindColumn,	//바인드된 컬럼명
+										"value" : sValue        //Filter 문자열
+							  };
+			}			
+		}
+	}
+	
+	//config.cols 정보 교체
+	objConfig.cols = objCols;
+};
+
+/**
+* @description 	      : 필터 삭제 함수
+* @param objGrid	  : 필터 적용된 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnRemoveHeadFilter = function(objGrid)
+{
+	var sPopupId = "popFilter";
+	var objPopup;
+	var objDs = objGrid.getBindDataset();
+	var objParent = objGrid.parent;
+	var objConfig = objGrid.config;
+	
+	//필터용 PopupDiv 삭제
+	var objPopup = objParent.removeChild(sPopupId);
+	if(objPopup != null){
+		objPopup.destroy();
+	}
+	
+	//그리드 Row의 갯수 가져오기
+	var nRowCnt = objGrid.getFormatRowCount();
+	
+	//그리드 Head Row의 갯수를 구하기 위한 변수
+	var nHeadRowCnt = 0;
+	
+	//그리드 Head Row 갯수 구하기
+	for(i=0;i<nRowCnt;i++)
+	{
+		if(objGrid.getFormatRowProperty(i, "band")=="head")nHeadRowCnt++;
+	}
+	
+	//Head의 Cell 갯수 가져오기
+	var nHeadCellCnt = objGrid.getCellCount("head");
+		
+	for(i=0;i<nHeadCellCnt;i++)
+	{
+		//현재 Cell의 시작 Row Index
+		nHeadRowStart = objGrid.getCellProperty("head", i, "row");
+		
+		//현재 Cell의 Row Sapn 
+		nHeadRowSpan = objGrid.getCellProperty("head", i, "rowspan");
+		
+		//현재 Cell의 마지막 Row Index
+		nHeadRowEnd = nHeadRowStart + nHeadRowSpan -1;
+		
+		//Head 마지막 Row에 해당하는 Cell에 Filter 기능 추가
+		if (nHeadRowEnd==nHeadRowCnt-1)
+		{
+			//Head의 Col Index로 Body의 Index 찾기
+			nHeadCol = objGrid.getCellProperty("head", i, "col");
+			sText = objGrid.getCellProperty("body", nHeadCol, "text");
+			
+			//Bind된 Cell일 경우 Col별 필터 정보 입력
+			if(sText && sText.indexOf("bind:")>-1)
+			{
+				sBindColumn = sText.replace("bind:", "");
+				objGrid.config.cols[nHeadCol] = {
+										"bind" : sBindColumn,	//바인드된 컬럼명
+										"value" : null          //Filter 문자열
+									};
+				
+				//expand버튼이 보이도록 설정
+				objGrid.setCellProperty("head", i, "expandshow", "hide");
+				objGrid.setCellProperty("head", i, "expandimage", "");
+			}			
+		}
+	}
+	
+	objGrid.removeEventHandler("onexpandup", this.gfnFilterGridOnExpandUp, this);
+	
+	//필터 설정 정보 삭제
+	objGrid.config = null;
+	
+	objDs.filter("");
+}
+
+/**
+* @description 	      : 필터 실행 함수
+* @param objGrid	  : 필터 적용할 그리드 컴포넌트
+* @return             : 없음
+*/
+this.gfnApplyFilter = function(objGrid)
+{
+	var i, j;
+	var objConfig = objGrid.config;
+	var objCols = objConfig.cols;
+	var objDs = objGrid.getBindDataset();
+	var sColumnId;
+	var sValue;
+	var arrValue;
+	var sFilterString = "";
+	var nColCount;
+	var nValueCount;
+		
+	//Col별 설정정보 갯수 가져오기
+	nColCount = objCols.length;
+	
+	for(i=0;i<nColCount;i++)
+	{
+		//Cell 설정정보가 존재하고 bind 정보가 있을 경우
+		if(objCols[i]&&objCols[i].bind)
+		{
+			sColumnId = objCols[i].bind;
+			sValue = objCols[i].value;
+			
+			//필터 문자열 정보가 있을 경우
+			if(sValue)
+			{
+				//필터 문자열을 분해하여 필터 쿼리 만들기
+				sFilterString += "("
+				arrValue = sValue.split(",");
+				nValueCount = arrValue.length;
+				
+				for(j=0;j<nValueCount;j++)
+				{
+					sFilterString += sColumnId + "=='" + arrValue[j] + "'||";
+				}
+				
+				sFilterString = sFilterString.substr(0, sFilterString.length-2);
+				sFilterString += ")&&";
+			}
+		}
+	}
+	sFilterString = sFilterString.substr(0, sFilterString.length-2);
+	
+	//필터 실행
+	objDs.filter(sFilterString);
+}
+
+/**
+* @description 	      : 필터 문자열 만드는 함수
+* @param objGrid	  : 필터 팝업 컴포넌트
+* @return             : 없음
+*/
+this.gfnGetFilterValue = function(objPopDiv)
+{
+	var i;
+	var objDs = objPopDiv.form.dsFilter;
+	var nRowCount;
+	var sFilterValue = "";
+	
+	//체크된 리스트를 필터 문자열로 만들기
+	objDs.set_enableevent(false);
+	objDs.filter("chk==1");
+	nRowCount = objDs.rowcount;
+	
+	for(i=0;i<nRowCount;i++)
+	{
+		if(i==0)sFilterValue += objDs.getColumn(i, "code");
+		else sFilterValue += "," + objDs.getColumn(i, "code");
+	}
+	
+	objDs.filter("");
+	objDs.set_enableevent(true);
+	
+	//필터 문자열 리턴
+	return sFilterValue;
+}]]></Script>

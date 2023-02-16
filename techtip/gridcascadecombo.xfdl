@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="gridcascadecombo" width="1120" height="790" titletext="New Form">
+    <Layouts>
+      <Layout height="790" width="1120">
+        <Grid id="Grid00" taborder="0" left="10" top="10" width="570" height="270" binddataset="Dataset00" autoupdatetype="comboselect" oncloseup="Grid00_oncloseup" ondropdown="Grid00_ondropdown" autoenter="select">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="code1"/>
+                <Cell col="1" text="code2"/>
+                <Cell col="2" text="code3"/>
+                <Cell col="3" text="caption"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:code1" displaytype="combocontrol" edittype="combo" combodataset="dsCode1" combocodecol="code" combodatacol="value"/>
+                <Cell col="1" text="bind:code2" displaytype="combocontrol" edittype="combo" combodataset="dsCode2" combocodecol="code" combodatacol="value"/>
+                <Cell col="2" text="bind:code3" displaytype="combocontrol" edittype="combo" combodataset="dsCode3" combocodecol="code" combodatacol="value"/>
+                <Cell col="3" text="bind:caption"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="Dataset00" oncolumnchanged="Dataset00_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="code1" type="STRING" size="256"/>
+          <Column id="code2" type="STRING" size="256"/>
+          <Column id="code3" type="STRING" size="256"/>
+          <Column id="caption" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCode1">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">01</Col>
+            <Col id="value">일</Col>
+          </Row>
+          <Row>
+            <Col id="code">02</Col>
+            <Col id="value">이</Col>
+          </Row>
+          <Row>
+            <Col id="code">03</Col>
+            <Col id="value">삼</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCode2">
+        <ColumnInfo>
+          <Column id="parentcode" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="parentcode">01</Col>
+            <Col id="code">0101</Col>
+            <Col id="value">일일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">01</Col>
+            <Col id="code">0102</Col>
+            <Col id="value">일이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">01</Col>
+            <Col id="code">0103</Col>
+            <Col id="value">일삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">02</Col>
+            <Col id="code">0201</Col>
+            <Col id="value">이일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">02</Col>
+            <Col id="code">0202</Col>
+            <Col id="value">이이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">02</Col>
+            <Col id="code">0203</Col>
+            <Col id="value">이삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">03</Col>
+            <Col id="code">0301</Col>
+            <Col id="value">삼일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">03</Col>
+            <Col id="code">0302</Col>
+            <Col id="value">삼이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">03</Col>
+            <Col id="code">0303</Col>
+            <Col id="value">삼삼</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsCode3">
+        <ColumnInfo>
+          <Column id="parentcode" type="STRING" size="256"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="value" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="parentcode">0101</Col>
+            <Col id="code">010101</Col>
+            <Col id="value">일일일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0101</Col>
+            <Col id="code">010102</Col>
+            <Col id="value">일일이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0101</Col>
+            <Col id="code">010103</Col>
+            <Col id="value">일일삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0102</Col>
+            <Col id="code">010201</Col>
+            <Col id="value">일이일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0102</Col>
+            <Col id="code">010202</Col>
+            <Col id="value">일이이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0102</Col>
+            <Col id="code">010203</Col>
+            <Col id="value">일이삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0103</Col>
+            <Col id="code">010301</Col>
+            <Col id="value">일삼일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0103</Col>
+            <Col id="code">010302</Col>
+            <Col id="value">일삼이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0103</Col>
+            <Col id="code">010303</Col>
+            <Col id="value">일삼삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0201</Col>
+            <Col id="code">020101</Col>
+            <Col id="value">이일일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0201</Col>
+            <Col id="code">020102</Col>
+            <Col id="value">이일이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0201</Col>
+            <Col id="code">020103</Col>
+            <Col id="value">이일삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0202</Col>
+            <Col id="code">020201</Col>
+            <Col id="value">이이일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0202</Col>
+            <Col id="code">020202</Col>
+            <Col id="value">이이이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0202</Col>
+            <Col id="code">020203</Col>
+            <Col id="value">이이삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0203</Col>
+            <Col id="code">020301</Col>
+            <Col id="value">이삼일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0203</Col>
+            <Col id="code">020302</Col>
+            <Col id="value">이삼이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0203</Col>
+            <Col id="code">020303</Col>
+            <Col id="value">이삼삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0301</Col>
+            <Col id="code">030101</Col>
+            <Col id="value">삼일일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0301</Col>
+            <Col id="code">030102</Col>
+            <Col id="value">삼일이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0301</Col>
+            <Col id="code">030103</Col>
+            <Col id="value">삼일삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0302</Col>
+            <Col id="code">030201</Col>
+            <Col id="value">삼이일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0302</Col>
+            <Col id="code">030202</Col>
+            <Col id="value">삼이이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0302</Col>
+            <Col id="code">030203</Col>
+            <Col id="value">삼이삼</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0303</Col>
+            <Col id="code">030301</Col>
+            <Col id="value">삼삼일</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0303</Col>
+            <Col id="code">030302</Col>
+            <Col id="value">삼삼이</Col>
+          </Row>
+          <Row>
+            <Col id="parentcode">0303</Col>
+            <Col id="code">030303</Col>
+            <Col id="value">삼삼삼</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[
+this.Dataset00_oncolumnchanged = function(obj:nexacro.NormalDataset,e:nexacro.DSColChangeEventInfo)
+{
+	var nRow = e.row;
+	
+	if(e.columnid=="code1")
+	{
+		obj.setColumn(nRow, "code2", "");
+		obj.setColumn(nRow, "code3", "");
+	}else if(e.columnid=="code2")
+	{
+		obj.setColumn(nRow, "code3", "");
+	}else if(e.columnid=="code3")
+	{
+		var sCaption = e.newvalue;
+		obj.setColumn(nRow, "caption", sCaption);
+	}
+};
+
+this.Grid00_ondropdown = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
+{
+	var objDs;
+	var sParentCode;
+	
+	var nRow = e.row;
+	var sColumnId = nexacro.replaceAll(obj.getCellProperty("body", e.cell, "text"), "bind:", "");
+	
+	if(sColumnId=="code2")
+	{
+		objDs = obj.getBindDataset();
+		sParentCode = objDs.getColumn(nRow, "code1");
+		this.dsCode2.filter("parentcode=='"+sParentCode+"'");
+				
+	}else if(sColumnId=="code3")
+	{
+		objDs = obj.getBindDataset();
+		sParentCode = objDs.getColumn(nRow, "code2");
+		this.dsCode3.filter("parentcode=='"+sParentCode+"'");
+	}
+};
+
+this.Grid00_oncloseup = function(obj:nexacro.Grid,e:nexacro.GridEditEventInfo)
+{
+	var sColumnId = nexacro.replaceAll(obj.getCellProperty("body", e.cell, "text"), "bind:", "");
+	
+	if(sColumnId=="code2")
+	{
+		this.dsCode2.filter("");
+		
+	}else if(sColumnId=="code3")
+	{
+		this.dsCode3.filter("");
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

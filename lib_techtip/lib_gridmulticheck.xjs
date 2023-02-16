@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[
+/**
+* @description 	     : 그리드 선택 로우 멀티체크 초기화 함수
+* @param objGrid     : 기능을 추가할 그리드 컴포넌트
+* @param sChkColumnId: 체크로 사용할 데이터셋 컬럼 ID
+* @return            : 없음
+*/
+this.gfnInitGridMultiCheck = function(objGrid, sChkColumnId)
+{
+	objGrid.checkcolumnid = sChkColumnId;
+	objGrid.addEventHandler("onkeydown", this.gfnMultiCheckOnKeyDown, this);
+}
+
+/**
+* @description 	   : space키 키입력시 체크박스 체크할 이벤트
+*/
+this.gfnMultiCheckOnKeyDown = function(obj:nexacro.Grid,e:nexacro.KeyEventInfo)
+{
+	var nFRow;
+	var arrRows;
+	
+	//바인드된 데이터셋 가져오기
+	var objDs = obj.getBindDataset();
+	
+	//체크로 사용할 컬럼 ID 가져오기
+	var sCheckColumnId = obj.checkcolumnid;
+	
+	var sCheckValue;
+	
+	//현재 Cell Edit상태가 아니며 스페이스키가 입력되었을 경우
+	if(obj.getEditCaret()==-1&&e.keycode==32)
+	{
+		//현재 선택된 Row 리스트 가져오기
+		arrRows = obj.getSelectedRows();
+		
+		for(i=0;i<arrRows.length;i++)
+		{
+			//선택된 Row Index 가져오기
+			nFRow = arrRows[i];
+			
+			//Check 값 가져오기
+			sCheckValue = objDs.getColumn(nFRow, sCheckColumnId);
+			
+			//체크되어 있을 경우 체크 해제
+			if(sCheckValue=="1")objDs.setColumn(nFRow, sCheckColumnId, "0");
+			
+			//체크해제되어 있을 경우 체크
+			else objDs.setColumn(nFRow, sCheckColumnId, "1");
+		}
+	}
+};
+]]></Script>

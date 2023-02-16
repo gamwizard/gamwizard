@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script version="1.0" type="xscript5.1"><![CDATA[/**
+* @description 	   : 텍스트(Static) 생성 함수
+* @param objDiv	   : 텍스트를 생성할 부모 Div
+* @param objDs	   : 생성할 텍스트를 가지고 있는 Dataset
+* @return          : 없음
+*/
+this.gfnCreateText = function(objDiv, objDs)
+{
+	//Static 컴포넌트 기본 좌표
+	var nLeft = 0;
+	var nTop = 0;
+	var nWidth = 0;
+	var nBottom = 0;
+	
+	//Static 컴포넌트간 간격
+	var nGap = 10;
+	
+	//텍스트 갯수 가져오기
+	var nCnt = objDs.rowcount;
+	
+	var objText;
+	var sText;
+	
+	//텍스트 갯수 만큼 Static 컴포넌트 생성
+	for(var i=0;i<nCnt;i++)
+	{
+		//텍스트 가져오기
+		sText = objDs.getColumn(i, "text");
+		
+		//Static 컴포넌트 만들기
+		objText = new nexacro.Static("staText_"+i, nLeft, nTop, nWidth, null, null, nBottom);
+		objDiv.form.addChild(objText.id, objText);
+		objText.show();
+		
+		//텍스트 길이에 맞춰 리사이즈 되도록 fittocontents 설정
+		objText.set_fittocontents("width");
+		
+		//텍스트 설정
+		objText.set_text(sText);
+		
+		//리사이즈되도록 resetScroll 실행
+		objDiv.form.resetScroll();
+		
+		//다음 Static 생성될 위치 구하기
+		nLeft = objText.getOffsetLeft() + objText.getOffsetWidth() + nGap;
+	}
+	
+	//ontimer함수에서 재사용을 위해 폼변수 설정
+	this.movetextdiv = objDiv;
+		
+	//ontimer함수 이벤트 핸들러 등록
+	this.addEventHandler("ontimer", this.gfnOnMoveText_ontimer, this);
+}
+
+/**
+* @description 	   : 텍스트를 이동시킬 타이머 함수
+* @param obj	   : 설정할 폼
+* @param e		   : 이벤트 오브젝트
+* @return          : 없음
+*/
+this.gfnOnMoveText_ontimer = function(obj:nexacro.Form,e:nexacro.TimerEventInfo)
+{
+	//흐르는 텍스트용 타이머일 경우
+	if(e.timerid=="movetext")
+	{
+		//텍스트 이동 함수 호출
+		this.gfnMoveText();
+	}
+}
+
+/**
+* @description 	   : 텍스트(Static) 이동 함수
+* @return          : 없음
+*/
+this.gfnMoveText = function()
+{
+	//흐르는 텍스트용 Div정보 가져오기
+	var objDiv = this.movetextdiv;
+	
+	//설정된 Div가 없을 경우 return
+	if(!objDiv)return;
+	
+	
+	var nLeft;
+	var nWidth;
+	var nGap = 10;
+	
+	var objText;
+	var objText_Befor;
+	var nBeforIdx;
+	
+	//Static 컴포넌트 갯수 가져오기
+	var nCnt = objDiv.form.components.length;
+	
+	//Static 컴포넌트 갯수만큼 Loop
+	for(var i=0;i<nCnt;i++)
+	{
+		//Static 컴포넌트 가져오기
+		objText = objDiv.form.components[i];
+		
+		//왼쪽으로 1px 이동
+		nLeft = objText.getOffsetLeft() - 1;
+		objText.setOffsetLeft(nLeft);
+	}
+	
+	//Static 컴포넌트 갯수만큼 Loop
+	for(var i=0;i<nCnt;i++)
+	{
+		//Static 컴포넌트 가져오기
+		objText = objDiv.form.components[i];
+		
+		//현재 Static의 Left좌표값 가져오기
+		nLeft = objText.getOffsetLeft();
+		
+		//현재 Static의 Width 값 가져오기
+		nWidth = objText.getOffsetWidth();
+		
+		//현재 Left 좌표값이 -Width 값보다 작을 경우
+		//현재 Static이 왼쪽으로 완전히 벗어날 경우
+		if(nLeft < -nWidth)
+		{
+			//이전 컴포넌트의 Index 구하기
+			//0번째 컴포넌트일 경우 마지막 컴포넌트 뒤에 붙어야함으로 나머지값 계산
+			nBeforIdx = (i+nCnt-1)%(nCnt);
+			
+			//이전 컴포넌트 가져오기
+			objText_Befor = objDiv.form.components[nBeforIdx];
+			
+			//이전 컴포넌트 뒤로 이동될 수 있도록 Left값 계산
+			nLeft = objText_Befor.getOffsetLeft() + objText_Befor.getOffsetWidth() + nGap;
+			
+			//이전 컴포넌트 뒤로 이동
+			objText.setOffsetLeft(nLeft);
+		}
+	}
+}]]></Script>

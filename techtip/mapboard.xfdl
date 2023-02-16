@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="mapboard" width="630" height="760" titletext="Map Board (Graphics Component를 이용한 지도 현황판 만들기)">
+    <Layouts>
+      <Layout height="760" width="630">
+        <Graphics id="graBoard" taborder="0" left="20" top="50" width="600" height="700" onclick="graBoard_onclick"/>
+        <Button id="btnSubmit" taborder="1" text="실행" left="540" top="10" width="80" height="30" onclick="btnSubmit_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[include "lib_techtip::lib_mapboard.xjs"
+
+this.btnSubmit_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//Graphics 컴포넌트 그리기 함수 호출
+	this.gfnLoadGraphics(this.graBoard, this.dsMap);
+};
+
+//Graphics onclick 이벤트 함수
+this.graBoard_onclick = function(obj:nexacro.Graphics,e:nexacro.ClickEventInfo)
+{
+	var sId;
+	var arrId;
+	var objTargetPath;
+	
+	//클릭된 좌표의 오브젝트 가져오기
+	var objPath = obj.hitTest(e.canvasx, e.canvasy);
+	
+	//클릭된 오브젝트가 포인트일 경우
+	if(objPath!=null&&objPath.id.indexOf("point")==0)
+	{
+		//포인트의 ID값 가져오기
+		arrId = objPath.id.split("_");
+		sId = arrId[1];
+		
+		//동일한 ID를 가진 상세정보창 오브젝트 가져오기(GraphicsGroup)
+		objTargetPath = obj.getObjectByID("window_"+sId);
+		
+		//보이기/숨기기 처리
+		if(objTargetPath.visible==true)
+		{
+			objTargetPath.set_visible(false);
+		}else
+		{
+			objTargetPath.set_visible(true);
+		}
+		
+		//Graphics redraw 실행
+		obj.redraw();
+	}
+};
+]]></Script>
+    <Objects>
+      <Dataset id="dsMap">
+        <ColumnInfo>
+          <Column id="id" type="STRING" size="256"/>
+          <Column id="x" type="STRING" size="256"/>
+          <Column id="y" type="STRING" size="256"/>
+          <Column id="title" type="STRING" size="256"/>
+          <Column id="value1" type="STRING" size="256"/>
+          <Column id="value2" type="STRING" size="256"/>
+          <Column id="value3" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="title">경기도</Col>
+            <Col id="x">140</Col>
+            <Col id="y">160</Col>
+            <Col id="id">02</Col>
+            <Col id="value1">8</Col>
+            <Col id="value2">5</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="title">강원도</Col>
+            <Col id="x">220</Col>
+            <Col id="y">80</Col>
+            <Col id="id">03</Col>
+            <Col id="value1">5</Col>
+            <Col id="value2">15</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="id">01</Col>
+            <Col id="x">100</Col>
+            <Col id="y">110</Col>
+            <Col id="title">서울</Col>
+            <Col id="value1">9</Col>
+            <Col id="value2">20</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="title">충청북도</Col>
+            <Col id="x">180</Col>
+            <Col id="y">210</Col>
+            <Col id="id">04</Col>
+            <Col id="value1">10</Col>
+            <Col id="value2">20</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="id">05</Col>
+            <Col id="x">85</Col>
+            <Col id="y">260</Col>
+            <Col id="title">충청남도</Col>
+            <Col id="value1">10</Col>
+            <Col id="value2">0</Col>
+            <Col id="value3">맑음</Col>
+          </Row>
+          <Row>
+            <Col id="title">경상북도</Col>
+            <Col id="x">280</Col>
+            <Col id="y">280</Col>
+            <Col id="id">06</Col>
+            <Col id="value1">9</Col>
+            <Col id="value2">0</Col>
+            <Col id="value3">맑음</Col>
+          </Row>
+          <Row>
+            <Col id="title">전라북도</Col>
+            <Col id="x">110</Col>
+            <Col id="y">350</Col>
+            <Col id="id">07</Col>
+            <Col id="value1">8</Col>
+            <Col id="value2">0</Col>
+            <Col id="value3">맑음</Col>
+          </Row>
+          <Row>
+            <Col id="title">전라남도</Col>
+            <Col id="x">90</Col>
+            <Col id="y">450</Col>
+            <Col id="id">08</Col>
+            <Col id="value1">8</Col>
+            <Col id="value2">30</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="title">경상남도</Col>
+            <Col id="x">240</Col>
+            <Col id="y">400</Col>
+            <Col id="id">09</Col>
+            <Col id="value1">7</Col>
+            <Col id="value2">20</Col>
+            <Col id="value3">흐림</Col>
+          </Row>
+          <Row>
+            <Col id="title">울릉도</Col>
+            <Col id="x">465</Col>
+            <Col id="y">205</Col>
+            <Col id="id">10</Col>
+            <Col id="value1">5</Col>
+            <Col id="value2">50</Col>
+            <Col id="value3">비</Col>
+          </Row>
+          <Row>
+            <Col id="id">11</Col>
+            <Col id="x">45</Col>
+            <Col id="y">610</Col>
+            <Col id="title">제주도</Col>
+            <Col id="value2">100</Col>
+            <Col id="value3">비</Col>
+            <Col id="value1">12</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

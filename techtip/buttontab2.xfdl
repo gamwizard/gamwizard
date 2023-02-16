@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="buttontab2" width="400" height="150" titletext="New Form" onload="buttontab2_onload">
+    <Layouts>
+      <Layout height="150" width="400">
+        <Div id="divMdi" taborder="0" left="10" top="10" height="50" border="1px solid #000000" right="70" formscrollbartype="none none" formscrolltype="none"/>
+        <Button id="addBtn" taborder="1" text="버튼추가" left="10" top="85" width="70" height="30" onclick="addBtn_onclick"/>
+        <Button id="btnPrev" taborder="2" text="&lt;" top="10" width="30" height="50" right="40" onclick="btnPrev_onclick"/>
+        <Button id="btnNext" taborder="3" text="&gt;" top="10" width="30" height="50" right="11" onclick="btnNext_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > buttontab2
+*  techtip 텍스트 사이즈에 맞춰 버튼 사이즈가 변경되는 탭 버튼 샘플
+*  @FileName	buttontab2.xfdl 
+*******************************************************************************
+*  2023.01.12		daewon			최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib_techtip::lib_buttontab2.xjs";
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+this.fvMenuIdx = 0;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+
+/**
+ * @description 화면 onload시 처리내역
+*/ 
+this.buttontab2_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//버튼 동작에 필요한 정보 오브젝트
+	var objConfig = 
+	{
+		"index" : 0, 	//현재 선택된 버튼의 Index
+		"position" : 0,	//현재 가장 왼쪽에 표현된 버튼의 Index
+		"btngap" : 0, 	//버튼과 버튼사이에 간격
+		"btnlist" : [],  //버튼의 Id와 text를 관리하기 위한 오브젝트 Array
+		"showallbutton" : true //영역을 벗어난 버튼을 표현할지 여부
+	};
+	
+	//Tab button 초기화 함수 호출
+	this.gfnInitButtonTab2(this.divMdi, objConfig);
+};
+
+/**************************************************************************
+ * CALLBACK 콜백 처리부분(Transaction)
+ **************************************************************************/
+
+/**************************************************************************
+ * CRUD 및 TRANSACTION 서비스 호출 처리
+ **************************************************************************/
+
+/**************************************************************************
+ * 각 COMPONENT 별 EVENT 영역
+**************************************************************************/
+/**
+ * @description 버튼추가 버튼 클릭 시
+*/
+this.addBtn_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//샘플로 만든 메뉴리스트보다 클 경우 retrun
+	if(this.fvMenuIdx>this.dsMenu.rowcount-1)return;
+	
+	//가져올 메뉴 Row Index;
+	var nRow = this.fvMenuIdx;
+	
+	//메뉴 ID 가져오기
+	var sId = this.dsMenu.getColumn(nRow, "menuId");
+	
+	//메뉴 Text 가져오기
+	var sBtnText = this.dsMenu.getColumn(nRow, "menuNm");
+	
+	//버튼 추가 함수 실행
+	this.gfnAddBtn(this.divMdi, sId, sBtnText);
+	
+	//다음에 가져올 메뉴의 Row Index 구하기
+	this.fvMenuIdx++;
+};
+
+/**
+ * @description 이전 버튼 클릭 시
+*/
+this.btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//이전 버튼 선택 함수 실행
+	this.gfnSelectPrev(this.divMdi);
+};
+
+/**
+ * @description 다음 버튼 클릭 시
+*/
+this.btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	//다음 버튼 선택 함수 실행
+	this.gfnSelectNext(this.divMdi);
+};
+
+/**************************************************************************
+ * 사용자 FUNCTION 영역
+ **************************************************************************/
+]]></Script>
+    <Objects>
+      <Dataset id="dsMenu">
+        <ColumnInfo>
+          <Column id="menuId" type="STRING" size="256"/>
+          <Column id="menuNm" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="menuId">01</Col>
+            <Col id="menuNm">그리드 기능</Col>
+          </Row>
+          <Row>
+            <Col id="menuId">02</Col>
+            <Col id="menuNm">파일 업로드/다운로드</Col>
+          </Row>
+          <Row>
+            <Col id="menuId">03</Col>
+            <Col id="menuNm">엑셀 저장</Col>
+          </Row>
+          <Row>
+            <Col id="menuId">04</Col>
+            <Col id="menuNm">업무화면 예시1</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

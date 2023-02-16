@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Div.divViewForm
+{
+	background : #ffffff;
+	color : #333333;
+	-nexa-border : 2px solid #dbdee2;
+	font : 12px Gulim;
+}
+.Static.staViewTitle
+{
+	-nexa-text-align : right;
+}
+
+.Static.staViewForm
+{
+	background : #999999;
+	-nexa-border : 1px solid #d5d5d5;
+	-nexa-padding : 1px 9px 0px 9px;
+}
+.Edit.edtViewControl
+{
+	background : #ffffff;
+	-nexa-border : 1px solid #d5d5d5;
+	-nexa-padding : 1px 9px 0px 9px;
+	font : 14px Gulim;
+}
+
+.EditControl.edtViewControl
+{
+	background : transparent;
+	-nexa-border : 0px none;
+	-nexa-padding : 1px 9px 0px 9px;
+}
+
+.Edit.edtViewControl[status=mouseover],.Edit.edtViewControl[status=focused]
+{
+	-nexa-border : 1px solid #5a86cd;
+}
+
+.Edit.edtViewControl[status=readonly]
+{
+	background : #efefef;
+}
+
+.Edit.edtViewControl[status=disabled]
+{
+	color : #999999;
+	background : #efefef;
+}]]></XCSS>

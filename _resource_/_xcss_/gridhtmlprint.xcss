@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.0"><![CDATA[.Grid .body .row .cell.grd_WF_cellBlueC
+{
+	color : #0078ff;
+}]]></XCSS>

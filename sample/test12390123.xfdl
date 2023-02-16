@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="test12390123" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" width="1280">
+        <workflow id="workflow00" taborder="0" left="15" top="10" width="990" height="480" buttonname="11111"/>
+        <Button id="Button00" taborder="1" text="Button00" left="1050" top="25" width="120" height="50" onclick="Button00_onclick"/>
+        <Grid id="Grid00" taborder="2" left="962" top="141" width="37" height="119" oncellclick="Grid00_oncellclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.Button00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.workflow00.render();
+	this.workflow00.addLine();
+	this.workflow00.addItem();
+};
+
+this.Grid00_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	e.row
+};
+]]></Script>
+  </Form>
+</FDL>

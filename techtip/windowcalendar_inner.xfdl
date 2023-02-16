@@ -1,0 +1,565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="windowcalendar_inner" width="344" height="360" titletext="New Form" onload="windowcalendar_inner_onload" scrollbartype="none none" scrolltype="none">
+    <Layouts>
+      <Layout height="360" mobileorientation="landscape" width="344">
+        <Div id="divYear" taborder="0" text="Div00" left="0" top="0" width="344" height="360" cssclass="div_WF_calendar" onsize="divYear_onsize">
+          <Layouts>
+            <Layout>
+              <Button id="stYears" taborder="0" text="2020 - 2029" left="10" top="27" width="120" height="43" cssclass="btn_WF_period"/>
+              <Button id="btnPrev" taborder="1" top="27" width="40" height="40" cssclass="btn_WF_up" onclick="divYear_btnPrev_onclick" right="64"/>
+              <Button id="btnNext" taborder="2" top="27" width="40" height="40" cssclass="btn_WF_down" onclick="divYear_btnNext_onclick" right="18"/>
+              <Button id="btn_0" taborder="3" text="2017" left="10" top="80" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+              <Button id="btn_1" taborder="10" text="2018" left="90" top="80" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+              <Button id="btn_2" taborder="14" text="2019" left="170" top="80" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+              <Button id="btn_3" taborder="18" text="2020" top="80" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick" left="250"/>
+              <Button id="btn_4" taborder="4" text="2021" left="10" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_5" taborder="9" text="2022" left="90" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_6" taborder="13" text="2023" left="170" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_7" taborder="17" text="2024" left="250" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_8" taborder="5" text="2025" left="10" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_9" taborder="8" text="2026" left="90" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_10" taborder="12" text="2027" left="170" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_12" taborder="6" text="2029" left="10" top="281" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_11" taborder="16" text="2028" left="250" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="YearButton_onclick"/>
+              <Button id="btn_13" taborder="7" text="2030" left="90" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+              <Button id="btn_14" taborder="11" text="2031" left="170" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+              <Button id="btn_15" taborder="15" text="2032" left="250" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="YearButton_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divMonth" taborder="1" text="Div00" left="350" top="0" width="344" height="360" cssclass="div_WF_calendar" onsize="divMonth_onsize">
+          <Layouts>
+            <Layout>
+              <Button id="btnYear" taborder="0" text="2021년" left="10" top="27" width="120" height="43" cssclass="btn_WF_period" onclick="divMonth_btnYear_onclick"/>
+              <Button id="btn_0" taborder="1" text="1" left="10" top="80" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_1" taborder="8" text="2" left="90" top="80" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_2" taborder="12" text="3" left="170" top="80" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_3" taborder="16" text="4" top="80" width="80" height="67" left="250" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_4" taborder="2" text="5" left="10" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_5" taborder="7" text="6" left="90" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_6" taborder="11" text="7" left="170" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_7" taborder="15" text="8" left="250" top="147" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_8" taborder="3" text="9" left="10" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_9" taborder="6" text="10" left="90" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_10" taborder="10" text="11" left="170" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_11" taborder="14" text="12" left="250" top="214" width="80" height="67" cssclass="btn_WF_month" onclick="MonthButton_onclick"/>
+              <Button id="btn_12" taborder="4" text="1" left="10" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="MonthButton_onclick"/>
+              <Button id="btn_13" taborder="5" text="2" left="90" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="MonthButton_onclick"/>
+              <Button id="btn_14" taborder="9" text="3" left="170" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="MonthButton_onclick"/>
+              <Button id="btn_15" taborder="13" text="4" left="250" top="281" width="80" height="67" cssclass="btn_WF_notThisTime" onclick="MonthButton_onclick"/>
+              <Button id="btnPrev" taborder="17" top="27" width="40" height="40" cssclass="btn_WF_up" onclick="divMonth_btnPrev_onclick" right="64"/>
+              <Button id="btnNext" taborder="18" top="27" width="40" height="40" cssclass="btn_WF_down" onclick="divMonth_btnNext_onclick" right="18"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="divDay" taborder="2" text="Div00" left="700" top="0" width="344" height="360" cssclass="div_WF_calendar" onsize="divDay_onsize">
+          <Layouts>
+            <Layout>
+              <Button id="btnYearMonth" taborder="0" text="2021년 5월" left="10" top="27" width="120" height="43" cssclass="btn_WF_period" onclick="divDay_btnYearMonth_onclick"/>
+              <Button id="btnPrev" taborder="50" top="27" width="40" height="40" cssclass="btn_WF_up" onclick="divDay_btnPrev_onclick" right="64"/>
+              <Button id="btnNext" taborder="51" top="27" width="40" height="40" cssclass="btn_WF_down" onclick="divDay_btnNext_onclick" right="18"/>
+              <Static id="stSun" taborder="1" text="일" left="10" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stMon" taborder="8" text="월" left="56" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stTue" taborder="15" text="화" left="102" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stWed" taborder="22" text="수" left="148" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stThu" taborder="29" text="목" left="194" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stFri" taborder="36" text="금" left="240" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Static id="stSta" taborder="43" text="토" left="286" top="70" width="46" height="40" cssclass="static_WF_week"/>
+              <Button id="btn_0" taborder="2" text="25" left="10" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_1" taborder="9" text="26" left="56" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_2" taborder="16" text="27" left="102" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_3" taborder="23" text="28" left="148" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_4" taborder="30" text="29" left="194" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_5" taborder="37" text="30" left="240" top="110" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_6" taborder="44" text="1" left="286" top="110" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_7" taborder="3" text="2" left="10" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_8" taborder="10" text="3" left="56" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_9" taborder="17" text="4" left="102" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_10" taborder="24" text="5" left="148" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_11" taborder="31" text="6" left="194" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_12" taborder="38" text="7" left="240" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_13" taborder="45" text="8" left="286" top="150" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_14" taborder="4" text="9" left="10" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_15" taborder="11" text="10" left="56" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_16" taborder="18" text="11" left="102" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_17" taborder="25" text="12" left="148" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_18" taborder="32" text="13" left="194" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_19" taborder="39" text="14" left="240" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_20" taborder="46" text="15" left="286" top="190" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_21" taborder="5" text="16" left="10" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_22" taborder="12" text="17" left="56" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_23" taborder="19" text="18" left="102" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_24" taborder="26" text="19" left="148" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_25" taborder="33" text="20" left="194" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_26" taborder="40" text="21" left="240" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_27" taborder="47" text="22" left="286" top="230" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_28" taborder="6" text="23" left="10" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_29" taborder="13" text="24" left="56" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_30" taborder="20" text="25" left="102" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_31" taborder="27" text="26" left="148" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_32" taborder="34" text="27" left="194" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_33" taborder="41" text="28" left="240" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_34" taborder="48" text="29" left="286" top="270" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_35" taborder="7" text="30" left="10" top="310" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_36" taborder="14" text="31" left="56" top="310" width="46" height="40" cssclass="btn_WF_day" onclick="DayButton_onclick"/>
+              <Button id="btn_37" taborder="21" text="1" left="102" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_38" taborder="28" text="2" left="148" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_39" taborder="35" text="3" left="194" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_40" taborder="42" text="4" left="240" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+              <Button id="btn_41" taborder="49" text="5" left="286" top="310" width="46" height="40" cssclass="btn_WF_notThisTime" onclick="DayButton_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/**
+*  @MenuPath    techtip > windowcalendar
+*  techtip [디자인] Window Calendar (윈도우 스타일 달력)
+
+*  @FileName	aniaccordionmenu.xfdl 
+*******************************************************************************
+*  2021.05.20		투비대원&투비미뇽		최초 생성
+*******************************************************************************
+*/
+
+/**************************************************************************
+ * include 영역 
+ **************************************************************************/
+include "lib::lib_common.xjs";
+
+
+/**************************************************************************
+ * FORM 변수 선언 영역
+ **************************************************************************/
+ 
+//달력의 현재 선택된 날짜를 관리하기 위한 Date 오브젝트
+this.calendarDate;
+
+//윈도우달력에 설정될 날짜를 관리하기 위한 Data 오브젝트
+this.targetDate;
+
+/**************************************************************************
+ * FORM EVENT 영역(onload)
+ **************************************************************************/
+ 
+/**
+ * @description 화면 onload시 처리내역
+*/
+this.windowcalendar_inner_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
+{
+	//윈도우 달력 초기화 함수 호출
+	this.fnOnLoadCalendar();
+};
+
+//일달력에서 월이동 버튼 클릭 시
+this.divDay_btnYearMonth_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnShowCalendarType("MONTH");
+};
+
+//월달력에서 년도이동 버튼 클릭시
+this.divMonth_btnYear_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.fnShowCalendarType("YEAR");
+};
+
+//년달력에서 년도 선택시
+this.YearButton_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sYear = obj.text;
+	var sMonth = (this.calendarDate.getMonth()+1).toString().padLeft(2, "0");
+	var sDate = (this.calendarDate.getDate()).toString().padLeft(2, "0");
+	var sFullDate = sYear + sMonth + sDate;
+	
+	this.fnChangeWindowCalPopValue(sFullDate);
+	this.fnShowCalendarType("MONTH");
+};
+
+//월달력에서 월 선택 시
+this.MonthButton_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sYear;
+	var sMonth;
+	var sDate;
+	var sFullDate
+	
+	//다음년도 월 클릭 시 년도 + 1
+	if(obj.cssclass=="btn_WF_notThisTime") this.calendarDate.addYear(1);
+	
+	sYear = this.calendarDate.getFullYear();	
+	sMonth = obj.text.toString().padLeft(2, "0");
+	sDate = (this.calendarDate.getDate()).toString().padLeft(2, "0");
+		
+	sFullDate = sYear + sMonth + sDate;
+	
+	this.fnChangeWindowCalPopValue(sFullDate);
+	this.fnShowCalendarType("DAY");
+};
+
+//일달력에서 일자 선택 시
+this.DayButton_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	var sYear;
+	var sMonth;
+	var sDate;
+	var sFullDate
+	
+	var arrBtnText = obj.id.split("_");
+	var nBtnIdx = nexacro.toNumber(arrBtnText[1]);
+	
+	//이전 달 일자 클릭 시 월 - 1
+	if(obj.cssclass=="btn_WF_notThisTime"&&nBtnIdx<7) this.calendarDate.addMonth(-1);
+	//다음 달 일자 클릭 시 월 + 1
+	else if(obj.cssclass=="btn_WF_notThisTime"&&nBtnIdx>34)this.calendarDate.addMonth(1);
+	
+	var sYear = this.calendarDate.getFullYear();
+	var sMonth = (this.calendarDate.getMonth()+1).toString().padLeft(2, "0");
+	var sDate = obj.text.toString().padLeft(2, "0");
+	var sFullDate = sYear + sMonth + sDate;
+	
+	this.fnChangeWindowCalPopValue(sFullDate);
+	this.parent.closePopup();
+};
+
+//년달력에서 이전 버튼 클릭 시
+this.divYear_btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addYear(-10);
+	this.fnSetDivYear();
+};
+
+//년달력에서 다음 버튼 클릭 시
+this.divYear_btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addYear(10);
+	this.fnSetDivYear();
+};
+
+//월달력에서 이전 버튼 클릭 시
+this.divMonth_btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addYear(-1);
+	this.fnSetDivMonth();
+};
+
+//월달력에서 다음 버튼 클릭 시
+this.divMonth_btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addYear(1);
+	this.fnSetDivMonth();
+};
+
+//일달력에서 이전 버튼 클릭 시
+this.divDay_btnPrev_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addMonth(-1);
+	this.fnSetDivDay();
+};
+
+//일달력에서 다음 버튼 클릭 시
+this.divDay_btnNext_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.calendarDate.addMonth(1);
+	this.fnSetDivDay();
+};
+
+//연달력 사이즈 변경 시
+this.divYear_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	var nTop = 80;
+	var nLeft = 10;
+	var nRight = 10;
+	var nBottom = 10;
+	
+	var nWidth = e.cx - nLeft -nRight;
+	var nHeight = e.cy - nTop - nBottom;
+	
+	var nCompWidth = nexacro.floor(nWidth/4);
+	var nCompHeight = nexacro.floor(nHeight/4);
+	
+	var objComponents = this.divYear.form.components;
+	
+	for(var i=0;i<16;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%4==3)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+};
+
+//월달력 사이즈 변경 시
+this.divMonth_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	var nTop = 80;
+	var nLeft = 10;
+	var nRight = 10;
+	var nBottom = 10;
+	
+	var nWidth = e.cx - nLeft -nRight;
+	var nHeight = e.cy - nTop - nBottom;
+	
+	var nCompWidth = nexacro.floor(nWidth/4);
+	var nCompHeight = nexacro.floor(nHeight/4);
+	
+	var objComponents = this.divMonth.form.components;
+	
+	for(var i=0;i<16;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%4==3)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+};
+
+//일달력 사이즈 변경 시
+this.divDay_onsize = function(obj:nexacro.Div,e:nexacro.SizeEventInfo)
+{
+	var arrWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sta"]
+	var nTop = 70;
+	var nLeft = 10;
+	var nRight = 10;
+	var nBottom = 10;
+	
+	var nWidth = e.cx - nLeft -nRight;
+	var nHeight = e.cy - nTop - nBottom;
+	
+	var nCompWidth = nexacro.floor(nWidth/7);
+	var nCompHeight = nexacro.floor(nHeight/7);
+	
+	var objComponents = this.divDay.form.components;
+	
+	for(var i=0;i<7;i++)
+	{
+		objComp = objComponents["st"+arrWeek[i]];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%7==6)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+	
+	for(var i=0;i<42;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		objComp.move(nLeft, nTop, nCompWidth, nCompHeight);
+		
+		if(i%7==6)
+		{
+			nLeft = 10;
+			nTop = nTop + nCompHeight;
+		}else
+		{
+			nLeft = nLeft + nCompWidth;
+		}
+	}
+};
+
+/**
+* @description 	     : 윈도우 달력 초기화 함수
+* @return            : 없음
+*/
+this.fnOnLoadCalendar = function()
+{
+	//일달력으로 변경 
+	this.fnShowCalendarType("DAY");
+	
+	//달력들을 최초 위치로 이동
+	this.divYear.move(0, 0, null, null, 0, 0);
+	this.divMonth.move(0, 0, null, null, 0, 0);
+	this.divDay.move(0, 0, null, null, 0, 0);
+}
+
+/**
+* @description 	     : 달력의 타입을 변경하는 함수
+* @param sType       : 달력 타입(년, 월, 일 달력)
+* @return            : 없음
+*/
+this.fnShowCalendarType = function(sType)
+{
+	//모든 달력 visible false
+	this.divYear.set_visible(false);
+	this.divMonth.set_visible(false);
+	this.divDay.set_visible(false);
+	
+	//년달력 visible true
+	if(sType=="YEAR")
+	{
+		this.divYear.set_visible(true);
+	}
+	//월달력 visible true
+	else if(sType=="MONTH")
+	{
+		this.divMonth.set_visible(true);
+	}
+	//일달력 visible true
+	else if(sType=="DAY")
+	{
+		this.divDay.set_visible(true);
+	}
+}
+
+/**
+* @description 	     : 윈도우달력의 값 변경 함수
+* @param sType       : 변경할 날짜 값(yyyyMMdd)
+* @return            : 없음
+*/
+this.fnChangeWindowCalPopValue = function(sValue)
+{
+	var i;
+	var objDate;
+	var nYear;
+	var nMonth;
+	var nDate;
+	
+	var objMonthCalPop = this.parent;
+	var objCal = objMonthCalPop.targetcal;
+	
+	//값이 없을 경우 오늘날짜 기준으로 팝업
+	if(this.gfnIsNull(sValue)==true)
+	{
+		this.calendarDate = new nexacro.Date();
+		this.targetDate = new nexacro.Date();
+	}else
+	{
+		nYear = nexacro.toNumber(sValue.substr(0, 4));
+		nMonth = nexacro.toNumber(sValue.substr(4, 2))-1;
+		nDate = nexacro.toNumber(sValue.substr(6, 2));
+		
+		this.calendarDate = new nexacro.Date(nYear, nMonth, nDate);
+		this.targetDate = new nexacro.Date(nYear, nMonth, nDate);
+	}
+	
+	//이전 값 가져오기
+	sPreValue = objCal.value;
+	
+	if(sPreValue!=sValue)objCal._on_value_change(sPreValue, sValue);
+	
+	this.fnSetDivYear();
+	this.fnSetDivMonth();
+	this.fnSetDivDay();
+}
+
+/**
+* @description 	     : 변경된 값에 따라 연달력 표현 변경
+* @return            : 없음
+*/
+this.fnSetDivYear = function()
+{
+	var nYear = this.calendarDate.getFullYear();
+	var nDiff = nYear%10;
+	var nStartYear = nYear - nDiff;
+	var objComponents = this.divYear.form.components;
+	var objComp;
+	var nTempYear;
+	var nTargetYear = this.targetDate.getFullYear();
+	
+	var sYears = nStartYear + " - " + (nStartYear+9)
+	
+	this.divYear.form.stYears.set_text(sYears);
+	
+	for(var i=0;i<16;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		nTempYear = nStartYear + i -3;
+		objComp.set_text(nTempYear);
+		if(nTempYear==nTargetYear)objComp.setSelectStatus(true);
+		else objComp.setSelectStatus(false);
+	}
+}
+
+/**
+* @description 	     : 변경된 값에 따라 월달력 표현 변경
+* @return            : 없음
+*/
+this.fnSetDivMonth = function()
+{
+	var nYear = this.calendarDate.getFullYear();
+	var nMonth = this.calendarDate.getMonth()+1;
+	var objComponents = this.divMonth.form.components;
+	var objComp;
+	var nTargetYear = this.targetDate.getFullYear();
+	var nTargetMonth = this.targetDate.getMonth();
+	this.divMonth.form.btnYear.set_text(nYear);
+	
+	for(var i=0;i<16;i++)
+	{
+		objComp = objComponents["btn_"+i];
+		
+		if(nYear==nTargetYear&&i==nTargetMonth)objComp.setSelectStatus(true);
+		else objComp.setSelectStatus(false);
+	}
+}
+
+/**
+* @description 	     : 변경된 값에 따라 일달력 표현 변경
+* @return            : 없음
+*/
+this.fnSetDivDay = function()
+{
+	var nYear = this.calendarDate.getFullYear();
+	var nMonth = this.calendarDate.getMonth();
+	var nDate = this.calendarDate.getDate();
+	var objComponents = this.divDay.form.components;
+	var objComp;
+	var objTempDate = new Date(nYear, nMonth, 1);
+	var nWeek = objTempDate.getDay();
+	
+	var nTargetYear = this.targetDate.getFullYear();
+	var nTargetMonth = this.targetDate.getMonth();
+	var nTargetDate = this.targetDate.getDate();
+	
+	var nTempYear;
+	var nTempMonth;
+	var nTempDate;
+	
+	objTempDate.addDate(-nWeek);
+	
+	var sYearMonth = nYear + "년 " + (nMonth+1)+"월";
+	
+	this.divDay.form.btnYearMonth.set_text(sYearMonth);
+	for(var i=0;i<42;i++)
+	{
+		nTempYear = objTempDate.getFullYear();
+		nTempMonth = objTempDate.getMonth();
+		nTempDate = objTempDate.getDate();
+		
+		objComp = objComponents["btn_"+i];
+		objComp.set_text(nTempDate);
+		
+		if(nTempYear==nTargetYear&&nTempMonth==nTargetMonth&&nTempDate==nTargetDate)
+		{
+			objComp.setSelectStatus(true);
+		}
+		else objComp.setSelectStatus(false);
+		
+		if(nMonth!=nTempMonth)objComp.set_cssclass("btn_WF_notThisTime");
+		else objComp.set_cssclass("btn_WF_day");
+		
+		objTempDate.addDate(1);
+	}
+}
+]]></Script>
+  </Form>
+</FDL>
